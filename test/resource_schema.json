@@ -1,0 +1,94 @@
+{
+  "title": "Resource",
+  "type": "object",
+  "required": ["name", "comment", "fields", "actions"],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "comment", "example_values"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "example_values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "length": {
+              "min": 1
+            }
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "comment"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "comment": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "method", "path", "comment"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "collection": {
+            "type": "boolean"
+          },
+          "args": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "comment"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "comment": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

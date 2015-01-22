@@ -1,0 +1,29 @@
+{
+  "name": "asana-api-meta",
+  "version": "0.0.1",
+  "description": "Metadata for Asana API for generating client libraries and documenation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Asana/asana-api-meta.git"
+  },
+  "keywords": [
+    "asana",
+    "api"
+  ],
+  "author": "Greg Slovacek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Asana/asana-api-meta/issues"
+  },
+  "homepage": "https://github.com/Asana/asana-api-meta",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-mocha": "^2.0.0",
+    "js-yaml": "^3.2.5",
+    "jsonschema": "^1.0.0"
+  }
+}
