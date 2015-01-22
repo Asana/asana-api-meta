@@ -15,7 +15,6 @@ describe('Resource', function() {
 
   describe('#load', function() {
     var validator = new Validator();
-    console.log(process.cwd());
     var schema = JSON.parse(fs.readFileSync('./test/resource_schema.json'));
     resource.names().forEach(function(name) {
       it('should load `' + name + '` conforming to resource schema', function() {
