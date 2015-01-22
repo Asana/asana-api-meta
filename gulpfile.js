@@ -4,6 +4,7 @@ var rename = require('gulp-rename');
 var template = require('gulp-template');
 var yaml = require('js-yaml');
 var resource = require('./src/resource');
+var helpers = require('./src/helpers');
 
 /**
  * Paths
@@ -34,7 +35,9 @@ languages.forEach(function(lang) {
   resourceNames.forEach(function(resourceName) {
     gulp.task(taskName(resourceName), function() {
       return gulp.src('src/templates/' + lang + '/resource.js')
-          .pipe(template(resource.load(resourceName)))
+          .pipe(template(resource.load(resourceName), {
+            imports: helpers
+          }))
           .pipe(rename(function(path) {
             path.basename = resourceName;
           }))
