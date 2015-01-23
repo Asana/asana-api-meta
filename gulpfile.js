@@ -19,7 +19,10 @@ var test = 'test/**/*';
 var languages = {
   js: {
     repo: 'Asana/node-asana-gen',
-    destPath: '/lib'
+    destPath: '/lib',
+    resourceBaseName: function(resource) {
+      return helpers.plural(resource);
+    }
   }
 };
 
@@ -31,7 +34,10 @@ var paths = {
     return 'dist/repos/' + lang;
   },
   repoDest: function(lang) {
-    return 'dist/repos/' + lang + languages[lang].destPath;
+    return paths.repo(lang) + paths.repoDestRelative(lang);
+  },
+  repoDestRelative: function(lang) {
+    return languages[lang].destPath;
   }
 };
 
@@ -53,15 +59,24 @@ gulp.task('deploy', ['build'].concat(Object.keys(languages).map(function(lang) {
  * Generate deploy rules for each language
  */
 Object.keys(languages).forEach(function(lang) {
-  gulp.task('deploy-' + lang, function(done) {
-    fs.remove(paths.repo(lang), function(err) {
+  gulp.task('deploy-' + lang, function(cb) {
+    var dest = paths.repoDest(lang);
+    var repoRoot = paths.repo(lang);
+    fs.removeSync(repoRoot);
+    git.clone(
+        'git@github.com:' + languages[lang].repo,
+        {args: repoRoot + ' --depth=1'}, function(err) {
       if (err) throw err;
-      git.clone(languages[lang].repo, paths.repo(lang), {args: '--depth=1'}, function(err) {
+      fs.mkdirpSync(dest);
+      fs.copy(paths.dist(lang), dest, function(err) {
         if (err) throw err;
-        fs.mkdirpSync(paths.repoDest(lang));
-        fs.copy(paths.dist(lang), paths.repoDest(lang), function(err) {
+        git.add({cwd: repoRoot, args: paths.repoDestRelative(lang)}, function(err) {
           if (err) throw err;
-          done();
+          // TODO: add current version to commit message
+          git.commit({cwd: repoRoot, args: '-m "Deploy from asana-api-meta"'}, function(err) {
+            if (err) throw err;
+            cb();
+          });
         });
       });
     });
@@ -86,14 +101,20 @@ Object.keys(languages).forEach(function(lang) {
             variable: 'resource'
           }))
           .pipe(rename(function(path) {
-            path.extname = /^.*[.](.*?)$/.exec(path.basename)[1];
-            path.basename = resourceName;
+            path.extname = /^.*([.].*?)$/.exec(path.basename)[1];
+            path.basename = languages[lang].resourceBaseName(resourceName);
           }))
           .pipe(gulp.dest(paths.dist(lang)));
     });
   });
 
-  gulp.task('build-' + lang, resourceNames.map(taskName));
+  gulp.task('build-' + lang, ['clean-' + lang].concat(resourceNames.map(taskName)));
+});
+
+Object.keys(languages).forEach(function(lang) {
+  gulp.task('clean-' + lang, function() {
+    fs.removeSync(paths.dist(lang));
+  });
 });
 
 /**
