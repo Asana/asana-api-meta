@@ -1,4 +1,4 @@
-<% var typeName = cap(resource.name); %>
+<% var typeName = plural(cap(resource.name)); %>
 
 var util = require('util');
 var Resource = require('./resource');

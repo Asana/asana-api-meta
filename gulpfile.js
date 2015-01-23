@@ -1,3 +1,5 @@
+var fs = require('fs-extra');
+var git = require('gulp-git');
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
@@ -10,23 +12,67 @@ var helpers = require('./src/helpers');
  * Paths
  */
 var test = 'test/**/*';
-var languages = ['js'];
+
+/**
+ * Environment
+ */
+var languages = {
+  js: {
+    repo: 'Asana/node-asana-gen',
+    destPath: '/lib'
+  }
+};
+
+var paths = {
+  dist: function(lang) {
+    return 'dist/' + lang;
+  },
+  repo: function(lang) {
+    return 'dist/repos/' + lang;
+  },
+  repoDest: function(lang) {
+    return 'dist/repos/' + lang + languages[lang].destPath;
+  }
+};
 
 /**
  * High-level tasks
  */
 
 // Build all languages
-gulp.task('build', ['test'].concat(languages.map(function(lang) {
+gulp.task('build', ['test'].concat(Object.keys(languages).map(function(lang) {
   return 'build-' + lang;
 })));
 
+// Deploy languages
+gulp.task('deploy', ['build'].concat(Object.keys(languages).map(function(lang) {
+  return 'deploy-' + lang;
+})));
+
+/**
+ * Generate deploy rules for each language
+ */
+Object.keys(languages).forEach(function(lang) {
+  gulp.task('deploy-' + lang, function(done) {
+    fs.remove(paths.repo(lang), function(err) {
+      if (err) throw err;
+      git.clone(languages[lang].repo, paths.repo(lang), {args: '--depth=1'}, function(err) {
+        if (err) throw err;
+        fs.mkdirpSync(paths.repoDest(lang));
+        fs.copy(paths.dist(lang), paths.repoDest(lang), function(err) {
+          if (err) throw err;
+          done();
+        });
+      });
+    });
+  });
+});
 
 /**
  * Generate build rules for each resource in each language.
  */
 var resourceNames = resource.names();
-languages.forEach(function(lang) {
+Object.keys(languages).forEach(function(lang) {
 
   function taskName(resourceName) {
     return 'build-' + lang + '-' + resourceName;
@@ -43,7 +89,7 @@ languages.forEach(function(lang) {
             path.extname = /^.*[.](.*?)$/.exec(path.basename)[1];
             path.basename = resourceName;
           }))
-          .pipe(gulp.dest('dist/' + lang));
+          .pipe(gulp.dest(paths.dist(lang)));
     });
   });
 
