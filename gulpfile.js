@@ -34,11 +34,13 @@ languages.forEach(function(lang) {
 
   resourceNames.forEach(function(resourceName) {
     gulp.task(taskName(resourceName), function() {
-      return gulp.src('src/templates/' + lang + '/resource.js')
+      return gulp.src('src/templates/' + lang + '/resource.*.template')
           .pipe(template(resource.load(resourceName), {
-            imports: helpers
+            imports: helpers,
+            variable: 'resource'
           }))
           .pipe(rename(function(path) {
+            path.extname = /^.*[.](.*?)$/.exec(path.basename)[1];
             path.basename = resourceName;
           }))
           .pipe(gulp.dest('dist/' + lang));

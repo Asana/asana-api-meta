@@ -47,6 +47,7 @@ actions:
     path: "/workspaces/%d/tasks"
     args:
       - name: workspaceId
+        type: Number
         comment: The workspace to create a task in.
     comment: |
       Creating a new task is as easy as POSTing to the `/tasks` endpoint
@@ -61,6 +62,7 @@ actions:
     path: "/tasks/%d"
     args:
       - name: taskId
+        type: Number
         comment: The task to get.
     comment: |
       TODO
