@@ -1,5 +1,5 @@
+var exec = require('child_process').exec;
 var fs = require('fs-extra');
-var git = require('gulp-git');
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
@@ -19,7 +19,7 @@ var test = 'test/**/*';
 var languages = {
   js: {
     repo: 'Asana/node-asana-gen',
-    destPath: '/lib',
+    destPath: 'lib',
     resourceBaseName: function(resource) {
       return helpers.plural(resource);
     }
@@ -31,10 +31,10 @@ var paths = {
     return 'dist/' + lang;
   },
   repo: function(lang) {
-    return 'dist/repos/' + lang;
+    return 'dist/git/' + lang;
   },
   repoDest: function(lang) {
-    return paths.repo(lang) + paths.repoDestRelative(lang);
+    return paths.repo(lang) + '/' + paths.repoDestRelative(lang);
   },
   repoDestRelative: function(lang) {
     return languages[lang].destPath;
@@ -63,19 +63,19 @@ Object.keys(languages).forEach(function(lang) {
     var dest = paths.repoDest(lang);
     var repoRoot = paths.repo(lang);
     fs.removeSync(repoRoot);
-    git.clone(
-        'git@github.com:' + languages[lang].repo,
-        {args: repoRoot + ' --depth=1'}, function(err) {
+    exec(
+        'git clone --depth=1 git@github.com:' + languages[lang].repo +
+            ' ' + repoRoot, function(err) {
       if (err) throw err;
       fs.mkdirpSync(dest);
       fs.copy(paths.dist(lang), dest, function(err) {
         if (err) throw err;
-        git.add({cwd: repoRoot, args: paths.repoDestRelative(lang)}, function(err) {
+        exec('git add ' + paths.repoDestRelative(lang), {cwd: repoRoot}, function(err) {
           if (err) throw err;
           // TODO: add current version to commit message
-          git.commit({cwd: repoRoot, args: '-m "Deploy from asana-api-meta"'}, function(err) {
+          exec('git commit -a -m "Deploy from asana-api-meta"', {cwd: repoRoot}, function(err) {
             if (err) throw err;
-            git.push('origin', 'master', {cwd: repoRoot}, function(err) {
+            exec('git push origin master', {cwd: repoRoot}, function(err) {
               if (err) throw err;
               cb();
             });
