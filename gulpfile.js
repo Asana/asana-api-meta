@@ -75,7 +75,10 @@ Object.keys(languages).forEach(function(lang) {
           // TODO: add current version to commit message
           git.commit({cwd: repoRoot, args: '-m "Deploy from asana-api-meta"'}, function(err) {
             if (err) throw err;
-            cb();
+            git.push('origin', 'master', {cwd: repoRoot}, function(err) {
+              if (err) throw err;
+              cb();
+            });
           });
         });
       });
