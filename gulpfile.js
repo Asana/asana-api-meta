@@ -113,7 +113,7 @@ Object.keys(languages).forEach(function(lang) {
 });
 
 function bumpVersion(version, importance) {
-  var v = /^(\d+).(\d+).(\d+)$/.match(version);
+  var v = /^(\d+).(\d+).(\d+)$/.exec(version);
   if (importance === 'major') {
     v[1] = parseInt(v[1], 10) + 1;
   } else if (importance === 'minor') {
