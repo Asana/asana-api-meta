@@ -1,6 +1,7 @@
 var bump = require('gulp-bump');
 var exec = require('child_process').exec;
 var fs = require('fs-extra');
+var git = require('gulp-git');
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
