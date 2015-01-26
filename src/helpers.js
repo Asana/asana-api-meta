@@ -4,14 +4,33 @@ var _ = require('lodash');
 /**
  * Helpers for code-generation templates
  */
+
+/**
+ * Wrap the interior of a multi-line comment at the 80-column boundary.
+ *
+ * @param {String} text
+ * @param {String?} prefix
+ * @param {Number?} maxChars
+ * @returns {*}
+ */
 function wrapComment(text, prefix, maxChars) {
-  // TODO
+  // TODO: actually wrap :)
+  prefix = prefix || "";
   maxChars = maxChars || 78;
-  return text;
+  return prefix + text.replace(/\n/g, "\n" + prefix);
+}
+
+function wrapStarComment(text) {
+  return wrapComment(text, " * ");
+}
+
+function wrapHashComment(text) {
+  return wrapComment(text, "# ");
 }
 
 _.merge(exports, {
-  wrapComment: wrapComment,
+  starComment: wrapStarComment,
+  hashComment: wrapHashComment,
   plural: inflect.pluralize,
   single: inflect.singularize,
   camel: inflect.camelize,

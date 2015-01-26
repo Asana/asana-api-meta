@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
 var template = require('gulp-template');
+var util = require('util');
 var yaml = require('js-yaml');
 var resource = require('./src/resource');
 var helpers = require('./src/helpers');
@@ -22,6 +23,13 @@ var languages = {
     destPath: 'lib',
     resourceBaseName: function(resource) {
       return helpers.plural(resource);
+    },
+    updatePackage: function(version, cb) {
+      var repoRoot = paths.repo('js');
+      var destPackage = readPackage(repoRoot + '/package.json');
+      destPackage.version = version;
+      writePackage(repoRoot + '/package.json', destPackage);
+      exec('git add package.json', {cwd: repoRoot}, cb);
     }
   }
 };
@@ -41,6 +49,14 @@ var paths = {
   }
 };
 
+function readPackage(filename) {
+  return fs.readJSONSync(filename || 'package.json');
+}
+
+function writePackage(filename, data) {
+  return fs.writeJSONSync(filename || 'package.json', data);
+}
+
 /**
  * High-level tasks
  */
@@ -59,31 +75,63 @@ gulp.task('deploy', ['build'].concat(Object.keys(languages).map(function(lang) {
  * Generate deploy rules for each language
  */
 Object.keys(languages).forEach(function(lang) {
+  var config = languages[lang];
   gulp.task('deploy-' + lang, function(cb) {
     var dest = paths.repoDest(lang);
     var repoRoot = paths.repo(lang);
     fs.removeSync(repoRoot);
     exec(
-        'git clone --depth=1 git@github.com:' + languages[lang].repo +
+        'git clone --depth=1 git@github.com:' + config.repo +
             ' ' + repoRoot, function(err) {
-      if (err) throw err;
+      if (err) { cb(err); return; }
       fs.mkdirpSync(dest);
       fs.copy(paths.dist(lang), dest, function(err) {
-        if (err) throw err;
-        exec('git add ' + paths.repoDestRelative(lang), {cwd: repoRoot}, function(err) {
-          if (err) throw err;
-          // TODO: add current version to commit message
-          exec('git commit -a -m "Deploy from asana-api-meta"', {cwd: repoRoot}, function(err) {
-            if (err) throw err;
-            exec('git push origin master', {cwd: repoRoot}, function(err) {
-              if (err) throw err;
-              cb();
+        var version = readPackage().version;
+        config.updatePackage(version, function(err) {
+          if (err) { cb(err); return; }
+
+          exec('git add ' + paths.repoDestRelative(lang), {cwd: repoRoot}, function(err) {
+            if (err) { cb(err); return; }
+
+            exec(util.format('git commit -a -m "Deploy from asana-api-meta v%s"', version), {cwd: repoRoot}, function(err) {
+              if (err) { cb(err); return; }
+
+              exec(util.format('git tag -f "v%s"', version), {cwd: repoRoot}, function(err) {
+                if (err) { cb(err); return; }
+
+                exec('git push --tags origin master', {cwd: repoRoot}, function(err) {
+                  if (err) { cb(err); return; }
+                  cb();
+                });
+              });
             });
           });
         });
       });
     });
   });
+});
+
+function bumpVersion(version, importance) {
+  var v = /^(\d+).(\d+).(\d+)$/.match(version);
+  if (importance === 'major') {
+    v[1] = parseInt(v[1], 10) + 1;
+  } else if (importance === 'minor') {
+    v[2] = parseInt(v[2], 10) + 1;
+  } else {
+    v[3] = parseInt(v[3], 10) + 1;
+  }
+  return [v[1], v[2], v[3]].join('.');
+}
+
+gulp.task('deploy-patch', ['ensure-git-clean'], function() {
+  return bumpVersion('patch');
+});
+gulp.task('deploy-feature', ['ensure-git-clean'], function() {
+  return bumpVersion('minor');
+});
+gulp.task('deploy-release', ['ensure-git-clean'], function() {
+  return bumpVersion('major');
 });
 
 /**
@@ -129,3 +177,4 @@ gulp.task('test', function(callback) {
         reporter: process.env.TRAVIS ? 'spec' : 'nyan'
       }));
 });
+

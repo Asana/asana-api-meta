@@ -5,7 +5,7 @@ var util = require('util');
 var Resource = require('./resource');
 
 /**
-<%= wrapComment(resource.comment, ' *') %>
+<%= starComment(resource.comment) %>
  * @class
  * @param {Dispatcher} dispatcher The API dispatcher
  */
@@ -38,15 +38,14 @@ util.inherits(<%= typeName %>, Resource);
   actionArgs = actionArgs.concat(extraArg ? [extraArg] : []);
 %>
 /**
-<%= wrapComment(action.comment, ' *') %>
-<% _.forEach(actionArgs, function(arg) { %><%=   wrapComment(
+<%= starComment(action.comment) %>
+<% _.forEach(actionArgs, function(arg) { %><%= starComment(
           '@param {' + arg.type + '} ' + arg.name + ' ' + arg.comment) %>
-<% }); %><%= wrapComment(
+<% }); %><%= starComment(
     '@return {Promise} ' +
         ((isGet && !action.collection) ?
             'The requested resource' :
-            'The response from the API'),
-    ' *') %>
+            'The response from the API')) %>
  */
 <%= typeName + '.prototype.' + action.name %> = function(
 <% _.forEach(actionArgs, function(arg, i) { %>    <%= arg.name %><% if (i !== actionArgs.length - 1) { %>,
