@@ -145,6 +145,18 @@ gulp.task('bump-release', ['ensure-git-clean'], function() {
 });
 
 /**
+ * Ensure that the git working directory is clean.
+ */
+gulp.task('ensure-git-clean', function() {
+  git.status(function(err, out) {
+    if (err) { throw err; }
+    if (!/working directory clean/.exec(out)) {
+      throw new Error('Git working directory not clean, will not bump version');
+    }
+  });
+});
+
+/**
  * Generate build rules for each resource in each language.
  */
 var resourceNames = resource.names();
