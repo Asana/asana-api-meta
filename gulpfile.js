@@ -67,7 +67,7 @@ gulp.task('build', ['test'].concat(Object.keys(languages).map(function(lang) {
 })));
 
 // Deploy languages
-gulp.task('deploy', ['build'].concat(Object.keys(languages).map(function(lang) {
+gulp.task('deploy', ['ensure-git-clean', 'build'].concat(Object.keys(languages).map(function(lang) {
   return 'deploy-' + lang;
 })));
 
@@ -124,13 +124,13 @@ function bumpVersion(version, importance) {
   return [v[1], v[2], v[3]].join('.');
 }
 
-gulp.task('deploy-patch', ['ensure-git-clean'], function() {
+gulp.task('bump-patch', function() {
   return bumpVersion('patch');
 });
-gulp.task('deploy-feature', ['ensure-git-clean'], function() {
+gulp.task('bump-feature', function() {
   return bumpVersion('minor');
 });
-gulp.task('deploy-release', ['ensure-git-clean'], function() {
+gulp.task('bump-release', function() {
   return bumpVersion('major');
 });
 
