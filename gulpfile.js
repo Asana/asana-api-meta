@@ -1,8 +1,10 @@
+var bump = require('gulp-bump');
 var exec = require('child_process').exec;
 var fs = require('fs-extra');
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
+var tagVersion = require('gulp-tag-version');
 var template = require('gulp-template');
 var util = require('util');
 var yaml = require('js-yaml');
@@ -112,25 +114,33 @@ Object.keys(languages).forEach(function(lang) {
   });
 });
 
-function bumpVersion(version, importance) {
-  var v = /^(\d+).(\d+).(\d+)$/.exec(version);
-  if (importance === 'major') {
-    v[1] = parseInt(v[1], 10) + 1;
-  } else if (importance === 'minor') {
-    v[2] = parseInt(v[2], 10) + 1;
-  } else {
-    v[3] = parseInt(v[3], 10) + 1;
-  }
-  return [v[1], v[2], v[3]].join('.');
+/**
+ * Bumping version number and tagging the repository with it.
+ * Please read http://semver.org/
+ *
+ * You can use the commands
+ *
+ *     gulp bump-patch     # makes v0.1.0 → v0.1.1
+ *     gulp bump-feature   # makes v0.1.1 → v0.2.0
+ *     gulp bump-release   # makes v0.2.1 → v1.0.0
+ *
+ * To bump the version numbers accordingly after you did a patch,
+ * introduced a feature or made a backwards-incompatible release.
+ */
+function bumpVersion(importance) {
+  return gulp.src(['./package.json'])
+      .pipe(bump({type: importance}))
+      .pipe(gulp.dest('./'))
+      .pipe(git.commit('bump package version'))
+      .pipe(tagVersion());
 }
-
-gulp.task('bump-patch', function() {
+gulp.task('bump-patch', ['ensure-git-clean'], function() {
   return bumpVersion('patch');
 });
-gulp.task('bump-feature', function() {
+gulp.task('bump-feature', ['ensure-git-clean'], function() {
   return bumpVersion('minor');
 });
-gulp.task('bump-release', function() {
+gulp.task('bump-release', ['ensure-git-clean'], function() {
   return bumpVersion('major');
 });
 

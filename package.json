@@ -23,8 +23,10 @@
   "devDependencies": {
     "fs-extra": "^0.15.0",
     "gulp": "^3.8.10",
+    "gulp-bump": "^0.1.11",
     "gulp-mocha": "^2.0.0",
     "gulp-rename": "^1.2.0",
+    "gulp-tag-version": "^1.2.1",
     "gulp-template": "^2.0.0",
     "inflect": "^0.3.0",
     "js-yaml": "^3.2.5",
