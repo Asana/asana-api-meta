@@ -15,7 +15,13 @@ function names() {
 }
 
 function load(name) {
-  return yaml.load(fs.readFileSync(resourceDir + '/' + name + '.yaml'));
+  var content = fs.readFileSync(resourceDir + '/' + name + '.yaml', 'utf8');
+  content = content.replace(/\!include\s+(\S+)/g, function(match, filename) {
+    var included = fs.readFileSync(resourceDir + '/' + filename, 'utf8');
+    // Strip document header
+    return included.replace(/^---+/m, '');
+  });
+  return yaml.load(content);
 }
 
 exports.names = names;

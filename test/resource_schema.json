@@ -1,11 +1,11 @@
 {
   "title": "Resource",
   "type": "object",
-  "required": ["name", "comment", "fields", "actions"],
+  "required": ["name", "comment", "properties", "actions"],
   "properties": {
     "name": { "type": "string" },
     "comment": { "type": "string" },
-    "fields": {
+    "properties": {
       "type": "array",
       "items": {
         "type": "object",

@@ -1,0 +1,41 @@
+name: user
+comment: |
+  xcxc
+properties:
+  - name: id
+    type: Number
+    example_values:
+      - "1234"
+    comment: |
+      Globally unique identifier for this user.
+actions:
+  - name: me
+    method: GET
+    path: "/tasks/me"
+    comment: |
+      xcxc
+  - name: findById
+    method: GET
+    path: "/tasks/%d"
+    args:
+      - name: userId
+        type: Number
+        comment: The user to get.
+    comment: |
+      xcxc
+  - name: findByWorkspace
+    method: GET
+    path: "/workspaces/%d/users"
+    collection: true
+    args:
+      - name: workspaceId
+        type: Number
+        comment: The workspace in which to get users.
+    comment: |
+      xcxc
+  - name: findAll
+    method: GET
+    path: "/users"
+    collection: true
+    comment: |
+      xcxc
