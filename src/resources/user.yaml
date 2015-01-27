@@ -1,4 +1,11 @@
 ---
+# Yaml file for the User resource.
+# Schema for all resources exists in `resource_schema.json` and is validated
+# as part of tests.
+# All resource yaml files must include the includes.
+# We've extended our yaml loader to do a quick-and-dirty parse of these
+# includes, so that our files can remain syntactically still yaml even if
+# semantically they only work with includes.
 !include ../includes.yaml
 name: user
 comment: |
@@ -8,14 +15,18 @@ comment: |
   Like other objects in the system, users are referred to by numerical IDs.
   However, the special string identifier `me` can be used anywhere
   a user ID is accepted, to refer to the current authenticated user.
+
 properties:
+
   - name: id
     <<: *PropType.Id
+
   - name: email
     <<: *PropType.Email
     read_only: true
     comment: |
       The user's email address.
+
   - name: photo
     type: Struct
     example_values:
@@ -26,6 +37,7 @@ properties:
       is set. Sizes provided are 21, 27, 36, 60, and 128. Images are in
       PNG format.
     read_only: true
+
   - name: workspaces
     type: Array
     example_values:
@@ -36,12 +48,15 @@ properties:
     notes:
       - The API will only return workspaces and organizations that also
         contain the authenticated user.
+
 actions:
+
   - name: me
     method: GET
     path: "/users/me"
     comment: |
       Returns the full user record for the currently authenticated user.
+
   - name: findById
     method: GET
     path: "/users/%d"
@@ -50,6 +65,7 @@ actions:
         <<: *Arg.UserId
     comment: |
       Returns the full user record for a single user.
+
   - name: findByWorkspace
     method: GET
     path: "/workspaces/%d/users"
@@ -61,6 +77,7 @@ actions:
     comment: |
       Returns the user records for all users in all workspaces and organizations
       accessible to the authenticated user.
+
   - name: findAll
     method: GET
     path: "/users"

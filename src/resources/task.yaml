@@ -1,4 +1,5 @@
 ---
+# See `user.yaml` for more docs on these yaml files.
 !include ../includes.yaml
 name: task
 comment: |
@@ -6,18 +7,23 @@ comment: |
   centered. In the Asana application, multiple tasks populate the middle pane
   according to some view parameters, and the set of selected tasks determines
   the more detailed information presented in the details pane.
+
 properties:
+
   - name: assignee
     <<: *PropType.User
     comment: |
       User to which this task is assigned, or `null` if the task is
       unassigned.
+
   - name: assignee_status
     <<: *PropType.AssigneeStatus
     comment: |
       Scheduling status of this task for the user it is assigned to.
       This field can only be set if the `assignee` is non-null.
+
 actions:
+
   - name: create
     method: POST
     path: "/tasks"
@@ -29,6 +35,7 @@ actions:
       Every task is required to be created in a specific workspace, and this
       workspace cannot be changed once set. The workspace need not be set
       explicitly if you specify a project or a parent task instead.
+
   - name: createInWorkspace
     method: POST
     path: "/workspaces/%d/tasks"
@@ -44,6 +51,7 @@ actions:
       Every task is required to be created in a specific workspace, and this
       workspace cannot be changed once set. The workspace need not be set
       explicitly if you specify a project or a parent task instead.
+
   - name: findById
     method: GET
     path: "/tasks/%d"
