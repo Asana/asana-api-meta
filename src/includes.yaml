@@ -24,14 +24,20 @@ types:
       comment: |
         Globally unique identifier for the workspace or organization.
 
+  # Types of properties
+
   - type: &PropType.Id
     - type: Number
       example_values:
         - "1234"
+      read_only: true
       comment: |
         Globally unique identifier for this object.
 
-  # Types of properties
+  - type: &PropType.Email
+    - type: String
+      example_values:
+        - "gsanchez@example.com"
 
   - type: &PropType.User
     - type: User

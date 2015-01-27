@@ -17,7 +17,7 @@ function wrapComment(text, prefix, maxChars) {
   // TODO: actually wrap :)
   prefix = prefix || "";
   maxChars = maxChars || 78;
-  return prefix + text.replace(/\n/g, "\n" + prefix);
+  return prefix + text.trim().replace(/\n/g, "\n" + prefix);
 }
 
 function wrapStarComment(text) {

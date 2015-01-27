@@ -52,7 +52,7 @@ util.inherits(<%= typeName %>, Resource);
 <% } }); %>
 ) {
   var path = util.format('<%= action.path %>'<% _.forEach(action.args, function(arg) { %>, <%= arg.name %><% }); %>);
-  return this.dispatch<%= cap(action.method) %>(path<%= extraArg ? (', ' + extraArg.name) : ''%>);
+  return this.<%= dispatchName %>(path<%= extraArg ? (', ' + extraArg.name) : ''%>);
 };
 <% }); %>
 module.exports = <%= typeName %>;

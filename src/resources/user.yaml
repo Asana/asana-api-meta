@@ -1,41 +1,70 @@
+---
+!include ../includes.yaml
 name: user
 comment: |
-  xcxc
+  A _user_ object represents an account in Asana that can be given access to
+  various workspaces, projects, and tasks.
+
+  Like other objects in the system, users are referred to by numerical IDs.
+  However, the special string identifier `me` can be used anywhere
+  a user ID is accepted, to refer to the current authenticated user.
 properties:
   - name: id
-    type: Number
-    example_values:
-      - "1234"
+    <<: *PropType.Id
+  - name: email
+    <<: *PropType.Email
+    read_only: true
     comment: |
-      Globally unique identifier for this user.
+      The user's email address.
+  - name: photo
+    type: Struct
+    example_values:
+      - '{ "image_21x21": "https://...", ... }'
+    read_only: true
+    comment: |
+      A map of the user's profile photo in various sizes, or null if no photo
+      is set. Sizes provided are 21, 27, 36, 60, and 128. Images are in
+      PNG format.
+    read_only: true
+  - name: workspaces
+    type: Array
+    example_values:
+      - '[ { id: 14916, name: "My Workspace"} ... ]'
+    read_only: true
+    comment: |
+      Workspaces and organizations this user may access.
+    notes:
+      - The API will only return workspaces and organizations that also
+        contain the authenticated user.
 actions:
   - name: me
     method: GET
-    path: "/tasks/me"
+    path: "/users/me"
     comment: |
-      xcxc
+      Returns the full user record for the currently authenticated user.
   - name: findById
     method: GET
-    path: "/tasks/%d"
+    path: "/users/%d"
     args:
       - name: userId
-        type: Number
-        comment: The user to get.
+        <<: *Arg.UserId
     comment: |
-      xcxc
+      Returns the full user record for a single user.
   - name: findByWorkspace
     method: GET
     path: "/workspaces/%d/users"
     collection: true
     args:
       - name: workspaceId
-        type: Number
+        <<: *Arg.WorkspaceId
         comment: The workspace in which to get users.
     comment: |
-      xcxc
+      Returns the user records for all users in all workspaces and organizations
+      accessible to the authenticated user.
   - name: findAll
     method: GET
     path: "/users"
     collection: true
     comment: |
-      xcxc
+      Returns the user records for all users in the specified workspace or
+      organization.
