@@ -1,24 +1,56 @@
 ---
 types:
 
-  # Arguments
+  # TODO: response codes here, add to action schema set of possible responses
+
+  - type: &Code.200
+      value: 200
+      comment: |
+        Success.
+
+  # Parameters
   
-  - type: &Arg.TaskId
-      type: Number
+  - type: &Param.DateTime
+      type: String
+      example_values:
+        - "2012-02-22T02:06:58.158Z"
+        - "now"
+
+  - type: &Param.IdArray
+      type: Array
+      example_values:
+        - "[133713, 184253]"
+
+  - type: &Param.ProjectId
+      type: Id
+      example_values:
+        - "13579"
+      comment: |
+        Globally unique identifier for the project.
+
+  - type: &Param.TagId
+      type: Id
+      example_values:
+        - "11235"
+      comment: |
+        Globally unique identifier for the tag.
+
+  - type: &Param.TaskId
+      type: Id
       example_values:
         - "124816"
       comment: |
         Globally unique identifier for the task.
 
-  - type: &Arg.UserId
-      type: Number
+  - type: &Param.UserId
+      type: Id
       example_values:
         - "14641"
       comment: |
         Globally unique identifier for the user.
 
-  - type: &Arg.WorkspaceId
-      type: Number
+  - type: &Param.WorkspaceId
+      type: Id
       example_values:
         - "1331"
       comment: |
@@ -27,7 +59,7 @@ types:
   # Types of properties
 
   - type: &PropType.Id
-    - type: Number
+    - type: Id
       example_values:
         - "1234"
       read_only: true

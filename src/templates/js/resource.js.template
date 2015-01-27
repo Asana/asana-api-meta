@@ -16,10 +16,10 @@ util.inherits(<%= typeName %>, Resource);
 
 <% _.forEach(resource.actions, function(action) {
   var isGet = action.method === 'GET';
-  var extraArg = null;
+  var extraParam = null;
   var dispatchName = 'dispatch' + cap(action.method);
   if (isGet) {
-    extraArg = {
+    extraParam = {
       name: 'params',
       type: 'Object',
       comment: 'Parameters for the request'
@@ -28,19 +28,21 @@ util.inherits(<%= typeName %>, Resource);
       dispatchName = 'dispatchGetCollection';
     }
   } else if (action.method !== 'DELETE') {
-    extraArg = {
+    extraParam = {
       name: 'data',
       type: 'Object',
       comment: 'Data for the request'
     };
   }
-  var actionArgs = action.args ? [].concat(action.args) : [];
-  actionArgs = actionArgs.concat(extraArg ? [extraArg] : []);
+  var actionParams = action.params ? action.params.filter(function(param) {
+    return param.required;
+  }) : [];
+  actionParams = actionParams.concat(extraParam ? [extraParam] : []);
 %>
 /**
 <%= starComment(action.comment) %>
-<% _.forEach(actionArgs, function(arg) { %><%= starComment(
-          '@param {' + arg.type + '} ' + arg.name + ' ' + arg.comment) %>
+<% _.forEach(actionParams, function(param) { %><%= starComment(
+          '@param {' + param.type + '} ' + param.name + ' ' + param.comment) %>
 <% }); %><%= starComment(
     '@return {Promise} ' +
         ((isGet && !action.collection) ?
@@ -48,11 +50,11 @@ util.inherits(<%= typeName %>, Resource);
             'The response from the API')) %>
  */
 <%= typeName + '.prototype.' + action.name %> = function(
-<% _.forEach(actionArgs, function(arg, i) { %>    <%= arg.name %><% if (i !== actionArgs.length - 1) { %>,
+<% _.forEach(actionParams, function(param, i) { %>    <%= param.name %><% if (i !== actionParams.length - 1) { %>,
 <% } }); %>
 ) {
-  var path = util.format('<%= action.path %>'<% _.forEach(action.args, function(arg) { %>, <%= arg.name %><% }); %>);
-  return this.<%= dispatchName %>(path<%= extraArg ? (', ' + extraArg.name) : ''%>);
+  var path = util.format('<%= action.path %>'<% _.forEach(action.params, function(param) { %>, <%= param.name %><% }); %>);
+  return this.<%= dispatchName %>(path<%= extraParam ? (', ' + extraParam.name) : ''%>);
 };
 <% }); %>
 module.exports = <%= typeName %>;

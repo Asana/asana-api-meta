@@ -28,6 +28,8 @@ function wrapHashComment(text) {
   return wrapComment(text, "# ");
 }
 
+//xcxc provide a translator that can set up maps to translate?
+
 _.merge(exports, {
   starComment: wrapStarComment,
   hashComment: wrapHashComment,
