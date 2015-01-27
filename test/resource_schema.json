@@ -1,49 +1,45 @@
 {
   "title": "Resource",
   "type": "object",
-  "required": ["name", "comment", "fields", "actions"],
+  "required": ["name", "comment", "properties", "actions"],
   "properties": {
-    "name": {
-      "type": "string"
+    "name": { "type": "string" },
+    "comment": { "type": "string" },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string" }
     },
-    "comment": {
-      "type": "string"
-    },
-    "fields": {
+    "properties": {
       "type": "array",
       "items": {
         "type": "object",
         "required": ["name", "type", "comment", "example_values"],
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "comment": {
-            "type": "string"
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "comment": { "type": "string" },
+          "notes": {
+            "type": "array",
+            "items": { "type": "string" }
           },
           "example_values": {
             "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "length": {
-              "min": 1
-            }
+            "items": { "type": "string" },
+            "length": { "min": 1 }
           },
+          "read_only": { "type": "boolean" },
+          "create_only": { "type": "boolean" },
           "values": {
             "type": "array",
             "items": {
               "type": "object",
               "required": ["name", "comment"],
               "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "comment": {
-                  "type": "string"
+                "name": { "type": "string" },
+                "comment": { "type": "string" },
+                "notes": {
+                  "type": "array",
+                  "items": { "type": "string" }
                 }
               }
             }
@@ -57,32 +53,27 @@
         "type": "object",
         "required": ["name", "method", "path", "comment"],
         "properties": {
-          "name": {
-            "type": "string"
+          "name": { "type": "string" },
+          "method": { "type": "string" },
+          "path": { "type": "string" },
+          "comment": { "type": "string" },
+          "notes": {
+            "type": "array",
+            "items": { "type": "string" }
           },
-          "method": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "comment": {
-            "type": "string"
-          },
-          "collection": {
-            "type": "boolean"
-          },
+          "collection": { "type": "boolean" },
           "args": {
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["name", "comment"],
+              "required": ["name", "type", "comment"],
               "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "comment": {
-                  "type": "string"
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "comment": { "type": "string" },
+                "notes": {
+                  "type": "array",
+                  "items": { "type": "string" }
                 }
               }
             }

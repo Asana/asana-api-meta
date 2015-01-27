@@ -1,0 +1,60 @@
+---
+types:
+
+  # Arguments
+  
+  - type: &Arg.TaskId
+      type: Number
+      example_values:
+        - "124816"
+      comment: |
+        Globally unique identifier for the task.
+
+  - type: &Arg.UserId
+      type: Number
+      example_values:
+        - "14641"
+      comment: |
+        Globally unique identifier for the user.
+
+  - type: &Arg.WorkspaceId
+      type: Number
+      example_values:
+        - "1331"
+      comment: |
+        Globally unique identifier for the workspace or organization.
+
+  # Types of properties
+
+  - type: &PropType.Id
+    - type: Number
+      example_values:
+        - "1234"
+      read_only: true
+      comment: |
+        Globally unique identifier for this object.
+
+  - type: &PropType.Email
+    - type: String
+      example_values:
+        - "gsanchez@example.com"
+
+  - type: &PropType.User
+    - type: User
+      example_values:
+        - "{ id: 1234, name: 'Tim Bizarro' }"
+        - "null"
+
+  - type: &PropType.AssigneeStatus
+      type: Enum
+      example_values:
+        - "'upcoming'"
+      values:
+        - name: inbox
+          comment: In the inbox.
+        - name: later
+          comment: Scheduled for _later_.
+        - name: upcoming
+          comment: Scheduled for _upcoming_.
+        - name: today
+          comment: Scheduled for _today_.

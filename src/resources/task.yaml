@@ -1,36 +1,29 @@
 ---
+# See `user.yaml` for more docs on these yaml files.
+!include ../includes.yaml
 name: task
 comment: |
   The _task_ is the basic object around which many operations in Asana are
   centered. In the Asana application, multiple tasks populate the middle pane
   according to some view parameters, and the set of selected tasks determines
   the more detailed information presented in the details pane.
-fields:
+
+properties:
+
   - name: assignee
-    type: User
-    example_values:
-      - "{ id: 1234, name: 'Tim Bizarro' }"
-      - "null"
+    <<: *PropType.User
     comment: |
       User to which this task is assigned, or `null` if the task is
       unassigned.
+
   - name: assignee_status
-    type: Enum
-    example_values:
-      - "'upcoming'"
-    values:
-      - name: inbox
-        comment: In the inbox.
-      - name: later
-        comment: Scheduled for _later_.
-      - name: upcoming
-        comment: Scheduled for _upcoming_.
-      - name: today
-        comment: Scheduled for _today_.
+    <<: *PropType.AssigneeStatus
     comment: |
       Scheduling status of this task for the user it is assigned to.
       This field can only be set if the `assignee` is non-null.
+
 actions:
+
   - name: create
     method: POST
     path: "/tasks"
@@ -42,11 +35,13 @@ actions:
       Every task is required to be created in a specific workspace, and this
       workspace cannot be changed once set. The workspace need not be set
       explicitly if you specify a project or a parent task instead.
+
   - name: createInWorkspace
     method: POST
     path: "/workspaces/%d/tasks"
     args:
       - name: workspaceId
+        <<: *Arg.WorkspaceId
         comment: The workspace to create a task in.
     comment: |
       Creating a new task is as easy as POSTing to the `/tasks` endpoint
@@ -56,11 +51,13 @@ actions:
       Every task is required to be created in a specific workspace, and this
       workspace cannot be changed once set. The workspace need not be set
       explicitly if you specify a project or a parent task instead.
+
   - name: findById
     method: GET
     path: "/tasks/%d"
     args:
       - name: taskId
+        <<: *Arg.TaskId
         comment: The task to get.
     comment: |
       TODO

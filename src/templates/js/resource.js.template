@@ -1,0 +1,59 @@
+<%
+var typeName = plural(cap(resource.name));
+%>
+var util = require('util');
+var Resource = require('./resource');
+
+/**
+<%= starComment(resource.comment) %>
+ * @class
+ * @param {Dispatcher} dispatcher The API dispatcher
+ */
+function <%= typeName %>(dispatcher) {
+  Resource.call(this, dispatcher);
+}
+util.inherits(<%= typeName %>, Resource);
+
+<% _.forEach(resource.actions, function(action) {
+  var isGet = action.method === 'GET';
+  var extraArg = null;
+  var dispatchName = 'dispatch' + cap(action.method);
+  if (isGet) {
+    extraArg = {
+      name: 'params',
+      type: 'Object',
+      comment: 'Parameters for the request'
+    };
+    if (action.collection) {
+      dispatchName = 'dispatchGetCollection';
+    }
+  } else if (action.method !== 'DELETE') {
+    extraArg = {
+      name: 'data',
+      type: 'Object',
+      comment: 'Data for the request'
+    };
+  }
+  var actionArgs = action.args ? [].concat(action.args) : [];
+  actionArgs = actionArgs.concat(extraArg ? [extraArg] : []);
+%>
+/**
+<%= starComment(action.comment) %>
+<% _.forEach(actionArgs, function(arg) { %><%= starComment(
+          '@param {' + arg.type + '} ' + arg.name + ' ' + arg.comment) %>
+<% }); %><%= starComment(
+    '@return {Promise} ' +
+        ((isGet && !action.collection) ?
+            'The requested resource' :
+            'The response from the API')) %>
+ */
+<%= typeName + '.prototype.' + action.name %> = function(
+<% _.forEach(actionArgs, function(arg, i) { %>    <%= arg.name %><% if (i !== actionArgs.length - 1) { %>,
+<% } }); %>
+) {
+  var path = util.format('<%= action.path %>'<% _.forEach(action.args, function(arg) { %>, <%= arg.name %><% }); %>);
+  return this.<%= dispatchName %>(path<%= extraArg ? (', ' + extraArg.name) : ''%>);
+};
+<% }); %>
+module.exports = <%= typeName %>;
+
