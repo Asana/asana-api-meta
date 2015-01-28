@@ -28,19 +28,28 @@ function wrapHashComment(text) {
   return wrapComment(text, "# ");
 }
 
-//xcxc provide a translator that can set up maps to translate?
+function typeNameTranslator(lang) {
+  return ({
+    js: function(name) {
+      return ({
+        Id: 'Number'
+      })[name] || name;
+    }
+  })[lang] || function(x) { return x; };
+}
 
-_.merge(exports, {
-  starComment: wrapStarComment,
-  hashComment: wrapHashComment,
-  plural: inflect.pluralize,
-  single: inflect.singularize,
-  camel: inflect.camelize,
-  cap: inflect.capitalize,
-  decap: inflect.decapitalize,
-  snake: inflect.underscore,
-  dash: inflect.dasherize,
-  param: inflect.parameterize,
-  human: inflect.humanize
-});
-
+module.exports = function(lang) {
+  return {
+    typeName: typeNameTranslator(lang),
+    comment: wrapStarComment,
+    plural: inflect.pluralize,
+    single: inflect.singularize,
+    camel: inflect.camelize,
+    cap: inflect.capitalize,
+    decap: inflect.decapitalize,
+    snake: inflect.underscore,
+    dash: inflect.dasherize,
+    param: inflect.parameterize,
+    human: inflect.humanize
+  };
+};

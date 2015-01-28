@@ -1,5 +1,5 @@
 <%
-var typeName = plural(cap(resource.name));
+var thisType = plural(cap(resource.name));
 
 function paramNameInComment(param) {
   return param.required ? param.name : ('[' + param.name + ']');
@@ -9,14 +9,14 @@ var util = require('util');
 var Resource = require('./resource');
 
 /**
-<%= starComment(resource.comment) %>
+<%= comment(resource.comment) %>
  * @class
  * @param {Dispatcher} dispatcher The API dispatcher
  */
-function <%= typeName %>(dispatcher) {
+function <%= thisType %>(dispatcher) {
   Resource.call(this, dispatcher);
 }
-util.inherits(<%= typeName %>, Resource);
+util.inherits(<%= thisType %>, Resource);
 
 <% _.forEach(resource.actions, function(action) {
   var isGet = action.method === 'GET';
@@ -57,19 +57,19 @@ util.inherits(<%= typeName %>, Resource);
   var explicitParams = pathParams.concat(extraParam ? [extraParam] : []);
 %>
 /**
-<%= starComment(action.comment) %>
-<% _.forEach(explicitParams, function(param) { %><%= starComment(
-          '@param {' + param.type + '} ' + param.name + ' ' + param.comment) %>
+<%= comment(action.comment) %>
+<% _.forEach(explicitParams, function(param) { %><%= comment(
+          '@param {' + typeName(param.type) + '} ' + param.name + ' ' + param.comment) %>
 <% });
-   _.forEach(optionParams, function(param) { %><%= starComment(
-          '@option {' + param.type + '} ' + paramNameInComment(param) + ' ' + param.comment) %>
-<% }); %><%= starComment(
+   _.forEach(optionParams, function(param) { %><%= comment(
+          '@option {' + typeName(param.type) + '} ' + paramNameInComment(param) + ' ' + param.comment) %>
+<% }); %><%= comment(
     '@return {Promise} ' +
         ((isGet && !action.collection) ?
             'The requested resource' :
             'The response from the API')) %>
  */
-<%= typeName + '.prototype.' + action.name %> = function(
+<%= thisType + '.prototype.' + action.name %> = function(
 <% _.forEach(explicitParams, function(param, i) { %>    <%= param.name %><% if (i !== explicitParams.length - 1) { %>,
 <% } }); %>
 ) {
@@ -77,5 +77,5 @@ util.inherits(<%= typeName %>, Resource);
   return this.<%= dispatchName %>(path<%= extraParam ? (', ' + extraParam.name) : ''%>);
 };
 <% }); %>
-module.exports = <%= typeName %>;
+module.exports = <%= thisType %>;
 
