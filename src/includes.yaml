@@ -16,6 +16,11 @@ templates:
         - "'2012-02-22T02:06:58.158Z'"
         - "now"
 
+  - template: &Param.Bool
+    - type: Boolean
+      example_values:
+        - "false"
+
   - template: &Param.IdArray
       type: Array
       example_values:
