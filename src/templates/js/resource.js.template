@@ -1,5 +1,9 @@
 <%
 var typeName = plural(cap(resource.name));
+
+function paramNameInComment(param) {
+  return param.required ? param.name : ('[' + param.name + ']');
+}
 %>
 var util = require('util');
 var Resource = require('./resource');
@@ -34,16 +38,31 @@ util.inherits(<%= typeName %>, Resource);
       comment: 'Data for the request'
     };
   }
+  // Figure out how many params will be consumed by the path and put the
+  // first N required params there - the rest go in options.
   var numPathParams = (action.path.match(/%/g) || []).length;
-  var pathParams = action.params ? action.params.filter(function(param) {
-    return param.required;
-  }).slice(0, numPathParams) : [];
+  var pathParams = [];
+  var optionParams = [];
+  if (action.params) {
+    action.params.forEach(function(param, index) {
+      if (param.required && pathParams.length < numPathParams) {
+        pathParams.push(param);
+      } else {
+        optionParams.push(param);
+      }
+    });
+  }
+
+  // This includes the params that go on the path plus the request data param
   var explicitParams = pathParams.concat(extraParam ? [extraParam] : []);
 %>
 /**
 <%= starComment(action.comment) %>
 <% _.forEach(explicitParams, function(param) { %><%= starComment(
           '@param {' + param.type + '} ' + param.name + ' ' + param.comment) %>
+<% });
+   _.forEach(optionParams, function(param) { %><%= starComment(
+          '@option {' + param.type + '} ' + paramNameInComment(param) + ' ' + param.comment) %>
 <% }); %><%= starComment(
     '@return {Promise} ' +
         ((isGet && !action.collection) ?

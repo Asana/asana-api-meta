@@ -22,9 +22,11 @@ properties:
       Scheduling status of this task for the user it is assigned to.
       This field can only be set if the `assignee` is non-null.
 
+  # TODO more properties
+
 actions:
 
-  # CRUD
+  # Create, Retrieve, Update, Delete
 
   - name: create
     method: POST
