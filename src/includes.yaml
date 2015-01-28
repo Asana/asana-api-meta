@@ -71,6 +71,11 @@ types:
       example_values:
         - "gsanchez@example.com"
 
+  - type: &PropType.Bool
+    - type: Boolean
+      example_values:
+        - "false"
+
   - type: &PropType.User
     - type: User
       example_values:
