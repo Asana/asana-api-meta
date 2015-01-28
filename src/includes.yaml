@@ -21,6 +21,11 @@ templates:
       example_values:
         - "false"
 
+  - template: &Param.Id
+      type: Id
+      example_values:
+        - "12345"
+
   - template: &Param.IdArray
       type: Array
       example_values:
@@ -60,6 +65,13 @@ templates:
         - "1331"
       comment: |
         Globally unique identifier for the workspace or organization.
+
+  - template: &Param.AttachmentId
+      type: Id
+      example_values:
+        - "12357"
+      comment: |
+        Globally unique identifier for the attachment.
 
   - template: &Param.TeamId
       type: Id

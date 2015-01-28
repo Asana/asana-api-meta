@@ -24,7 +24,7 @@ actions:
     method: GET
     path: "/stories/%d"
     params:
-      - name: team
+      - name: story
         <<: *Param.StoryId
         required: true
     comment: |
