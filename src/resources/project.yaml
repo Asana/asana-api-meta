@@ -1,17 +1,3 @@
-#    "projects": {
-#      "methods": {
-#        "create":              { "doc": "Dispatches a POST request to /projects of the API to create a new project." },
-#        "create_in_workspace": { "doc": "Dispatches a POST request to /workspaces/:workspaceId/projects of the API to create a new project within the workspace." },
-#        "find_by_id":          { "doc": "Dispatches a GET request to /projects/:projectId of the API to get information about the project." },
-#        "find_all":            { "doc": "Dispatches a GET request to /projects of the API to get information about all projects that the dispatcher as access to." },
-#        "find_by_workspace":   { "doc": "Dispatches a GET request to /workspaces/:workspaceId/projects to get all the projects associated with the workspace." },
-#        "update":              { "doc": "Dispatches a PUT request to /projects/:projectId to update the project." },
-#        "delete":              { "doc": "Dispatches a DELETE requte to /projects/:projectId to delete the project." }
-#      }
-#    },
-#
-
-
 ---
 # See `user.yaml` for more docs on these yaml files.
 !include ../includes.yaml
@@ -92,7 +78,7 @@ actions:
 
   - name: findById
     method: GET
-    path: "/tasks/%d"
+    path: "/projects/%d"
     params:
       - name: task
         <<: *Param.TaskId
