@@ -1,25 +1,32 @@
 <%
-var typeName = plural(cap(resource.name));
+var thisType = plural(cap(resource.name));
+
+function paramNameInComment(param) {
+  return param.required ? param.name : ('[' + param.name + ']');
+}
 %>
 var util = require('util');
 var Resource = require('./resource');
 
 /**
-<%= starComment(resource.comment) %>
+<%= comment(resource.comment) %>
  * @class
  * @param {Dispatcher} dispatcher The API dispatcher
  */
-function <%= typeName %>(dispatcher) {
+function <%= thisType %>(dispatcher) {
   Resource.call(this, dispatcher);
 }
-util.inherits(<%= typeName %>, Resource);
+util.inherits(<%= thisType %>, Resource);
 
 <% _.forEach(resource.actions, function(action) {
+  if (action.no_code) {
+    return;
+  }
   var isGet = action.method === 'GET';
-  var extraArg = null;
+  var extraParam = null;
   var dispatchName = 'dispatch' + cap(action.method);
   if (isGet) {
-    extraArg = {
+    extraParam = {
       name: 'params',
       type: 'Object',
       comment: 'Parameters for the request'
@@ -28,32 +35,50 @@ util.inherits(<%= typeName %>, Resource);
       dispatchName = 'dispatchGetCollection';
     }
   } else if (action.method !== 'DELETE') {
-    extraArg = {
+    extraParam = {
       name: 'data',
       type: 'Object',
       comment: 'Data for the request'
     };
   }
-  var actionArgs = action.args ? [].concat(action.args) : [];
-  actionArgs = actionArgs.concat(extraArg ? [extraArg] : []);
+  // Figure out how many params will be consumed by the path and put the
+  // first N required params there - the rest go in options.
+  var numPathParams = (action.path.match(/%/g) || []).length;
+  var pathParams = [];
+  var optionParams = [];
+  if (action.params) {
+    action.params.forEach(function(param, index) {
+      if (param.required && pathParams.length < numPathParams) {
+        pathParams.push(param);
+      } else {
+        optionParams.push(param);
+      }
+    });
+  }
+
+  // This includes the params that go on the path plus the request data param
+  var explicitParams = pathParams.concat(extraParam ? [extraParam] : []);
 %>
 /**
-<%= starComment(action.comment) %>
-<% _.forEach(actionArgs, function(arg) { %><%= starComment(
-          '@param {' + arg.type + '} ' + arg.name + ' ' + arg.comment) %>
-<% }); %><%= starComment(
+<%= comment(action.comment) %>
+<% _.forEach(explicitParams, function(param) { %><%= comment(
+          '@param {' + typeName(param.type) + '} ' + param.name + ' ' + param.comment) %>
+<% });
+   _.forEach(optionParams, function(param) { %><%= comment(
+          '@option {' + typeName(param.type) + '} ' + paramNameInComment(param) + ' ' + param.comment) %>
+<% }); %><%= comment(
     '@return {Promise} ' +
         ((isGet && !action.collection) ?
             'The requested resource' :
             'The response from the API')) %>
  */
-<%= typeName + '.prototype.' + action.name %> = function(
-<% _.forEach(actionArgs, function(arg, i) { %>    <%= arg.name %><% if (i !== actionArgs.length - 1) { %>,
+<%= thisType + '.prototype.' + action.name %> = function(
+<% _.forEach(explicitParams, function(param, i) { %>    <%= param.name %><% if (i !== explicitParams.length - 1) { %>,
 <% } }); %>
 ) {
-  var path = util.format('<%= action.path %>'<% _.forEach(action.args, function(arg) { %>, <%= arg.name %><% }); %>);
-  return this.<%= dispatchName %>(path<%= extraArg ? (', ' + extraArg.name) : ''%>);
+  var path = util.format('<%= action.path %>'<% _.forEach(pathParams, function(param) { %>, <%= param.name %><% }); %>);
+  return this.<%= dispatchName %>(path<%= extraParam ? (', ' + extraParam.name) : ''%>);
 };
 <% }); %>
-module.exports = <%= typeName %>;
+module.exports = <%= thisType %>;
 

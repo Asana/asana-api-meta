@@ -1,51 +1,119 @@
 ---
-types:
+templates:
 
-  # Arguments
+  # TODO: response codes here, add to action schema set of possible responses
+
+  - template: &Code.200
+      value: 200
+      comment: |
+        Success.
+
+  # Parameters
   
-  - type: &Arg.TaskId
-      type: Number
+  - template: &Param.DateTime
+      type: String
+      example_values:
+        - "'2012-02-22T02:06:58.158Z'"
+        - "now"
+
+  - template: &Param.Bool
+    - type: Boolean
+      example_values:
+        - "false"
+
+  - template: &Param.Id
+      type: Id
+      example_values:
+        - "12345"
+
+  - template: &Param.IdArray
+      type: Array
+      example_values:
+        - "[133713, 184253]"
+
+  - template: &Param.ProjectId
+      type: Id
+      example_values:
+        - "13579"
+      comment: |
+        Globally unique identifier for the project.
+
+  - template: &Param.TagId
+      type: Id
+      example_values:
+        - "11235"
+      comment: |
+        Globally unique identifier for the tag.
+
+  - template: &Param.TaskId
+      type: Id
       example_values:
         - "124816"
       comment: |
         Globally unique identifier for the task.
 
-  - type: &Arg.UserId
-      type: Number
+  - template: &Param.UserId
+      type: Id
       example_values:
         - "14641"
       comment: |
         Globally unique identifier for the user.
 
-  - type: &Arg.WorkspaceId
-      type: Number
+  - template: &Param.WorkspaceId
+      type: Id
       example_values:
         - "1331"
       comment: |
         Globally unique identifier for the workspace or organization.
 
+  - template: &Param.AttachmentId
+      type: Id
+      example_values:
+        - "12357"
+      comment: |
+        Globally unique identifier for the attachment.
+
+  - template: &Param.TeamId
+      type: Id
+      example_values:
+        - "14916"
+      comment: |
+        Globally unique identifier for the team.
+
+  - template: &Param.StoryId
+      type: Id
+      example_values:
+        - "182764"
+      comment: |
+        Globally unique identifier for the team.
+
   # Types of properties
 
-  - type: &PropType.Id
-    - type: Number
+  - template: &PropType.Id
+    - type: Id
       example_values:
         - "1234"
       read_only: true
       comment: |
         Globally unique identifier for this object.
 
-  - type: &PropType.Email
+  - template: &PropType.Email
     - type: String
       example_values:
-        - "gsanchez@example.com"
+        - "'gsanchez@example.com'"
 
-  - type: &PropType.User
+  - template: &PropType.Bool
+    - type: Boolean
+      example_values:
+        - "false"
+
+  - template: &PropType.User
     - type: User
       example_values:
         - "{ id: 1234, name: 'Tim Bizarro' }"
         - "null"
 
-  - type: &PropType.AssigneeStatus
+  - template: &PropType.AssigneeStatus
       type: Enum
       example_values:
         - "'upcoming'"
@@ -58,3 +126,24 @@ types:
           comment: Scheduled for _upcoming_.
         - name: today
           comment: Scheduled for _today_.
+
+  # Full actions that are duplicated across resources, i.e. more than one
+  # way of doing something.
+  
+  - template: &Action.CommentOnTask
+      method: POST
+      path: "/tasks/%d/stories"
+      params:
+        - name: task
+          <<: *Param.TaskId
+          required: true
+        - name: text
+          type: String
+          required: true
+          comment: The plain text of the comment to add.
+      comment: |
+        Adds a comment to a task. The comment will be authored by the
+        currently authenticated user, and timestamped when the server receives
+        the request.
+
+        Returns the full record for the new story added to the task.
