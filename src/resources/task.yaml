@@ -22,7 +22,11 @@ properties:
       Scheduling status of this task for the user it is assigned to.
       This field can only be set if the `assignee` is non-null.
 
+  # TODO more properties
+
 actions:
+
+  # Create, Retrieve, Update, Delete
 
   - name: create
     method: POST
@@ -34,14 +38,15 @@ actions:
 
       Every task is required to be created in a specific workspace, and this
       workspace cannot be changed once set. The workspace need not be set
-      explicitly if you specify a project or a parent task instead.
+      explicitly if you specify a `project` or a `parent` task instead.
 
   - name: createInWorkspace
     method: POST
     path: "/workspaces/%d/tasks"
-    args:
-      - name: workspaceId
-        <<: *Arg.WorkspaceId
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
         comment: The workspace to create a task in.
     comment: |
       Creating a new task is as easy as POSTing to the `/tasks` endpoint
@@ -55,9 +60,338 @@ actions:
   - name: findById
     method: GET
     path: "/tasks/%d"
-    args:
-      - name: taskId
-        <<: *Arg.TaskId
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
         comment: The task to get.
     comment: |
-      TODO
+      Returns the complete task record for a single task.
+
+  - name: update
+    method: PUT
+    path: "/tasks/%d"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to update.
+    comment: |
+      A specific, existing task can be updated by making a PUT request on the
+      URL for that task. Only the fields provided in the `data` block will be
+      updated; any unspecified fields will remain unchanged.
+
+      When using this method, it is best to specify only those fields you wish
+      to change, or else you may overwrite changes made by another user since
+      you last retrieved the task.
+
+      Returns the complete updated task record.
+
+  - name: delete
+    method: DELETE
+    path: "/tasks/%d"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to delete.
+    comment: |
+      A specific, existing task can be deleted by making a DELETE request on the
+      URL for that task. Deleted tasks go into the "trash" of the user making
+      the delete request. Tasks can be recovered from the trash within a period
+      of 30 days; afterward they are completely removed from the system.
+
+      Returns an empty data record.
+
+  # Query
+
+  - name: findByProject
+    method: GET
+    path: "/projects/%d/tasks"
+    params:
+      - name: projectId
+        <<: *Param.ProjectId
+        required: true
+        comment: The project in which to search for tasks.
+    collection: true
+    comment: |
+      Returns the compact task records for all tasks within the given project,
+      ordered by their priority within the project.
+
+  - name: findByTag
+    method: GET
+    path: "/tags/%d/tasks"
+    params:
+      - name: tag
+        <<: *Param.TagId
+        required: true
+        comment: The tag in which to search for tasks.
+    collection: true
+    comment: |
+      Returns the compact task records for all tasks with the given tag.
+
+  - name: findAll
+    method: GET
+    path: "/tasks"
+    collection: true
+    comment: |
+      Returns the compact task records for some filtered set of tasks. Use one
+      or more of the parameters provided to filter the tasks returned.
+    params:
+      - name: assignee
+        <<: *Param.UserId
+        comment: The assignee to filter tasks on.
+        notes:
+          - If you specify `assignee`, you must also specify the `workspace` to filter on.
+      - name: workspace
+        <<: *Param.WorkspaceId
+        comment: The workspace or organization to filter tasks on.
+        notes:
+          - If you specify `workspace`, you must also specify the `assignee` to filter on.
+      - name: completed_since
+        <<: *Param.DateTime
+        comment: |
+          Only return tasks that are either incomplete or that have been
+          completed since this time.
+      - name: modified_since
+        <<: *Param.DateTime
+        comment: |
+          Only return tasks that have been modified since the given time.
+        notes:
+          - |
+            A task is considered "modified" if any of its properties change,
+            or associations between it and other objects are modified (e.g.
+            a task being added to a project). A task is not considered modified
+            just because another object it is associated with (e.g. a subtask)
+            is modified. Actions that count as modifying the task include
+            assigning, renaming, completing, and adding stories.
+
+  # Followers
+
+  - name: addFollowers
+    method: POST
+    path: "/tasks/%d/addFollowers"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to add followers to.
+      - name: followers
+        <<: *Param.IdArray
+        required: true
+        comment: An array of followers to add to the task.
+    comment: |
+      Adds each of the specified followers to the task, if they are not already
+      following. Returns the complete, updated record for the affected task.
+
+  - name: removeFollowers
+    method: POST
+    path: "/tasks/%d/removeFollowers"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to remove followers from.
+      - name: followers
+        <<: *Param.IdArray
+        required: true
+        comment: An array of followers to remove from the task.
+    comment: |
+      Removes each of the specified followers from the task if they are
+      following. Returns the complete, updated record for the affected task.
+
+  # Projects
+
+  - name: projects
+    method: GET
+    path: "/tasks/%d/projects"
+    collection: true
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to get projects on.
+    comment: |
+      Returns a compact representation of all of the projects the task is in.
+
+  - name: addProject
+    method: POST
+    path: "/tasks/%d/addProject"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to add to a project.
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to add the task to.
+      - name: insertAfter
+        <<: *Param.TaskId
+        example_values:
+          - "124816"
+          - "null"
+        comment: |
+          A task in the project to insert the task after, or `null` to
+          insert at the beginning of the list.
+      - name: insertBefore
+        <<: *Param.TaskId
+        example_values:
+          - "124816"
+          - "null"
+        comment: |
+          A task in the project to insert the task before, or `null` to
+          insert at the end of the list.
+      - name: section
+        <<: *Param.TaskId
+        example_values:
+          - "124816"
+        comment: |
+          A section in the project to insert the task into. The task will be
+          inserted at the top of the section.
+    comment: |
+      Adds the task to the specified project, in the optional location
+      specified. If no location arguments are given, the task will be added to
+      the beginning of the project.
+
+      `addProject` can also be used to reorder a task within a project that
+      already contains it.
+
+      Returns an empty data block.
+
+  - name: removeProject
+    method: POST
+    path: "/tasks/%d/removeProject"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to remove from a project.
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to remove the task from.
+    comment: |
+      Removes the task from the specified project. The task will still exist
+      in the system, but it will not be in the project anymore.
+
+      Returns an empty data block.
+
+  # Tags
+
+  - name: tags
+    method: GET
+    path: "/tasks/%d/tags"
+    collection: true
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to get tags on.
+    comment: |
+      Returns a compact representation of all of the tags the task has.
+
+  - name: addTag
+    method: POST
+    path: "/tasks/%d/addTag"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to add a tag to.
+      - name: tag
+        <<: *Param.TagId
+        required: true
+        comment: The tag to add to the task.
+    comment: |
+      Adds a tag to a task. Returns an empty data block.
+
+  - name: removeTag
+    method: POST
+    path: "/tasks/%d/removeTag"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to remove a tag from.
+      - name: tag
+        <<: *Param.TagId
+        required: true
+        comment: The tag to remove from the task.
+    comment: |
+      Removes a tag from the task. Returns an empty data block.
+
+  # Subtasks
+
+  - name: subtasks
+    method: GET
+    path: "/tasks/%d/subtasks"
+    collection: true
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to get the subtasks of.
+    comment: |
+      Returns a compact representation of all of the subtasks of a task.
+
+  - name: addSubtask
+    method: POST
+    path: "/tasks/%d/subtasks"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to add a subtask to.
+      - name: subtask
+        <<: *Param.TaskId
+        required: true
+        comment: The subtask to add to the task.
+    comment: |
+      Makes an existing task a subtask of another. Returns an empty data block.
+
+  - name: setParent
+    method: POST
+    path: "/tasks/%d/setParent"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to change the parent of.
+      - name: parent
+        <<: *Param.TaskId
+        required: true
+        comment: The new parent of the task, or `null` for no parent.
+    comment: |
+      Changes the parent of a task. Each task may only be a subtask of a single
+      parent, or no parent task at all. Returns an empty data block.
+
+  # Stories
+
+  - name: stories
+    method: GET
+    path: "/tasks/%d/stories"
+    collection: true
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task containing the stories to get.
+    comment: |
+      Returns a compact representation of all of the stories on the task.
+
+  - name: addComment
+    method: POST
+    path: "/tasks/%d/stories"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to add a story to.
+      - name: text
+        type: String
+        required: true
+        comment: The plain text of the story to add.
+    comment: |
+      Adds a comment story to the task from the currently authenticated user.
+      Returns the full record for the story added.

@@ -28,17 +28,28 @@ function wrapHashComment(text) {
   return wrapComment(text, "# ");
 }
 
-_.merge(exports, {
-  starComment: wrapStarComment,
-  hashComment: wrapHashComment,
-  plural: inflect.pluralize,
-  single: inflect.singularize,
-  camel: inflect.camelize,
-  cap: inflect.capitalize,
-  decap: inflect.decapitalize,
-  snake: inflect.underscore,
-  dash: inflect.dasherize,
-  param: inflect.parameterize,
-  human: inflect.humanize
-});
+function typeNameTranslator(lang) {
+  return ({
+    js: function(name) {
+      return ({
+        Id: 'Number'
+      })[name] || name;
+    }
+  })[lang] || function(x) { return x; };
+}
 
+module.exports = function(lang) {
+  return {
+    typeName: typeNameTranslator(lang),
+    comment: wrapStarComment,
+    plural: inflect.pluralize,
+    single: inflect.singularize,
+    camel: inflect.camelize,
+    cap: inflect.capitalize,
+    decap: inflect.decapitalize,
+    snake: inflect.underscore,
+    dash: inflect.dasherize,
+    param: inflect.parameterize,
+    human: inflect.humanize
+  };
+};

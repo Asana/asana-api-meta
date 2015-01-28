@@ -25,7 +25,7 @@ var languages = {
     repo: 'Asana/node-asana-gen',
     destPath: 'lib',
     resourceBaseName: function(resource) {
-      return helpers.plural(resource);
+      return helpers('js').plural(resource);
     },
     updatePackage: function(version, cb) {
       var repoRoot = paths.repo('js');
@@ -171,7 +171,7 @@ Object.keys(languages).forEach(function(lang) {
     gulp.task(taskName(resourceName), function() {
       return gulp.src('src/templates/' + lang + '/resource.*.template')
           .pipe(template(resource.load(resourceName), {
-            imports: helpers,
+            imports: helpers(lang),
             variable: 'resource'
           }))
           .pipe(rename(function(path) {
