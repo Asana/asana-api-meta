@@ -34,14 +34,15 @@ util.inherits(<%= typeName %>, Resource);
       comment: 'Data for the request'
     };
   }
-  var actionParams = action.params ? action.params.filter(function(param) {
+  var numPathParams = (action.path.match(/%/g) || []).length;
+  var pathParams = action.params ? action.params.filter(function(param) {
     return param.required;
-  }) : [];
-  actionParams = actionParams.concat(extraParam ? [extraParam] : []);
+  }).slice(0, numPathParams) : [];
+  var explicitParams = pathParams.concat(extraParam ? [extraParam] : []);
 %>
 /**
 <%= starComment(action.comment) %>
-<% _.forEach(actionParams, function(param) { %><%= starComment(
+<% _.forEach(explicitParams, function(param) { %><%= starComment(
           '@param {' + param.type + '} ' + param.name + ' ' + param.comment) %>
 <% }); %><%= starComment(
     '@return {Promise} ' +
@@ -50,10 +51,10 @@ util.inherits(<%= typeName %>, Resource);
             'The response from the API')) %>
  */
 <%= typeName + '.prototype.' + action.name %> = function(
-<% _.forEach(actionParams, function(param, i) { %>    <%= param.name %><% if (i !== actionParams.length - 1) { %>,
+<% _.forEach(explicitParams, function(param, i) { %>    <%= param.name %><% if (i !== explicitParams.length - 1) { %>,
 <% } }); %>
 ) {
-  var path = util.format('<%= action.path %>'<% _.forEach(action.params, function(param) { %>, <%= param.name %><% }); %>);
+  var path = util.format('<%= action.path %>'<% _.forEach(pathParams, function(param) { %>, <%= param.name %><% }); %>);
   return this.<%= dispatchName %>(path<%= extraParam ? (', ' + extraParam.name) : ''%>);
 };
 <% }); %>

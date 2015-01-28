@@ -36,7 +36,7 @@ actions:
 
       Every task is required to be created in a specific workspace, and this
       workspace cannot be changed once set. The workspace need not be set
-      explicitly if you specify a project or a parent task instead.
+      explicitly if you specify a `project` or a `parent` task instead.
 
   - name: createInWorkspace
     method: POST
@@ -120,7 +120,7 @@ actions:
     method: GET
     path: "/tags/%d/tasks"
     params:
-      - name: tagId
+      - name: tag
         <<: *Param.TagId
         required: true
         comment: The tag in which to search for tasks.
@@ -137,22 +137,22 @@ actions:
       or more of the parameters provided to filter the tasks returned.
     params:
       - name: assignee
-        <<: *Param.UserId;
+        <<: *Param.UserId
         comment: The assignee to filter tasks on.
         notes:
           - If you specify `assignee`, you must also specify the `workspace` to filter on.
       - name: workspace
-        <<: *Param.WorkspaceId;
+        <<: *Param.WorkspaceId
         comment: The workspace or organization to filter tasks on.
         notes:
           - If you specify `workspace`, you must also specify the `assignee` to filter on.
       - name: completed_since
-        <<: *Param.DateTime;
+        <<: *Param.DateTime
         comment: |
           Only return tasks that are either incomplete or that have been
           completed since this time.
       - name: modified_since
-        <<: *Param.DateTime;
+        <<: *Param.DateTime
         comment: |
           Only return tasks that have been modified since the given time.
         notes:
@@ -240,10 +240,20 @@ actions:
         comment: |
           A task in the project to insert the task before, or `null` to
           insert at the end of the list.
+      - name: section
+        <<: *Param.TaskId
+        example_values:
+          - "124816"
+        comment: |
+          A section in the project to insert the task into. The task will be
+          inserted at the top of the section.
     comment: |
       Adds the task to the specified project, in the optional location
       specified. If no location arguments are given, the task will be added to
       the beginning of the project.
+
+      `addProject` can also be used to reorder a task within a project that
+      already contains it.
 
       Returns an empty data block.
 
@@ -266,7 +276,6 @@ actions:
       Returns an empty data block.
 
   # Tags
-
 
   - name: tags
     method: GET
@@ -310,19 +319,77 @@ actions:
     comment: |
       Removes a tag from the task. Returns an empty data block.
 
-  # Sections
+  # Subtasks
+
+  - name: subtasks
+    method: GET
+    path: "/tasks/%d/subtasks"
+    collection: true
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to get the subtasks of.
+    comment: |
+      Returns a compact representation of all of the subtasks of a task.
+
+  - name: addSubtask
+    method: POST
+    path: "/tasks/%d/subtasks"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to add a subtask to.
+      - name: subtask
+        <<: *Param.TaskId
+        required: true
+        comment: The subtask to add to the task.
+    comment: |
+      Makes an existing task a subtask of another. Returns an empty data block.
+
+  - name: setParent
+    method: POST
+    path: "/tasks/%d/setParent"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to change the parent of.
+      - name: parent
+        <<: *Param.TaskId
+        required: true
+        comment: The new parent of the task, or `null` for no parent.
+    comment: |
+      Changes the parent of a task. Each task may only be a subtask of a single
+      parent, or no parent task at all. Returns an empty data block.
 
   # Stories
 
-  # Subtasks
+  - name: stories
+    method: GET
+    path: "/tasks/%d/stories"
+    collection: true
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task containing the stories to get.
+    comment: |
+      Returns a compact representation of all of the stories on the task.
 
-      "methods": {
-
-        "tags":                 { "method": "get",    "url": "/tasks/%d/tags",              "args": ["task_id"], "collection": true },
-        "add_tag":              { "method": "post",   "url": "/tasks/%d/addTag",            "args": ["task_id"] },
-        "remove_tag":           { "method": "post",   "url": "/tasks/%d/removeTag",         "args": ["task_id"] },
-
-        "subtasks":             { "method": "get",    "url": "/tasks/%d/subtasks",          "args": ["task_id"], "collection": true },
-        "add_subtask":          { "method": "post",   "url": "/tasks/%d/subtasks",          "args": ["task_id"] },
-        "set_parent":           { "method": "post",   "url": "/tasks/%d/setParent",         "args": ["task_id"] }
-      }
+  - name: addComment
+    method: POST
+    path: "/tasks/%d/stories"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to add a story to.
+      - name: text
+        type: String
+        required: true
+        comment: The plain text of the story to add.
+    comment: |
+      Adds a comment story to the task from the currently authenticated user.
+      Returns the full record for the story added.
