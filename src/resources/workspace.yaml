@@ -1,0 +1,107 @@
+---
+!include ../includes.yaml
+name: workspace
+comment: |
+  A _workspace_ is the highest-level organizational unit in Asana. All projects
+  and tasks have an associated workspace.
+
+  An _organization_ is a special kind of workspace that represents a company.
+  In an organization, you can group your projects into teams. You can read
+  more about how organizations work on the Asana Guide.
+  To tell if your workspace is an organization or not, check its
+  `is_organization` property.
+
+  Over time, we intend to migrate most workspaces into organizations and to
+  release more organization-specific functionality. We may eventually deprecate
+  using workspace-based APIs for organizations. Currently, and until after
+  some reasonable grace period following any further announcements, you can
+  still reference organizations in any `workspace` parameter.
+
+properties:
+
+  - name: id
+    <<: *PropType.Id
+
+  - name: name
+    type: String
+    example_values:
+      - "Apollo Moon Landing"
+    comment: |
+      The name of the workspace.
+
+  - name: is_organization
+    <<: *PropType.Bool
+    comment: |
+      True iff the workspace is an _organization_.
+
+actions:
+
+  # Create, Retrieve, Update, Delete
+
+  - name: findById
+    method: GET
+    path: "/workspaces/%d"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+    comment: |
+      Returns the full workspace record for a single workspace.
+
+  - name: findAll
+    method: GET
+    path: "/workspaces"
+    collection: true
+    comment: |
+      Returns the compact records for all workspaces visible to the authorized user.
+
+  - name: update
+    method: PUT
+    path: "/workspaces/%d"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace to update.
+    comment: |
+      Update properties on a workspace. Returns the complete, updated workspace record.
+
+  - name: typeahead
+    method: GET
+    path: "/workspaces/%d/typeahead"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace to fetch objects from.
+      - name: type
+        type: Enum
+        values:
+          - name: task
+            comment: A task.
+          - name: project
+            comment: A project.
+          - name: user
+            comment: A user.
+          - name: tag
+            comment: A tag.
+        required: true
+        comment: |
+          The type of values the typeahead should return.
+          Note that unlike in the names of endpoints, the types listed here are
+          in singular form (e.g. `task`). Using multiple types is not yet supported.
+      - name: query
+        type: String
+        comment: |
+          The string that will be used to search for relevant objects. If an
+          empty string is passed in, the API will currently return an empty
+          result set.
+      - name: count
+        type: Number
+        comment: |
+          The number of results to return. The default is `20` if this
+          parameter is omitted, with a minimum of `1` and a maximum of `100`.
+          If there are fewer results found than requested, all will be returned.
+    collection: true
+    comment: |
+      Returns the full records for all workspaces visible to the authorized user.

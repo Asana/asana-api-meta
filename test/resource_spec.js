@@ -10,7 +10,7 @@ describe('Resource', function() {
   describe('#names', function() {
     it('should return known resources in order', function() {
       assert.deepEqual(resource.names(), [
-        'task', 'team', 'user', 'workspace'
+        'story', 'task', 'team', 'user', 'workspace'
       ]);
     });
   });
