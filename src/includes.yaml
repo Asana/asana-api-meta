@@ -13,7 +13,7 @@ types:
   - type: &Param.DateTime
       type: String
       example_values:
-        - "2012-02-22T02:06:58.158Z"
+        - "'2012-02-22T02:06:58.158Z'"
         - "now"
 
   - type: &Param.IdArray
@@ -56,6 +56,13 @@ types:
       comment: |
         Globally unique identifier for the workspace or organization.
 
+  - type: &Param.TeamId
+      type: Id
+      example_values:
+        - "14916"
+      comment: |
+        Globally unique identifier for the team.
+
   # Types of properties
 
   - type: &PropType.Id
@@ -69,7 +76,7 @@ types:
   - type: &PropType.Email
     - type: String
       example_values:
-        - "gsanchez@example.com"
+        - "'gsanchez@example.com'"
 
   - type: &PropType.Bool
     - type: Boolean

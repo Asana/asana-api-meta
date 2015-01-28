@@ -32,7 +32,8 @@ function typeNameTranslator(lang) {
   return ({
     js: function(name) {
       return ({
-        Id: 'Number'
+        Id: 'Number',
+        Enum: 'String'
       })[name] || name;
     }
   })[lang] || function(x) { return x; };

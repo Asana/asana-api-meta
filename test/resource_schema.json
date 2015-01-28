@@ -61,6 +61,7 @@
             "type": "array",
             "items": { "type": "string" }
           },
+          "no_code": { "type": "boolean" },
           "collection": { "type": "boolean" },
           "args": {
             "type": "array",

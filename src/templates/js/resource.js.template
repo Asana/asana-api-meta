@@ -19,6 +19,9 @@ function <%= thisType %>(dispatcher) {
 util.inherits(<%= thisType %>, Resource);
 
 <% _.forEach(resource.actions, function(action) {
+  if (action.no_code) {
+    return;
+  }
   var isGet = action.method === 'GET';
   var extraParam = null;
   var dispatchName = 'dispatch' + cap(action.method);
