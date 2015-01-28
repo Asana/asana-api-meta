@@ -1,0 +1,54 @@
+---
+!include ../includes.yaml
+name: attachment
+comment: |
+  An _attachment_ object represents any file attached to a task in Asana,
+  whether it's an uploaded file or one associated via a third-party service
+  such as Dropbox or Google Drive.
+properties:
+
+  - name: id
+    <<: *PropType.Id
+
+  # TODO: properties
+
+actions:
+
+  # Create, Retrieve, Update, Delete
+
+  - name: findById
+    method: GET
+    path: "/attachments/%d"
+    params:
+      - name: attachment
+        <<: *Param.AttachmentId
+        required: true
+    comment: |
+      Returns the full record for a single attachment.
+
+  - name: findByTask
+    method: GET
+    path: "/tasks/%d/attachments"
+    collection: true
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+    comment: |
+      Returns the compact records for all attachments on the task.
+
+  - name: createOnTask
+    method: POST
+    path: "/tasks/%d/attachments"
+    no_code: true  # Uploading attachments must be hand-coded
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+      - name: file
+        type: File
+        example_values:
+          - xcxc
+        required: true
+    comment: |
+      Returns the compact records for all attachments on the task.

@@ -381,17 +381,4 @@ actions:
       Returns a compact representation of all of the stories on the task.
 
   - name: addComment
-    method: POST
-    path: "/tasks/%d/stories"
-    params:
-      - name: task
-        <<: *Param.TaskId
-        required: true
-        comment: The task to add a story to.
-      - name: text
-        type: String
-        required: true
-        comment: The plain text of the story to add.
-    comment: |
-      Adds a comment story to the task from the currently authenticated user.
-      Returns the full record for the story added.
+    <<: *Action.CommentOnTask

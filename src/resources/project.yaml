@@ -1,0 +1,179 @@
+---
+# See `user.yaml` for more docs on these yaml files.
+!include ../includes.yaml
+name: project
+comment: |
+  A _project_ represents a prioritized list of tasks in Asana. It exists in a
+  single workspace or organization and is accessible to a subset of users in
+  that workspace or organization, depending on its permissions.
+
+  Projects in organizations are shared with a single team. You cannot currently
+  change the team of a project via the API. Non-organization workspaces do not
+  have teams and so you should not specify the team of project in a
+  regular workspace.
+
+properties:
+
+  - name: id
+    <<: *PropType.Id
+
+  # TODO more properties
+
+actions:
+
+  # Create, Retrieve, Update, Delete
+
+  - name: create
+    method: POST
+    path: "/projects"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace or organization to create the project in.
+      - name: team
+        <<: *Param.TeamId
+        comment: |
+          If creating in an organization, the specific team to create the
+          project in.
+    comment: |
+      Creates a new project in a workspace or team.
+
+      Every project is required to be created in a specific workspace or
+      organization, and this cannot be changed once set. Note that you can use
+      the `workspace` parameter regardless of whether or not it is an
+      organization.
+
+      If the workspace for your project _is_ an organization, you must also
+      supply a `team` to share the project with.
+
+      Returns the full record of the newly created project.
+
+  - name: createInWorkspace
+    method: POST
+    path: "/workspaces/%d/projects"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace or organization to create the project in.
+    comment: |
+      If the workspace for your project _is_ an organization, you must also
+      supply a `team` to share the project with.
+
+      Returns the full record of the newly created project.
+
+  - name: createInTeam
+    method: POST
+    path: "/teams/%d/projects"
+    params:
+      - name: team
+        <<: *Param.TeamId
+        required: true
+        comment: The team to create the project in.
+    comment: |
+      Creates a project shared with the given team.
+
+      Returns the full record of the newly created project.
+
+  - name: findById
+    method: GET
+    path: "/projects/%d"
+    params:
+      - name: task
+        <<: *Param.TaskId
+        required: true
+        comment: The task to get.
+    comment: |
+      Returns the complete task record for a single task.
+
+  - name: update
+    method: PUT
+    path: "/projects/%d"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to update.
+    comment: |
+      A specific, existing project can be updated by making a PUT request on the
+      URL for that project. Only the fields provided in the `data` block will be
+      updated; any unspecified fields will remain unchanged.
+
+      When using this method, it is best to specify only those fields you wish
+      to change, or else you may overwrite changes made by another user since
+      you last retrieved the task.
+
+      Returns the complete updated project record.
+
+  - name: delete
+    method: DELETE
+    path: "/projects/%d"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to delete.
+    comment: |
+      A specific, existing project can be deleted by making a DELETE request
+      on the URL for that project.
+
+      Returns an empty data record.
+
+  - name: findAll
+    method: GET
+    path: "/projects"
+    collection: true
+    comment: |
+      Returns the compact project records for some filtered set of projects.
+      Use one or more of the parameters provided to filter the projects returned.
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        comment: The workspace or organization to filter projects on.
+      - name: team
+        <<: *Param.TeamId
+        comment: The team to filter projects on.
+      - name: archived
+        <<: *Param.Bool
+        comment: |
+          Only return projects whose `archived` field takes on the value of
+          this parameter.
+
+  - name: findByWorkspace
+    method: GET
+    path: "/workspaces/%d/projects"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace or organization to find projects in.
+      - name: archived
+        <<: *Param.Bool
+        comment: |
+          Only return projects whose `archived` field takes on the value of
+          this parameter.
+    collection: true
+    comment: |
+      Returns the compact project records for all projects in the workspace.
+
+  - name: findByTeam
+    method: GET
+    path: "/teams/%d/projects"
+    params:
+      - name: team
+        <<: *Param.TeamId
+        required: true
+        comment: The team to find projects in.
+      - name: archived
+        <<: *Param.Bool
+        comment: |
+          Only return projects whose `archived` field takes on the value of
+          this parameter.
+    collection: true
+    comment: |
+      Returns the compact project records for all projects in the team.
+
+  # Children
+
+  # TODO: sections
