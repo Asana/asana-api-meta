@@ -82,4 +82,5 @@ util.inherits(<%= thisType %>, SuperType);
 };
 <% }); %>
 
+  return <%= thisType %>;
 };
