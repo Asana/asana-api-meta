@@ -11,7 +11,7 @@ after_success:
     secure: QX5VFzswWnqzlwzb3w/OkpDLZLKgddOEUmM6OeOCfnuanuQYBPghyeEQFDEebkCRxqf6sOfYTKKenk6+afLa7VtyVadnAuEgGsZn8WficeLtThw6CcmYukdOEdmWFQO0RjrauRbcch5ndXC3aHxWj//e7vZtDp+Rs3smn34XcKg=
   on:
     branch: master
-    repo: Asana/node-asana-gen
+    repo: Asana/asana-api-meta
 - git config --global user.email "git@asana.com"
 - git config --global user.name "Asana"
 env:
