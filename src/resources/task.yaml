@@ -361,6 +361,7 @@ actions:
       - name: parent
         <<: *Param.TaskId
         required: true
+        explicit: true
         comment: The new parent of the task, or `null` for no parent.
     comment: |
       Changes the parent of a task. Each task may only be a subtask of a single

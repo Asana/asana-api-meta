@@ -48,7 +48,8 @@ actions:
       - name: file
         type: File
         example_values:
-          - xcxc
+          - TBD
         required: true
+        comment: TBD
     comment: |
       Returns the compact records for all attachments on the task.

@@ -1,8 +1,10 @@
 {
   "title": "Resource",
   "type": "object",
+  "additionalProperties": false,
   "required": ["name", "comment", "properties", "actions"],
   "properties": {
+    "templates": { "type": "array" },
     "name": { "type": "string" },
     "comment": { "type": "string" },
     "notes": {
@@ -13,6 +15,7 @@
       "type": "array",
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "required": ["name", "type", "comment", "example_values"],
         "properties": {
           "name": { "type": "string" },
@@ -34,6 +37,7 @@
             "items": {
               "type": "object",
               "required": ["name", "comment"],
+              "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
                 "comment": { "type": "string" },
@@ -52,6 +56,7 @@
       "items": {
         "type": "object",
         "required": ["name", "method", "path", "comment"],
+        "additionalProperties": false,
         "properties": {
           "name": { "type": "string" },
           "method": { "type": "string" },
@@ -63,18 +68,42 @@
           },
           "no_code": { "type": "boolean" },
           "collection": { "type": "boolean" },
-          "args": {
+          "params": {
             "type": "array",
             "items": {
               "type": "object",
               "required": ["name", "type", "comment"],
+              "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
                 "type": { "type": "string" },
+                "required": { "type": "boolean" },
+                "explicit": { "type": "boolean" },
                 "comment": { "type": "string" },
                 "notes": {
                   "type": "array",
                   "items": { "type": "string" }
+                },
+                "example_values": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "length": { "min": 1 }
+                },
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["name", "comment"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "name": { "type": "string" },
+                      "comment": { "type": "string" },
+                      "notes": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                      }
+                    }
+                  }
                 }
               }
             }
