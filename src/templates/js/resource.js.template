@@ -6,7 +6,8 @@ function paramNameInComment(param) {
 }
 %>
 var util = require('util');
-var Resource = require('./resource');
+
+module.exports = function(SuperType) {
 
 /**
 <%= comment(resource.comment) %>
@@ -14,9 +15,9 @@ var Resource = require('./resource');
  * @param {Dispatcher} dispatcher The API dispatcher
  */
 function <%= thisType %>(dispatcher) {
-  Resource.call(this, dispatcher);
+  SuperType.call(this, dispatcher);
 }
-util.inherits(<%= thisType %>, Resource);
+util.inherits(<%= thisType %>, SuperType);
 
 <% _.forEach(resource.actions, function(action) {
   if (action.no_code) {
@@ -80,5 +81,5 @@ util.inherits(<%= thisType %>, Resource);
   return this.<%= dispatchName %>(path<%= extraParam ? (', ' + extraParam.name) : ''%>);
 };
 <% }); %>
-module.exports = <%= thisType %>;
 
+};
