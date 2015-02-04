@@ -56,15 +56,16 @@ actions:
   - name: get
     method: GET
     path: "/events"
-    no_code: true
     params:
       - name: resource
         <<: *Param.Id
         required: true
+        explicit: true
         comment: |
           A resource ID to subscribe to. The resource can be a task or project.
       - name: sync
         type: String
+        explicit: true
         example_values:
           - "'de4774f6915eae04714ca93bb2f5ee81'"
         comment: |

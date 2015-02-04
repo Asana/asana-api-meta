@@ -104,4 +104,8 @@ actions:
           If there are fewer results found than requested, all will be returned.
     collection: true
     comment: |
-      Returns the full records for all workspaces visible to the authorized user.
+      Retrieves objects in the workspace based on an auto-completion/typeahead
+      search algorithm. This feature is meant to provide results quickly, so do
+      not rely on this API to provide extremely accurate search results. The
+      result set is limited to a single page of results with a maximum size,
+      so you won't be able to fetch large numbers of results.

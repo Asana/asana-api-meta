@@ -5,6 +5,14 @@ var _ = require('lodash');
  * Helpers for code-generation templates
  */
 
+function _repeat(char, times) {
+  var s = '';
+  for (var i = 0; i < times; i++) {
+    s += char;
+  }
+  return s;
+}
+
 /**
  * Wrap the interior of a multi-line comment at the 80-column boundary.
  *
@@ -20,12 +28,12 @@ function wrapComment(text, prefix, maxChars) {
   return prefix + text.trim().replace(/\n/g, "\n" + prefix);
 }
 
-function wrapStarComment(text) {
-  return wrapComment(text, " * ");
+function wrapStarComment(text, indent) {
+  return wrapComment(text, _repeat(' ', indent || 0) + ' * ');
 }
 
-function wrapHashComment(text) {
-  return wrapComment(text, "# ");
+function wrapHashComment(text, indent) {
+  return wrapComment(text, _repeat(' ', indent || 0) + '# ');
 }
 
 function typeNameTranslator(lang) {
