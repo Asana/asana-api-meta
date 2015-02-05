@@ -57,6 +57,8 @@ actions:
     method: GET
     path: "/events"
     collection: true
+    # Calling get collection isn't quite right since it will add limit=
+    no_code: true
     params:
       - name: resource
         <<: *Param.Id
