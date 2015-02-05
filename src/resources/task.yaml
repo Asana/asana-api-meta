@@ -353,6 +353,9 @@ actions:
   - name: setParent
     method: POST
     path: "/tasks/%d/setParent"
+    # TODO: we need allow_null to gen the code for this. We would also need
+    # casting (to number) but that will be unnecessary when we move to TS.
+    no_code: true
     params:
       - name: task
         <<: *Param.TaskId
