@@ -56,6 +56,7 @@ actions:
   - name: get
     method: GET
     path: "/events"
+    collection: true
     params:
       - name: resource
         <<: *Param.Id
