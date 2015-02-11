@@ -6,4 +6,8 @@ branches:
   only:
     - master
 after_success:
+  - git config --global user.email "git@asana.com"
+  - git config --global user.name "Asana"
   - gulp deploy
+env:
+  global: ASANA_GITHUB_TOKEN=8cf0fa40746dc08aeb4a9f6e1e124d63451b7e44
