@@ -84,7 +84,7 @@ Object.keys(languages).forEach(function(lang) {
     var repoRoot = paths.repo(lang);
     fs.removeSync(repoRoot);
     exec(
-        'git clone --depth=1 git@github.com:' + config.repo +
+        'git clone --depth=2 git@github.com:' + config.repo +
             ' ' + repoRoot, function(err) {
       if (err) { cb(err); return; }
       fs.mkdirpSync(dest);
