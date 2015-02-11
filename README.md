@@ -9,12 +9,11 @@ It is currently used to build the following client libraries:
 
 ## Workflow
 
-**In `asana-api-meta`:**
   1. Modify a resource or template
-  2. `gulp build`        # builds and tests
+  2. `gulp build`        _# builds and tests changes_
   3. `git commit -a -m ...`
-  4. `gulp bump-patch`   # or bump-feature or bump-release
-  5. `gulp deploy`       # deploys all generated files to client libs (TODO: do automatically via travis)
+  4. `gulp bump-patch`   _# or `bump-feature` or `bump-release`_
+  5. `git push origin master --tags`  _# pushes changes; travis will deploy all generated files to client libs_
 
 Then, update the client libraries to use the new package, update their versions, etc.
 
@@ -37,4 +36,4 @@ The build system will, for each language `LANG` it is building (e.g. `LANG='js'`
       4. Execute the resource template against the resource definition.
       5. Output the result into the file `dist/LANG/NAME.EXT`.
 
-The file `helpers.js` is scoped into the template namespace for use in the templates.
+The file `helpers.js` is scoped into the template namespace for use in the templates, and includes utilities for common code-generation patterns.
