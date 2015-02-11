@@ -82,10 +82,13 @@ Object.keys(languages).forEach(function(lang) {
   gulp.task('deploy-' + lang, function(cb) {
     var dest = paths.repoDest(lang);
     var repoRoot = paths.repo(lang);
+    var token = process.env.ASANA_GITHUB_TOKEN || null;
     fs.removeSync(repoRoot);
+    var url = (token !== null)
+        ? util.format('https://%s@github.com/%s', token, config.repo)
+        : util.format('git@github.com:%s', config.repo);
     exec(
-        'git clone --depth=1 git@github.com:' + config.repo +
-            ' ' + repoRoot, function(err) {
+        util.format('git clone --depth=1 %s %s', url, repoRoot), function(err) {
       if (err) { cb(err); return; }
       fs.mkdirpSync(dest);
       fs.copy(paths.dist(lang), dest, function(err) {
