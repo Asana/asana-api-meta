@@ -1,9 +1,9 @@
+language: node_js
+node_js:
+- '0.10'
 sudo: false
+branches:
+  only:
+    - master
 after_success:
-  skip_cleanup: true
-  api_key:
-    secure: QX5VFzswWnqzlwzb3w/OkpDLZLKgddOEUmM6OeOCfnuanuQYBPghyeEQFDEebkCRxqf6sOfYTKKenk6+afLa7VtyVadnAuEgGsZn8WficeLtThw6CcmYukdOEdmWFQO0RjrauRbcch5ndXC3aHxWj//e7vZtDp+Rs3smn34XcKg=
-  on:
-    branch: master
-    repo: Asana/asana-api-meta
   - gulp deploy
