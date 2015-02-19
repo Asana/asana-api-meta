@@ -34,6 +34,20 @@ var languages = {
       writePackage(repoRoot + '/package.json', destPackage);
       exec('git add package.json', {cwd: repoRoot}, cb);
     }
+  },
+  json: {
+    repo: 'Asana/asana-api-json',
+    destPath: 'lib',
+    resourceBaseName: function(resource) {
+      return helpers('js').plural(resource);
+    },
+    updatePackage: function(version, cb) {
+      var repoRoot = paths.repo('json');
+      var destPackage = readPackage(repoRoot + '/package.json');
+      destPackage.version = version;
+      writePackage(repoRoot + '/package.json', destPackage);
+      exec('git add package.json', {cwd: repoRoot}, cb);
+    }
   }
 };
 
