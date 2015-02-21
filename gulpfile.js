@@ -78,43 +78,85 @@ gulp.task('deploy', ['ensure-git-clean', 'build'].concat(Object.keys(languages).
  * Generate deploy rules for each language
  */
 Object.keys(languages).forEach(function(lang) {
-  var config = languages[lang];
   gulp.task('deploy-' + lang, function(cb) {
+    var config = languages[lang];
     var dest = paths.repoDest(lang);
     var repoRoot = paths.repo(lang);
     var token = process.env.ASANA_GITHUB_TOKEN || null;
-    fs.removeSync(repoRoot);
-    var url = (token !== null)
-        ? util.format('https://%s@github.com/%s', token, config.repo)
-        : util.format('git@github.com:%s', config.repo);
-    exec(
-        util.format('git clone --depth=1 %s %s', url, repoRoot), function(err) {
+    var version;
+
+    function echoAndExec() {
+      if (process.env.GULP_DEBUG) {
+        console.log('+ ' + arguments[0]);
+      }
+      return exec.apply(null, arguments);
+    }
+
+    cloneRepo(cb);
+
+    // TODO: use some kind of promisify libraries to clean all this async code
+    function cloneRepo(cb) {
+      fs.removeSync(repoRoot);
+      var url = (token !== null)
+          ? util.format('https://github.com/%s', config.repo)
+          : util.format('git@github.com:%s', config.repo);
+      echoAndExec(
+          util.format('git clone --depth=1 %s %s', url, repoRoot),
+          configureCredentials);
+    }
+
+    function configureCredentials(err, stdout, stderr) {
+      if (err) { cb(err); return; }
+      if (token !== null) {
+        echoAndExec(
+            'git config credential.helper "store --file=.git/credentials"',
+            {cwd: repoRoot},
+            writeCredentials);
+      } else {
+        copyToRepo();
+      }
+    }
+
+    function writeCredentials(err, stdout, stderr) {
+      if (err) { cb(err); return; }
+      fs.writeFileSync(
+          util.format('%s/.git/credentials', repoRoot),
+          util.format('https://%s:@github.com', token));
+      copyToRepo();
+    }
+
+    function copyToRepo(err, stdout, stderr) {
       if (err) { cb(err); return; }
       fs.mkdirpSync(dest);
       fs.copy(paths.dist(lang), dest, function(err) {
-        var version = readPackage().version;
-        config.updatePackage(version, function(err) {
-          if (err) { cb(err); return; }
-
-          exec('git add ' + paths.repoDestRelative(lang), {cwd: repoRoot}, function(err) {
-            if (err) { cb(err); return; }
-
-            exec(util.format('git commit -a -m "Deploy from asana-api-meta v%s"', version), {cwd: repoRoot}, function(err) {
-              if (err) { cb(err); return; }
-
-              exec(util.format('git tag -f "v%s"', version), {cwd: repoRoot}, function(err) {
-                if (err) { cb(err); return; }
-
-                exec('git push --tags origin master', {cwd: repoRoot}, function(err) {
-                  if (err) { cb(err); return; }
-                  cb();
-                });
-              });
-            });
-          });
-        });
+        version = readPackage().version;
+        config.updatePackage(version, gitAdd);
       });
-    });
+    }
+
+    function gitAdd(err) {
+      if (err) { cb(err); return; }
+      echoAndExec('git add ' + paths.repoDestRelative(lang), {cwd: repoRoot}, gitCommit);
+    }
+
+    function gitCommit(err) {
+      if (err) { cb(err); return; }
+      echoAndExec(util.format('git commit --allow-empty -a -m "Deploy from asana-api-meta v%s"', version), {cwd: repoRoot}, gitTag);
+    }
+
+    function gitTag(err, stdout, stderr) {
+      if (err) { cb(err); return; }
+      echoAndExec(util.format('git tag -f "v%s"', version), {cwd: repoRoot}, gitPush);
+    }
+
+    function gitPush(err) {
+      if (err) { cb(err); return; }
+      echoAndExec('git push --tags origin master', {cwd: repoRoot}, function(err, stdout, stderr) {
+        if (err) { cb(err); return; }
+        // Finally, success!
+        cb();
+      });
+    }
   });
 });
 
