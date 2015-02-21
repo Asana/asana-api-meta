@@ -78,7 +78,7 @@ gulp.task('deploy', ['ensure-git-clean', 'build'].concat(Object.keys(languages).
  * Generate deploy rules for each language
  */
 Object.keys(languages).forEach(function(lang) {
-  gulp.task('deploy-' + lang, function(cb) {
+  gulp.task('deploy-' + lang, ['build-' + lang], function(cb) {
     var config = languages[lang];
     var dest = paths.repoDest(lang);
     var repoRoot = paths.repo(lang);
