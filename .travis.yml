@@ -11,5 +11,6 @@ after_success:
   - gulp deploy
 env:
   global:
+    - GULP_DEBUG=1
     # ASANA_GITHUB_TOKEN=...
-    secure: "EdAbDyOv6n8mWup5HNOxc74N+P8b+G4ogScuPTVnFNa7GbDPUGR1xpVUBt2ONIgagVV+PQd64b3F54h8muiwKUIkvvntgYnzRFjygrykOb4Hx6jfk5W8Psr9YvDCrJd6lN5V0tk1S7LdK0c0WbDQF0atkFge1jnB8sIeqRHPZXU="
+    - secure: "krbw7SRVcFTRWGkg60V9qk3uJGGGCQgYGYbUC6KG3tQDT9/z9D8+vKvrhtfeMDisF1xgCN0vcUVRjm9qhjrjZhIK0Lcexp9QICOVrKbnlU72E532tg0pf5nJlzN6x3EMl10jBt9HWWA7gUK2rPZ6w84MjU5MfUijoxmbytFnMj8="
