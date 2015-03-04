@@ -25,7 +25,11 @@ function wrapComment(text, prefix, maxChars) {
   // TODO: actually wrap :)
   prefix = prefix || "";
   maxChars = maxChars || 78;
-  return prefix + text.trim().replace(/\n/g, "\n" + prefix);
+  return prefixLines(text, prefix);
+}
+
+function prefixLines(text, prefix, skipFirst) {
+  return (skipFirst ? "" : prefix) + text.trim().replace(/\n/g, "\n" + prefix);
 }
 
 function wrapStarComment(text, indent) {
@@ -47,10 +51,11 @@ function typeNameTranslator(lang) {
   })[lang] || function(x) { return x; };
 }
 
-module.exports = function(lang) {
-  return {
-    typeName: typeNameTranslator(lang),
+var langs = {
+  js: {
+    typeName: typeNameTranslator("js"),
     comment: wrapStarComment,
+    prefix: prefixLines,
     plural: inflect.pluralize,
     single: inflect.singularize,
     camel: inflect.camelize,
@@ -60,5 +65,23 @@ module.exports = function(lang) {
     dash: inflect.dasherize,
     param: inflect.parameterize,
     human: inflect.humanize
-  };
+  },
+  python: {
+    typeName: typeNameTranslator("python"),
+    comment: wrapHashComment,
+    prefix: prefixLines,
+    plural: inflect.pluralize,
+    single: inflect.singularize,
+    camel: inflect.camelize,
+    cap: inflect.capitalize,
+    decap: inflect.decapitalize,
+    snake: inflect.underscore,
+    dash: inflect.dasherize,
+    param: inflect.parameterize,
+    human: inflect.humanize
+  }
+}
+
+module.exports = function(lang) {
+  return langs[lang];
 };
