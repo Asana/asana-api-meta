@@ -22,8 +22,9 @@ var test = 'test/**/*';
  */
 var languages = {
   js: {
-    repo: 'Asana/node-asana-gen',
-    destPath: 'lib',
+    repo: 'Asana/node-asana',
+    branch: 'api-meta-incoming',
+    destPath: 'lib/resources/gen',
     resourceBaseName: function(resource) {
       return helpers('js').plural(resource);
     },
@@ -101,7 +102,16 @@ Object.keys(languages).forEach(function(lang) {
           ? util.format('https://github.com/%s', config.repo)
           : util.format('git@github.com:%s', config.repo);
       echoAndExec(
-          util.format('git clone --depth=1 %s %s', url, repoRoot),
+          util.format('git clone %s %s', url, repoRoot),
+          switchToBranch);
+    }
+
+    function switchToBranch(err, stdout, stderr) {
+      if (err) { cb(err); return; }
+      var branch = config.branch;
+      echoAndExec(
+          util.format('git checkout --track -b %s origin/%s', branch, branch),
+          {cwd: repoRoot},
           configureCredentials);
     }
 
@@ -151,7 +161,9 @@ Object.keys(languages).forEach(function(lang) {
 
     function gitPush(err) {
       if (err) { cb(err); return; }
-      echoAndExec('git push --tags origin master', {cwd: repoRoot}, function(err, stdout, stderr) {
+      echoAndExec(
+          util.format('git push --tags origin %s', config.branch),
+          {cwd: repoRoot}, function(err, stdout, stderr) {
         if (err) { cb(err); return; }
         // Finally, success!
         cb();
