@@ -22,11 +22,10 @@ var test = 'test/**/*';
  */
 var languages = {
   js: {
-    repo: 'Asana/node-asana-gen',
-    destPath: 'lib',
-    resourceBaseName: function(resource) {
-      return helpers('js').plural(resource);
-    },
+    repo: 'Asana/node-asana',
+    branch: 'api-meta-incoming',
+    templatePath: 'src/templates',
+    outputPath: 'lib/resources/gen',
     updatePackage: function(version, cb) {
       var repoRoot = paths.repo('js');
       var destPackage = readPackage(repoRoot + '/package.json');
@@ -44,11 +43,11 @@ var paths = {
   repo: function(lang) {
     return 'dist/git/' + lang;
   },
-  repoDest: function(lang) {
-    return paths.repo(lang) + '/' + paths.repoDestRelative(lang);
+  repoOutput: function(lang) {
+    return paths.repo(lang) + '/' + paths.repoOutputRelative(lang);
   },
-  repoDestRelative: function(lang) {
-    return languages[lang].destPath;
+  repoOutputRelative: function(lang) {
+    return languages[lang].outputPath;
   }
 };
 
@@ -75,35 +74,108 @@ gulp.task('deploy', ['ensure-git-clean', 'build'].concat(Object.keys(languages).
 })));
 
 /**
- * Generate deploy rules for each language
+ * Generate build and deploy rules for each language
  */
+var resourceNames = resource.names();
 Object.keys(languages).forEach(function(lang) {
-  gulp.task('deploy-' + lang, ['build-' + lang], function(cb) {
-    var config = languages[lang];
-    var dest = paths.repoDest(lang);
-    var repoRoot = paths.repo(lang);
-    var token = process.env.ASANA_GITHUB_TOKEN || null;
-    var version;
+  var config = languages[lang];
+  var outputPath = paths.repoOutput(lang);
+  var repoRoot = paths.repo(lang);
+  var token = process.env.ASANA_GITHUB_TOKEN || null;
 
-    function echoAndExec() {
-      if (process.env.GULP_DEBUG) {
-        console.log('+ ' + arguments[0]);
-      }
-      return exec.apply(null, arguments);
+  function echoAndExec() {
+    if (process.env.GULP_DEBUG) {
+      console.log('+ ' + arguments[0]);
     }
+    return exec.apply(null, arguments);
+  }
+
+  function resTaskName(resourceName) {
+    return 'build-' + lang + '-' + resourceName;
+  }
+
+  /**
+   * Clean work area for target repo
+   */
+  Object.keys(languages).forEach(function(lang) {
+    gulp.task('clean-' + lang, function() {
+      fs.removeSync(paths.dist(lang));
+    });
+  });
+
+  /**
+   * Checkout target repo, for build and deploy
+   */
+  gulp.task('checkout-' + lang, ['clean-' + lang], function(cb) {
 
     cloneRepo(cb);
 
-    // TODO: use some kind of promisify libraries to clean all this async code
     function cloneRepo(cb) {
       fs.removeSync(repoRoot);
       var url = (token !== null)
           ? util.format('https://github.com/%s', config.repo)
           : util.format('git@github.com:%s', config.repo);
       echoAndExec(
-          util.format('git clone --depth=1 %s %s', url, repoRoot),
-          configureCredentials);
+          util.format('git clone %s %s', url, repoRoot),
+          switchToBranch);
     }
+
+    function switchToBranch(err, stdout, stderr) {
+      if (err) { cb(err); return; }
+      var branch = config.branch;
+      echoAndExec(
+          util.format('git checkout --track -b %s origin/%s', branch, branch),
+          {cwd: repoRoot},
+          done);
+    }
+
+    function done(err, stdout, stderr) {
+      if (err) { cb(err); return; }
+      cb();
+    }
+  });
+
+  /**
+   * Build rules, per resource.
+   */
+  resourceNames.forEach(function(resourceName) {
+    gulp.task(resTaskName(resourceName), ['checkout-' + lang], function() {
+      // Support templates existing either locally or in target repo.
+      var templatePath = config.templatePath ?
+          (paths.repo(lang) + '/' + config.templatePath):
+          ('src/templates/' + lang);
+      var resourceTemplateInfo = require('./' + templatePath).resource;
+
+      // Find the template info for resources
+      var resourceInstance = resource.load(resourceName);
+      var templateHelpers = helpers(lang);
+      return gulp.src(templatePath + '/' + resourceTemplateInfo.template)
+          .pipe(
+              template(resourceInstance, {
+                imports: templateHelpers,
+                variable: 'resource'
+              }))
+          .pipe(
+              rename(resourceTemplateInfo.filename(resourceInstance, templateHelpers)))
+          .pipe(
+              gulp.dest(paths.dist(lang)));
+    });
+  });
+  gulp.task(
+      'build-' + lang,
+      resourceNames.map(resTaskName));
+
+  /**
+   * Deploy
+   */
+  gulp.task('deploy-' + lang, ['build-' + lang], function(cb) {
+    var version;
+
+    // We depend on the build step which checks out the repo, so we start by
+    // setting our credentials so we can push to it.
+    configureCredentials();
+
+    // TODO: use some kind of promisify libraries to clean all this async code
 
     function configureCredentials(err, stdout, stderr) {
       if (err) { cb(err); return; }
@@ -127,8 +199,8 @@ Object.keys(languages).forEach(function(lang) {
 
     function copyToRepo(err, stdout, stderr) {
       if (err) { cb(err); return; }
-      fs.mkdirpSync(dest);
-      fs.copy(paths.dist(lang), dest, function(err) {
+      fs.mkdirpSync(outputPath);
+      fs.copy(paths.dist(lang), outputPath, function(err) {
         version = readPackage().version;
         config.updatePackage(version, gitAdd);
       });
@@ -136,7 +208,7 @@ Object.keys(languages).forEach(function(lang) {
 
     function gitAdd(err) {
       if (err) { cb(err); return; }
-      echoAndExec('git add ' + paths.repoDestRelative(lang), {cwd: repoRoot}, gitCommit);
+      echoAndExec('git add ' + paths.repoOutputRelative(lang), {cwd: repoRoot}, gitCommit);
     }
 
     function gitCommit(err) {
@@ -151,11 +223,15 @@ Object.keys(languages).forEach(function(lang) {
 
     function gitPush(err) {
       if (err) { cb(err); return; }
-      echoAndExec('git push --tags origin master', {cwd: repoRoot}, function(err, stdout, stderr) {
-        if (err) { cb(err); return; }
-        // Finally, success!
-        cb();
-      });
+      echoAndExec(
+          util.format('git push --tags origin %s', config.branch),
+          {cwd: repoRoot},
+          done);
+    }
+
+    function done(err, stdout, stderr) {
+      if (err) { cb(err); return; }
+      cb();
     }
   });
 });
@@ -199,40 +275,6 @@ gulp.task('ensure-git-clean', function() {
     if (!/working directory clean/.exec(out)) {
       throw new Error('Git working directory not clean, will not bump version');
     }
-  });
-});
-
-/**
- * Generate build rules for each resource in each language.
- */
-var resourceNames = resource.names();
-Object.keys(languages).forEach(function(lang) {
-
-  function taskName(resourceName) {
-    return 'build-' + lang + '-' + resourceName;
-  }
-
-  resourceNames.forEach(function(resourceName) {
-    gulp.task(taskName(resourceName), function() {
-      return gulp.src('src/templates/' + lang + '/resource.*.template')
-          .pipe(template(resource.load(resourceName), {
-            imports: helpers(lang),
-            variable: 'resource'
-          }))
-          .pipe(rename(function(path) {
-            path.extname = /^.*([.].*?)$/.exec(path.basename)[1];
-            path.basename = languages[lang].resourceBaseName(resourceName);
-          }))
-          .pipe(gulp.dest(paths.dist(lang)));
-    });
-  });
-
-  gulp.task('build-' + lang, ['clean-' + lang].concat(resourceNames.map(taskName)));
-});
-
-Object.keys(languages).forEach(function(lang) {
-  gulp.task('clean-' + lang, function() {
-    fs.removeSync(paths.dist(lang));
   });
 });
 
