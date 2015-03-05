@@ -106,7 +106,7 @@ Object.keys(languages).forEach(function(lang) {
   /**
    * Checkout target repo, for build and deploy
    */
-  gulp.task('checkout-' + lang, ['clean-', lang], function(cb) {
+  gulp.task('checkout-' + lang, ['clean-' + lang], function(cb) {
 
     cloneRepo(cb);
 
@@ -139,31 +139,31 @@ Object.keys(languages).forEach(function(lang) {
    * Build rules, per resource.
    */
   resourceNames.forEach(function(resourceName) {
-    gulp.task(resTaskName(resourceName), function() {
+    gulp.task(resTaskName(resourceName), ['checkout-' + lang], function() {
       // Support templates existing either locally or in target repo.
       var templatePath = config.templatePath ?
           (paths.repo(lang) + '/' + config.templatePath):
           ('src/templates/' + lang);
-      var resourceTemplateInfo = require(templatePath).resource;
+      var resourceTemplateInfo = require('./' + templatePath).resource;
 
       // Find the template info for resources
-      var resource = resource.load(resourceName);
+      var resourceInstance = resource.load(resourceName);
       var templateHelpers = helpers(lang);
       return gulp.src(templatePath + '/' + resourceTemplateInfo.template)
           .pipe(
-              template(resource, {
+              template(resourceInstance, {
                 imports: templateHelpers,
                 variable: 'resource'
               }))
           .pipe(
-              rename(resourceTemplateInfo.filename(resource, templateHelpers)))
+              rename(resourceTemplateInfo.filename(resourceInstance, templateHelpers)))
           .pipe(
               gulp.dest(paths.dist(lang)));
     });
   });
   gulp.task(
       'build-' + lang,
-      ['checkout-' + lang].concat(resourceNames.map(resTaskName)));
+      resourceNames.map(resTaskName));
 
   /**
    * Deploy
