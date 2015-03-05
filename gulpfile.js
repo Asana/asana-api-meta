@@ -26,6 +26,12 @@ var languages = {
     branch: 'api-meta-incoming',
     templatePath: 'src/templates',
     outputPath: 'lib/resources/gen'
+  },
+  ts_tester: {
+    repo: 'Asana/node-asana-tester',
+    branch: 'api-meta-incoming',
+    templatePath: 'src/resources/templates',
+    outputPath: 'src/resources/gen'
   }
 };
 
