@@ -21,15 +21,35 @@ class _<%= thisType %>:
       method += "_collection";
     }
 
-    // Figure out how many params will be consumed by the path and put the
-    // first N required params there - the rest go in options.
-    var numPathParams = (action.path.match(/%/g) || []).length;
-    var pathParams = (action.params||[]).filter(function(p) { return p.required; }).map(function(p) { return p.name; }).slice(0, numPathParams);
+    var extraParam = null;
+    if (action.method === "GET") {
+      extraParam = {
+        name: 'params',
+        type: 'Object',
+        comment: 'Parameters for the request'
+      };
+    } else if (action.method !== 'DELETE') {
+      extraParam = {
+        name: 'data',
+        type: 'Object',
+        comment: 'Data for the request'
+      };
+    }
+    var params = paramsForAction(action);
+    var pathParamNames = params.pathParams.map(function(param) { return param.name; });
+    var explicitParams = params.pathParams.concat(params.explicitNonPathParams).concat(extraParam ? [extraParam] : []);
+    var documentedParams = explicitParams.concat(params.optionParams);
   %>
-    def <%= name %>(self, <%= pathParams.concat([""]).join(", ") %>params={}, **options): 
-        <%= '"""' + prefix(action.comment, "        ", true) + '"""' %>
-        <% if (pathParams.length > 0) { %>
-        path = <%= JSON.stringify(action.path) %> % (<%= pathParams.join(", ") %>)
+    def <%= name %>(self, <%= pathParamNames.concat([""]).join(", ") %>params={}, **options): 
+        """<%= prefix(action.comment, "        ", true) %>
+
+        Parameters
+        ----------<% _.forEach(documentedParams, function(param) { %>
+        <%= prefix(param.name + ' : ' + typeName(param.type), "        ", true) %>
+          <%= prefix(param.comment, "          ", true) %><% }); %>
+        """
+        <% if (pathParamNames.length > 0) { %>
+        path = <%= JSON.stringify(action.path) %> % (<%= pathParamNames.join(", ") %>)
         return self.client.<%= method %>(path, params, **options)
         <% } else { %>
         return self.client.<%= method %>(<%= JSON.stringify(action.path) %>, params, **options)

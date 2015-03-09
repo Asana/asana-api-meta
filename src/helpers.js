@@ -51,6 +51,29 @@ function typeNameTranslator(lang) {
   })[lang] || function(x) { return x; };
 }
 
+function paramsForAction(action) {
+    // Figure out how many params will be consumed by the path and put the
+  // first N required params there - the rest go in options.
+  var numPathParams = (action.path.match(/%/g) || []).length;
+  var results = {
+    pathParams: [],
+    explicitNonPathParams: [],
+    optionParams: []
+  };
+  if (action.params) {
+    action.params.forEach(function(param, index) {
+      if (param.required && results.pathParams.length < numPathParams) {
+        results.pathParams.push(param);
+      } else if (param.explicit) {
+        results.explicitNonPathParams.push(param);
+      } else {
+        results.optionParams.push(param);
+      }
+    });
+  }
+  return results;
+}
+
 var langs = {
   js: {
     typeName: typeNameTranslator("js"),
@@ -64,7 +87,8 @@ var langs = {
     snake: inflect.underscore,
     dash: inflect.dasherize,
     param: inflect.parameterize,
-    human: inflect.humanize
+    human: inflect.humanize,
+    paramsForAction: paramsForAction
   },
   python: {
     typeName: typeNameTranslator("python"),
@@ -78,7 +102,8 @@ var langs = {
     snake: inflect.underscore,
     dash: inflect.dasherize,
     param: inflect.parameterize,
-    human: inflect.humanize
+    human: inflect.humanize,
+    paramsForAction: paramsForAction
   }
 }
 
