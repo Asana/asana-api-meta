@@ -74,38 +74,34 @@ function paramsForAction(action) {
   return results;
 }
 
+var common = {
+  prefix: prefixLines,
+  plural: inflect.pluralize,
+  single: inflect.singularize,
+  camel: inflect.camelize,
+  cap: inflect.capitalize,
+  decap: inflect.decapitalize,
+  snake: inflect.underscore,
+  dash: inflect.dasherize,
+  param: inflect.parameterize,
+  human: inflect.humanize,
+  paramsForAction: paramsForAction
+};
+
 var langs = {
-  js: {
+  js: _.merge({}, common, {
     typeName: typeNameTranslator("js"),
-    comment: wrapStarComment,
-    prefix: prefixLines,
-    plural: inflect.pluralize,
-    single: inflect.singularize,
-    camel: inflect.camelize,
-    cap: inflect.capitalize,
-    decap: inflect.decapitalize,
-    snake: inflect.underscore,
-    dash: inflect.dasherize,
-    param: inflect.parameterize,
-    human: inflect.humanize,
-    paramsForAction: paramsForAction
-  },
-  python: {
+    comment: wrapStarComment
+  }),
+  php: _.merge({}, common, {
+    typeName: typeNameTranslator("php"),
+    comment: wrapStarComment
+  }),
+  python: _.merge({}, common, {
     typeName: typeNameTranslator("python"),
-    comment: wrapHashComment,
-    prefix: prefixLines,
-    plural: inflect.pluralize,
-    single: inflect.singularize,
-    camel: inflect.camelize,
-    cap: inflect.capitalize,
-    decap: inflect.decapitalize,
-    snake: inflect.underscore,
-    dash: inflect.dasherize,
-    param: inflect.parameterize,
-    human: inflect.humanize,
-    paramsForAction: paramsForAction
-  }
-}
+    comment: wrapHashComment
+  })
+};
 
 module.exports = function(lang) {
   return langs[lang];
