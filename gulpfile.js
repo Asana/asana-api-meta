@@ -30,8 +30,8 @@ var languages = {
   php: {
     repo: 'Asana/php-asana',
     branch: 'api-meta-incoming',
-    // templatePath: 'templates',
-    destPath: 'src/Asana/Resources/Gen',
+    templatePath: 'templates',
+    outputPath: 'src/Asana/Resources/Gen',
   },
   python: {
     repo: 'Asana/python-asana',
