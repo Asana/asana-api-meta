@@ -62,12 +62,12 @@ actions:
     method: GET
     path: "/tags/%d"
     params:
-      - name: task
-        <<: *Param.TaskId
+      - name: tag
+        <<: *Param.TagId
         required: true
-        comment: The task to get.
+        comment: The tag to get.
     comment: |
-      Returns the complete task record for a single task.
+      Returns the complete tag record for a single tag.
 
   - name: update
     method: PUT
@@ -132,4 +132,3 @@ actions:
     collection: true
     comment: |
       Returns the compact tag records for all tags in the workspace.
-

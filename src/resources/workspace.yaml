@@ -103,6 +103,7 @@ actions:
           parameter is omitted, with a minimum of `1` and a maximum of `100`.
           If there are fewer results found than requested, all will be returned.
     collection: true
+    collection_cannot_paginate: true
     comment: |
       Retrieves objects in the workspace based on an auto-completion/typeahead
       search algorithm. This feature is meant to provide results quickly, so do
