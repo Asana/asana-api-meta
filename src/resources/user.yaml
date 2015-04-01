@@ -84,6 +84,10 @@ actions:
     method: GET
     path: "/users"
     collection: true
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        comment: The workspace or organization to filter users on.
     comment: |
       Returns the user records for all users in the specified workspace or
       organization.

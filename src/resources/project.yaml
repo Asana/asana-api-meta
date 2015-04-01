@@ -80,12 +80,12 @@ actions:
     method: GET
     path: "/projects/%d"
     params:
-      - name: task
-        <<: *Param.TaskId
+      - name: project
+        <<: *Param.ProjectId
         required: true
-        comment: The task to get.
+        comment: The project to get.
     comment: |
-      Returns the complete task record for a single task.
+      Returns the complete project record for a single project.
 
   - name: update
     method: PUT
