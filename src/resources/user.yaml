@@ -91,3 +91,4 @@ actions:
     comment: |
       Returns the user records for all users in the specified workspace or
       organization.
+    can_paginate: true

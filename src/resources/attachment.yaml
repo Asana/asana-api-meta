@@ -36,6 +36,7 @@ actions:
         required: true
     comment: |
       Returns the compact records for all attachments on the task.
+    can_paginate: true
 
   - name: createOnTask
     method: POST

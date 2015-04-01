@@ -54,6 +54,7 @@ actions:
     collection: true
     comment: |
       Returns the compact records for all workspaces visible to the authorized user.
+    can_paginate: true
 
   - name: update
     method: PUT

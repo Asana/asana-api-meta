@@ -129,6 +129,7 @@ actions:
     collection: true
     comment: |
       Returns the compact task records for all tasks with the given tag.
+    can_paginate: true
 
   - name: findAll
     method: GET
@@ -137,6 +138,7 @@ actions:
     comment: |
       Returns the compact task records for some filtered set of tasks. Use one
       or more of the parameters provided to filter the tasks returned.
+    can_paginate: true
     params:
       - name: assignee
         <<: *Param.UserId
@@ -213,6 +215,7 @@ actions:
         comment: The task to get projects on.
     comment: |
       Returns a compact representation of all of the projects the task is in.
+    can_paginate: true
 
   - name: addProject
     method: POST
@@ -290,6 +293,7 @@ actions:
         comment: The task to get tags on.
     comment: |
       Returns a compact representation of all of the tags the task has.
+    can_paginate: true
 
   - name: addTag
     method: POST
@@ -334,6 +338,7 @@ actions:
         comment: The task to get the subtasks of.
     comment: |
       Returns a compact representation of all of the subtasks of a task.
+    can_paginate: true
 
   - name: addSubtask
     method: POST
@@ -383,6 +388,7 @@ actions:
         comment: The task containing the stories to get.
     comment: |
       Returns a compact representation of all of the stories on the task.
+    can_paginate: true
 
   - name: addComment
     <<: *Action.CommentOnTask
