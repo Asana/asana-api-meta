@@ -71,6 +71,7 @@ actions:
     method: GET
     path: "/workspaces/%d/users"
     collection: true
+    collection_cannot_paginate: true
     params:
       - name: workspace
         <<: *Param.WorkspaceId
@@ -91,4 +92,3 @@ actions:
     comment: |
       Returns the user records for all users in the specified workspace or
       organization.
-    can_paginate: true

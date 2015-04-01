@@ -41,7 +41,6 @@ actions:
     comment: |
       Returns the compact records for all teams in the organization visible to
       the authorized user.
-    can_paginate: true
 
   # Users
 

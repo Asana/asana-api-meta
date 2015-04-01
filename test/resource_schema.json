@@ -68,7 +68,7 @@
           },
           "no_code": { "type": "boolean" },
           "collection": { "type": "boolean" },
-          "can_paginate": { "type": "boolean" },
+          "collection_cannot_paginate": { "type": "boolean" },
           "params": {
             "type": "array",
             "items": {

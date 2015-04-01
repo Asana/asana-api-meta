@@ -127,7 +127,6 @@ actions:
     comment: |
       Returns the compact project records for some filtered set of projects.
       Use one or more of the parameters provided to filter the projects returned.
-    can_paginate: true
     params:
       - name: workspace
         <<: *Param.WorkspaceId
@@ -157,7 +156,6 @@ actions:
     collection: true
     comment: |
       Returns the compact project records for all projects in the workspace.
-    can_paginate: true
 
   - name: findByTeam
     method: GET
@@ -175,7 +173,6 @@ actions:
     collection: true
     comment: |
       Returns the compact project records for all projects in the team.
-    can_paginate: true
 
   # Children
 
