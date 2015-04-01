@@ -25,7 +25,11 @@ function wrapComment(text, prefix, maxChars) {
   // TODO: actually wrap :)
   prefix = prefix || "";
   maxChars = maxChars || 78;
-  return prefix + text.trim().replace(/\n/g, "\n" + prefix);
+  return prefixLines(text, prefix);
+}
+
+function prefixLines(text, prefix, skipFirst) {
+  return (skipFirst ? "" : prefix) + text.trim().replace(/\n/g, "\n" + prefix);
 }
 
 function wrapStarComment(text, indent) {
@@ -47,18 +51,58 @@ function typeNameTranslator(lang) {
   })[lang] || function(x) { return x; };
 }
 
-module.exports = function(lang) {
-  return {
-    typeName: typeNameTranslator(lang),
-    comment: wrapStarComment,
-    plural: inflect.pluralize,
-    single: inflect.singularize,
-    camel: inflect.camelize,
-    cap: inflect.capitalize,
-    decap: inflect.decapitalize,
-    snake: inflect.underscore,
-    dash: inflect.dasherize,
-    param: inflect.parameterize,
-    human: inflect.humanize
+function paramsForAction(action) {
+    // Figure out how many params will be consumed by the path and put the
+  // first N required params there - the rest go in options.
+  var numPathParams = (action.path.match(/%/g) || []).length;
+  var results = {
+    pathParams: [],
+    explicitNonPathParams: [],
+    optionParams: []
   };
+  if (action.params) {
+    action.params.forEach(function(param, index) {
+      if (param.required && results.pathParams.length < numPathParams) {
+        results.pathParams.push(param);
+      } else if (param.explicit) {
+        results.explicitNonPathParams.push(param);
+      } else {
+        results.optionParams.push(param);
+      }
+    });
+  }
+  return results;
+}
+
+var common = {
+  prefix: prefixLines,
+  plural: inflect.pluralize,
+  single: inflect.singularize,
+  camel: inflect.camelize,
+  cap: inflect.capitalize,
+  decap: inflect.decapitalize,
+  snake: inflect.underscore,
+  dash: inflect.dasherize,
+  param: inflect.parameterize,
+  human: inflect.humanize,
+  paramsForAction: paramsForAction
+};
+
+var langs = {
+  js: _.merge({}, common, {
+    typeName: typeNameTranslator("js"),
+    comment: wrapStarComment
+  }),
+  php: _.merge({}, common, {
+    typeName: typeNameTranslator("php"),
+    comment: wrapStarComment
+  }),
+  python: _.merge({}, common, {
+    typeName: typeNameTranslator("python"),
+    comment: wrapHashComment
+  })
+};
+
+module.exports = function(lang) {
+  return langs[lang];
 };
