@@ -43,7 +43,7 @@ var languages = {
     repo: 'Asana/ruby-asana',
     branch: 'api-meta-incoming',
     templatePath: 'lib/templates',
-    destPath: 'lib/asana/resources',
+    outputPath: 'lib/asana/resources',
   },
   ts_tester: {
     repo: 'Asana/node-asana-tester',
