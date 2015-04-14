@@ -101,6 +101,10 @@ var langs = {
     typeName: typeNameTranslator("python"),
     comment: wrapHashComment
   }),
+  ruby: _.merge({}, common, {
+    typeName: typeNameTranslator("ruby"),
+    comment: wrapHashComment
+  }),
   ts_tester: _.merge({}, common, {
     typeName: typeNameTranslator("js"),
     comment: wrapStarComment
