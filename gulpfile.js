@@ -166,6 +166,7 @@ Object.keys(languages).forEach(function(lang) {
       // Find the template info for resources
       var resourceInstance = resource.load(resourceName);
       var templateHelpers = helpers(lang);
+      templateHelpers.resources = resourceNames
       return gulp.src(templatePath + '/' + resourceTemplateInfo.template)
           .pipe(
               template(resourceInstance, {
