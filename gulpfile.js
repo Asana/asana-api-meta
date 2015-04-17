@@ -11,6 +11,7 @@ var util = require('util');
 var yaml = require('js-yaml');
 var resource = require('./src/resource');
 var helpers = require('./src/helpers');
+var _ = require('lodash');
 
 /**
  * Paths
@@ -44,6 +45,7 @@ var languages = {
     branch: 'api-meta-incoming',
     templatePath: 'lib/templates',
     outputPath: 'lib/asana/resources',
+    skip: ['event']
   },
   ts_tester: {
     repo: 'Asana/node-asana-tester',
@@ -155,7 +157,9 @@ Object.keys(languages).forEach(function(lang) {
   /**
    * Build rules, per resource.
    */
-  resourceNames.forEach(function(resourceName) {
+  var resourcesToSkip = config.skip || []
+  var resourcesToBuild = _.difference(resourceNames, resourcesToSkip);
+  resourcesToBuild.forEach(function(resourceName) {
     gulp.task(resTaskName(resourceName), ['checkout-' + lang], function() {
       // Support templates existing either locally or in target repo.
       var templatePath = config.templatePath ?
@@ -181,7 +185,7 @@ Object.keys(languages).forEach(function(lang) {
   });
   gulp.task(
       'build-' + lang,
-      resourceNames.map(resTaskName));
+      resourcesToBuild.map(resTaskName));
 
   /**
    * Deploy
