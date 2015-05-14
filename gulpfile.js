@@ -145,7 +145,12 @@ Object.keys(languages).forEach(function(lang) {
       echoAndExec(
           util.format('git checkout --track -b %s origin/%s', branch, branch),
           {cwd: repoRoot},
-          done);
+          updateFromMaster);
+    }
+
+    function updateFromMaster(err, stdout, stderr) {
+      if (err) { cb(err); return; }
+      echoAndExec('git merge origin/master', done);
     }
 
     function done(err, stdout, stderr) {
@@ -157,7 +162,7 @@ Object.keys(languages).forEach(function(lang) {
   /**
    * Build rules, per resource.
    */
-  var resourcesToSkip = config.skip || []
+  var resourcesToSkip = config.skip || [];
   var resourcesToBuild = _.difference(resourceNames, resourcesToSkip);
   resourcesToBuild.forEach(function(resourceName) {
     gulp.task(resTaskName(resourceName), ['checkout-' + lang], function() {
@@ -232,19 +237,14 @@ Object.keys(languages).forEach(function(lang) {
 
     function gitCommit(err) {
       if (err) { cb(err); return; }
-      echoAndExec(util.format('git commit --allow-empty -a -m "Deploy from asana-api-meta v%s"', version), {cwd: repoRoot}, gitTag);
-    }
-
-    function gitTag(err, stdout, stderr) {
-      if (err) { cb(err); return; }
       version = readPackage().version;
-      echoAndExec(util.format('git tag -f "v%s"', version), {cwd: repoRoot}, gitPush);
+      echoAndExec(util.format('git commit --allow-empty -a -m "Deploy from asana-api-meta v%s"', version), {cwd: repoRoot}, gitPush);
     }
 
     function gitPush(err) {
       if (err) { cb(err); return; }
       echoAndExec(
-          util.format('git push --tags origin %s', config.branch),
+          util.format('git push origin %s', config.branch),
           {cwd: repoRoot},
           done);
     }
