@@ -47,6 +47,12 @@ function typeNameTranslator(lang) {
         Id: 'Number',
         Enum: 'String'
       })[name] || name;
+    },
+    java: function(name) {
+      return ({
+        Id: 'String',
+        Enum: 'String'
+      })[name] || name;
     }
   })[lang] || function(x) { return x; };
 }
@@ -89,15 +95,19 @@ var common = {
 };
 
 var langs = {
-  js: _.merge({}, common, {
+  "java": _.merge({}, common, {
+    typeName: typeNameTranslator("java"),
+    comment: wrapStarComment
+  }),
+  "js": _.merge({}, common, {
     typeName: typeNameTranslator("js"),
     comment: wrapStarComment
   }),
-  php: _.merge({}, common, {
+  "php": _.merge({}, common, {
     typeName: typeNameTranslator("php"),
     comment: wrapStarComment
   }),
-  python: _.merge({}, common, {
+  "python": _.merge({}, common, {
     typeName: typeNameTranslator("python"),
     comment: wrapHashComment
   })

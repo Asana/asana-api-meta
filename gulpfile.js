@@ -33,6 +33,13 @@ var languages = {
     templatePath: 'templates',
     outputPath: 'src/Asana/Resources/Gen',
   },
+  java: {
+    repo: 'Asana/java-asana',
+    branch: 'api-meta-incoming',
+    templatePath: 'templates',
+    outputPath: 'src/main/java/com/asana/resources/gen'
+    // destPath: 'src/main/java/com/asana/resources/gen'
+  },
   python: {
     repo: 'Asana/python-asana',
     branch: 'api-meta-incoming',
@@ -296,4 +303,3 @@ gulp.task('test', function(callback) {
         reporter: process.env.TRAVIS ? 'spec' : 'nyan'
       }));
 });
-
