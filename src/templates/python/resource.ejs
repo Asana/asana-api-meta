@@ -1,9 +1,6 @@
 <%
 var thisType = plural(cap(resource.name));
 
-function paramNameInComment(param) {
-  return param.required ? param.name : ('[' + param.name + ']');
-}
 %>
 class _<%= thisType %>:
     <%= '"""' + prefix(resource.comment, "    ", true) + '"""' %>
