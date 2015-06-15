@@ -53,14 +53,12 @@ var languages = {
     templatePath: 'lib/templates',
     outputPath: 'lib/asana/resources',
     skip: ['event']
-/* disabled because we don't support private repos yet, cloning fails
   },
-  ts_tester: {
-    repo: 'Asana/node-asana-tester',
+  api_explorer: {
+    repo: 'Asana/api-explorer',
     branch: 'api-meta-incoming',
     templatePath: 'src/resources/templates',
     outputPath: 'src/resources/gen'
-*/
   }
 };
 
