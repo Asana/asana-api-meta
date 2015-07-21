@@ -120,6 +120,32 @@ actions:
 
       Returns an empty data record.
 
+  - name: getTasks
+    method: GET
+    path: "/projects/%d/tasks"
+    params:
+    - name: project
+      <<: *Param.ProjectId
+      required: true
+      comment: The project to retrieve tasks from
+    comment: |
+      Returns the list of tasks in this project.
+      Tasks can exist in more than one project at a time.
+
+  - name: getSections
+    method: GET
+    path: "/projects/%d/sections"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to get the sections from.
+    comment: |
+      Sections are tasks whose names end with a colon character.
+      For instance sections will be included in query results for tasks and
+      be represented with the same fields. The memberships property of a task
+      contains the project/section pairs a task belongs to when applicable.
+
   - name: findAll
     method: GET
     path: "/projects"
