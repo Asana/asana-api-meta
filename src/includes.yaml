@@ -85,27 +85,31 @@ templates:
       example_values:
         - "182764"
       comment: |
-        Globally unique identifier for the team.
+        Globally unique identifier for the story.
 
   # Types of properties
+  # The templates include type, enum values, and example values.
+  # Comments and notes live in the individual resources.
+  # Access (read-only, create-only, etc.) is here for the most part, but there
+  # are a couple exceptions.
+
+  # General
 
   - template: &PropType.Id
     - type: Id
       example_values:
         - "1234"
-      read_only: true
-      comment: |
-        Globally unique identifier for this object.
-
-  - template: &PropType.Email
-    - type: String
-      example_values:
-        - "'gsanchez@example.com'"
+      access: Read-only
 
   - template: &PropType.Bool
     - type: Boolean
       example_values:
         - "false"
+
+  - template: &PropType.Count
+    - type: Integer
+      example_values:
+        - "5"
 
   - template: &PropType.User
     - type: User
@@ -113,8 +117,75 @@ templates:
         - "{ id: 12345, name: 'Tim Bizarro' }"
         - "null"
 
+  - template: &PropType.UserArray
+    - type: Array
+      example_values:
+        - "[ { id: 1123, name: "Mittens" }, ... ]"
+
+  - template: &PropType.DateTime
+    - type: String
+      example_values:
+        - "'2012-02-22T02:06:58.147Z'"
+
+  - template: &PropType.Date
+    - type: String
+      example_values:
+        - "'2012-03-26'"
+
+  - template: &PropType.Workspace
+    - type: Workspace
+      example_values:
+        - "{ id: 14916, name: "My Workspace" }"
+      access: Create-only
+
+  - template: &PropType.Task
+    - type: Task
+      example_values:
+        - "{ id: 1234, name: "Bug task" }"
+      access: Read-only
+
+  - template: &PropType.Project
+    - type: Project
+      example_values:
+        - "{ id: 1234, name: "Bugs" }"
+      access: Read-only
+
+  # Leave it to the comment to specify all possible types
+  - template: &PropType.Type
+    - type: String
+      example_values:
+        - "'task'"
+
+  # By resource
+
+  ## User
+  - template: &PropType.UserName
+    - type: String
+      example_values:
+        - "'Greg Sanchez'"
+      access: Read-only
+
+  - template: &PropType.Email
+    - type: String
+      example_values:
+        - "'gsanchez@example.com'"
+      access: Read-only
+
+  - template: &PropType.Photo
+    - type: Struct
+      example_values:
+        - "{ "image_21x21": "https://...", ... }"
+      access: Read-only
+
+  - template: &PropType.Workspaces
+    - type: Array
+      example_values:
+        - "[ { id: 14916, name: "My Workspace" }, ... ]"
+      access: Read-only
+
+  ## Task
   - template: &PropType.AssigneeStatus
-      type: Enum
+    - type: Enum
       example_values:
         - "'upcoming'"
       values:
@@ -126,6 +197,155 @@ templates:
           comment: Scheduled for _upcoming_.
         - name: today
           comment: Scheduled for _today_.
+
+  - template: &PropType.External
+    - type: Map
+      example_values:
+        - "{ id: "my_id", data: "A blob of information." }"
+      access: Oauth Required
+
+  - template: &PropType.TaskName
+    - type: String
+      example_values:
+        - "'Buy catnip'"
+
+  - template: &PropType.TaskNotes
+    - type: String
+      example_values:
+        - "'Mittens really likes the stuff from Humboldt.'"
+
+  - template: &PropType.ProjectArray
+    - type: Array
+      example_values:
+        - "[ { id: 1331, name: "Stuff to Buy" }, ... ]"
+      access: Create-only
+
+  - template: &PropType.Memberships
+    - type: Array
+      example_values:
+        - "[ { project: { id: 1331, name: "Bugs" }, section: { id: 1123, name: "P1:" } }, ... ]"
+      access: Create-only
+
+  ## Project/Tag
+  - template: &PropType.ProjectName
+    - type: String
+      example_values:
+        - "'Stuff to buy'"
+
+  - template: &PropType.ProjectColor
+    - type: Enum
+      example_values:
+        - "'2012-02-22T02:06:58.147Z'"
+
+  - template: &PropType.ProjectNotes
+    - type: String
+      example_values:
+        - "'These are things we need to purchase.'"
+
+  - template: &PropType.Team
+    - type: Team
+      example_values:
+        - "{ id: 692353, name: "organization.com Marketing" }"
+      access: Create-only
+
+  ## Story
+  - template: &PropType.StoryText
+    - type: String
+      example_values:
+        - "'marked today'"
+      access: Create-only
+
+  - template: &PropType.HtmlText
+    - type: String
+      example_values:
+        - "'Get whatever <a href="https://app.asana.com/0/1123/1234"> Sashimi </a> has.'"
+      access: Read-only
+
+  - template: &PropType.StorySource
+    - type: Enum
+      example_values:
+        - "'web'"
+      values:
+        - name: web
+          comment: Via the Asana web app.
+        - name: email
+          comment: Via email.
+        - name: mobile
+          comment: Via the Asana mobile app.
+        - name: api
+          comment: Via the Asana API.
+        - name: unknown
+          comment: Unkonw or unrecorded.
+      access: Read-only
+
+  - template: &PropType.StoryType
+    - type: Enum
+      example_values:
+        - "'comment'"
+      values:
+        - name: comment
+          comment: A comment from a user. The text will be the message portion of the comment.
+        - name: system
+          comment:  A system-generated story based on a user action. The text will be a description of the action.
+      access: Read-only
+
+  ## Workspace
+  - template: &PropType.WorkspaceName
+    - type: String
+      example_values:
+        - "'My Favorite Workspace'"
+
+  ## Team
+  - template: &PropType.TeamName
+    - type: String
+      example_values:
+        - "'Engineering'"
+
+  ## Attachment
+  - template: &PropType.DownloadUrl
+    - type: String
+      example_values:
+        - "'https://www.dropbox.com/s/123/Screenshot.png?dl=1'"
+        - "null"
+      access: Read-only
+
+  - template: &PropType.ViewUrl
+    - type: String
+      example_values:
+        - "'https://www.dropbox.com/s/123/Screenshot.png'"
+        - "null"
+      access: Read-only
+
+  - template: &PropType.Host
+    - type: String
+      example_values:
+        - "'dropbox'"
+      access: Read-only
+
+  - template: &PropType.FileName
+    - type: String
+      example_values:
+        - "'Screenshot.png'"
+      access: Read-only
+
+  ## Typeahead
+  - template: &PropType.Query
+    - type: String
+      example_values:
+        - "'catnip'"
+
+  ## Events
+  - template: &PropType.Action
+    - type: Enum
+      example_values:
+        - "'changed'"
+      values:
+        - name: changed
+        - name: added
+        - name: removed
+        - name: deleted
+        - name: undeleted
+      access: Read-only
 
   # Full actions that are duplicated across resources, i.e. more than one
   # way of doing something.
