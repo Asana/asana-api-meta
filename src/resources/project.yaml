@@ -37,9 +37,10 @@ properties:
     access: Read-only
     comment: |
       The time at which this project was last modified.
-    notes: |
-      This does not currently reflect any changes in associations such as tasks
-      or comments that may have been added or removed from the project.
+    notes:
+      - |
+        This does not currently reflect any changes in associations such as tasks
+        or comments that may have been added or removed from the project.
 
   - name: name
     <<: *PropType.ProjectName

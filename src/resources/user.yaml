@@ -40,7 +40,8 @@ properties:
     comment: |
       Workspaces and organizations this user may access.
     notes:
-      - The API will only return workspaces and organizations that also
+      - |
+        The API will only return workspaces and organizations that also
         contain the authenticated user.
 
 actions:

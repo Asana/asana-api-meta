@@ -30,8 +30,7 @@
             "items": { "type": "string" },
             "length": { "min": 1 }
           },
-          "read_only": { "type": "boolean" },
-          "create_only": { "type": "boolean" },
+          "access": { "type": "string" },
           "values": {
             "type": "array",
             "items": {

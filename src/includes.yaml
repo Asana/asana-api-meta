@@ -120,7 +120,7 @@ templates:
   - template: &PropType.UserArray
     - type: Array
       example_values:
-        - "[ { id: 1123, name: "Mittens" }, ... ]"
+        - "[ { id: 1123, name: 'Mittens' }, ... ]"
 
   - template: &PropType.DateTime
     - type: String
@@ -135,19 +135,19 @@ templates:
   - template: &PropType.Workspace
     - type: Workspace
       example_values:
-        - "{ id: 14916, name: "My Workspace" }"
+        - "{ id: 14916, name: 'My Workspace' }"
       access: Create-only
 
   - template: &PropType.Task
     - type: Task
       example_values:
-        - "{ id: 1234, name: "Bug task" }"
+        - "{ id: 1234, name: 'Bug task' }"
       access: Read-only
 
   - template: &PropType.Project
     - type: Project
       example_values:
-        - "{ id: 1234, name: "Bugs" }"
+        - "{ id: 1234, name: 'Bugs' }"
       access: Read-only
 
   # Leave it to the comment to specify all possible types
@@ -174,13 +174,13 @@ templates:
   - template: &PropType.Photo
     - type: Struct
       example_values:
-        - "{ "image_21x21": "https://...", ... }"
+        - "{ 'image_21x21': 'https://...', ... }"
       access: Read-only
 
   - template: &PropType.Workspaces
     - type: Array
       example_values:
-        - "[ { id: 14916, name: "My Workspace" }, ... ]"
+        - "[ { id: 14916, name: 'My Workspace' }, ... ]"
       access: Read-only
 
   ## Task
@@ -201,7 +201,7 @@ templates:
   - template: &PropType.External
     - type: Map
       example_values:
-        - "{ id: "my_id", data: "A blob of information." }"
+        - "{ id: 'my_id', data: 'A blob of information.' }"
       access: Oauth Required
 
   - template: &PropType.TaskName
@@ -217,13 +217,13 @@ templates:
   - template: &PropType.ProjectArray
     - type: Array
       example_values:
-        - "[ { id: 1331, name: "Stuff to Buy" }, ... ]"
+        - "[ { id: 1331, name: 'Stuff to Buy' }, ... ]"
       access: Create-only
 
   - template: &PropType.Memberships
     - type: Array
       example_values:
-        - "[ { project: { id: 1331, name: "Bugs" }, section: { id: 1123, name: "P1:" } }, ... ]"
+        - "[ { project: { id: 1331, name: 'Bugs' }, section: { id: 1123, name: 'P1:' } }, ... ]"
       access: Create-only
 
   ## Project/Tag
@@ -245,7 +245,7 @@ templates:
   - template: &PropType.Team
     - type: Team
       example_values:
-        - "{ id: 692353, name: "organization.com Marketing" }"
+        - "{ id: 692353, name: 'organization.com Marketing' }"
       access: Create-only
 
   ## Story
@@ -258,7 +258,7 @@ templates:
   - template: &PropType.HtmlText
     - type: String
       example_values:
-        - "'Get whatever <a href="https://app.asana.com/0/1123/1234"> Sashimi </a> has.'"
+        - "'Get whatever <a href='https://app.asana.com/0/1123/1234'> Sashimi </a> has.'"
       access: Read-only
 
   - template: &PropType.StorySource
@@ -328,12 +328,6 @@ templates:
         - "'Screenshot.png'"
       access: Read-only
 
-  ## Typeahead
-  - template: &PropType.Query
-    - type: String
-      example_values:
-        - "'catnip'"
-
   ## Events
   - template: &PropType.Action
     - type: Enum
@@ -341,10 +335,15 @@ templates:
         - "'changed'"
       values:
         - name: changed
+          comment: A resource was changed.
         - name: added
+          comment: A resource was added.
         - name: removed
+          comment: A resource was removed.
         - name: deleted
+          comment: A resource was deleted.
         - name: undeleted
+          comment: A resource was undeleted.
       access: Read-only
 
   # Full actions that are duplicated across resources, i.e. more than one

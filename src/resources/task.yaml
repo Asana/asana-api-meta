@@ -85,9 +85,10 @@ properties:
     access: Read-only
     comment: |
       The time at which this task was last modified.
-    notes: |
-      This does not currently reflect any changes in associations such as
-      projects or comments that may have been added or removed from the task.
+    notes:
+      - |
+        This does not currently reflect any changes in associations such as
+        projects or comments that may have been added or removed from the task.
 
   - name: name
     <<: *PropType.TaskName
@@ -106,7 +107,7 @@ properties:
     comment: |
       The number of users who have hearted this task.
 
-   - name: projects
+  - name: projects
     <<: *PropType.ProjectArray
     comment: |
       Array of projects this task is associated with. At task creation time,
@@ -255,12 +256,14 @@ actions:
         <<: *Param.UserId
         comment: The assignee to filter tasks on.
         notes:
-          - If you specify `assignee`, you must also specify the `workspace` to filter on.
+          - |
+            If you specify `assignee`, you must also specify the `workspace` to filter on.
       - name: workspace
         <<: *Param.WorkspaceId
         comment: The workspace or organization to filter tasks on.
         notes:
-          - If you specify `workspace`, you must also specify the `assignee` to filter on.
+          - |
+            If you specify `workspace`, you must also specify the `assignee` to filter on.
       - name: completed_since
         <<: *Param.DateTime
         comment: |
