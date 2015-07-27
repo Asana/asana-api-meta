@@ -110,7 +110,7 @@ templates:
   - template: &PropType.User
     - type: User
       example_values:
-        - "{ id: 1234, name: 'Tim Bizarro' }"
+        - "{ id: 12345, name: 'Tim Bizarro' }"
         - "null"
 
   - template: &PropType.AssigneeStatus
