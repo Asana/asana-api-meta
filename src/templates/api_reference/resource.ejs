@@ -1,0 +1,70 @@
+<%
+var thisType = plural(cap(resource.name));
+
+%>---
+parent-title: API Reference
+title: <%= thisType %>
+description:
+_template: dev-api-reference
+_layout: dev
+
+
+# Sidebar nav
+side_nav:
+  <% _.forEach(resource.action_classes, function(action_class) {%><%= '-'%>
+    <%= 'name: ' + action_class.name%>
+    <%= 'url: ' + action_class.url%>
+<%});%>
+
+# Header
+logo_text: Developers
+header_type: navigation
+header_search: true;
+---
+
+### <%= thisType%>
+
+<%= removeLineBreaks(resource.comment)%>
+<%if (resource.notes) {%><% _.forEach(resource.notes, function(note) {%>
+<%= removeLineBreaks(note)%>
+<%})};%>
+
+<%= thisType%> have the following fields:
+
+| Field | Description |
+|---|---|<% _.forEach(resource.properties, function(property) {%>
+<%= '| ' + property.name + ' | '%><%_.forEach(property.example_values, function(value) {
+  %><%= '<code class="table-example">' + value + '</code> '%><%});%><%if (property.access) {
+%><%= '**' + property.access + '.** '%><%}%><%= removeLineBreaks(property.comment)%><%if (property.notes) {
+%>**Note:** <% _.forEach(property.notes, function(note) {%><%= removeLineBreaks(note)%><%})};%>|<%});%>
+
+<% _.forEach(resource.action_classes, function(action_class) {
+  var matchingActions = resource.actions.filter(function(action) {
+    return action.class == action_class.url;
+  });
+%><%= '<a name="' + action_class.url + '"></a>'%>
+<%= '**[' + action_class.name.toUpperCase() + '](#' + action_class.url + ')**'
+%>
+<%if (action_class.comment) {%><%= removeLineBreaks(action_class.comment)
+%>
+<%}%><% _.forEach(matchingActions, function(action) {%>
+    <%= action.method + '    ' + genericPath(action)%>
+
+<%= removeLineBreaks(action.comment)%>
+<%if (action.notes) {%><% _.forEach(action.notes, function(note) {%>
+<%= removeLineBreaks(note)%>
+<%})};
+%><%if (action.params) {%>
+| Parameter | Description |
+|---|---|<% _.forEach(action.params, function(param) {%>
+<%= '| ' + param.name + ' | '%><%_.forEach(param.example_values, function(value) {
+%><%= '<code class="table-example">' + value + '</code> '%><%});%><%if (param.required) {
+%><%= '**Required:** '%><%}%><%= removeLineBreaks(param.comment)%><%if (param.notes) {
+%>**Note:** <% _.forEach(param.notes, function(note) {%><%= removeLineBreaks(note)%><%})};%>|<%
+});}%>
+
+// example
+
+---
+<%});%>
+<%});%>

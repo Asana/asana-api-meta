@@ -80,6 +80,25 @@ function paramsForAction(action) {
   return results;
 }
 
+// Removes line breaks but preserves paragraphs (double newlines).
+// Preserves line breaks denoted with "\".
+function removeLineBreaks(text) {
+  text = text.replace(/\\\n/gm, "XX");
+  text = text.replace(/\n\n/gm, "CC");
+  text = text.replace(/\r\n|\n|\r/gm, " ");
+  text = text.replace(/XX/g, "\n");
+  return text.replace(/CC/g, "\n\n");
+}
+
+function genericPath(action) {
+  var path = action.path;
+  var numPathParams = (action.path.match(/%/g) || []).length;
+  for (var i = 0; i < numPathParams; i++) {
+    path = action.path.replace(/%./, action.params[i].name + "-id");
+  }
+  return path;
+}
+
 var common = {
   prefix: prefixLines,
   plural: inflect.pluralize,
@@ -91,6 +110,8 @@ var common = {
   dash: inflect.dasherize,
   param: inflect.parameterize,
   human: inflect.humanize,
+  removeLineBreaks: removeLineBreaks,
+  genericPath: genericPath,
   paramsForAction: paramsForAction
 };
 
@@ -118,6 +139,10 @@ var langs = {
   api_explorer: _.merge({}, common, {
     typeName: typeNameTranslator("js"),
     comment: wrapStarComment
+  }),
+  api_reference: _.merge({}, common, {
+    typeName: typeNameTranslator("md"),
+    comment: null
   })
 };
 

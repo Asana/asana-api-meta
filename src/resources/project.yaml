@@ -51,11 +51,11 @@ properties:
   - name: color
     <<: *PropType.ProjectColor
     comment: |
-      Color of the project. Must be either 'null' or one of: 'dark-pink',
-      'dark-green', 'dark-blue', 'dark-red', 'dark-teal', 'dark-brown',
-      'dark-orange', 'dark-purple', 'dark-warm-gray', 'light-pink', 'light-green',
-      'light-blue', 'light-red', 'light-teal', 'light-yellow', 'light-orange',
-      'light-purple', 'light-warm-gray'.
+      Color of the project. Must be either `null` or one of: `dark-pink`,
+      `dark-green`, `dark-blue`, `dark-red`, `dark-teal`, `dark-brown`,
+      `dark-orange`, `dark-purple`, `dark-warm-gray`, `light-pink`, `light-green`,
+      `light-blue`, `light-red`, `light-teal`, `light-yellow`, `light-orange`,
+      `light-purple`, `light-warm-gray`.
 
   - name: notes
     <<: *PropType.ProjectNotes
@@ -75,11 +75,36 @@ properties:
       The team that this project is shared with. This field only exists for
       projects in organizations.
 
+action_classes:
+  - name: Create a project
+    url: create
+  - name: Get single project
+    url: get-single
+  - name: Update a project
+    url: update
+  - name: Delete a project
+    url: delete
+  - name: Query for projects
+    url: query
+  - name: Get project tasks
+    url: get-tasks
+  - name: Get project sections
+    url: sections
+    comment: |
+      Sections are tasks whose names end with a colon character `:` . For instance
+      sections will be included in query results for tasks and be represented with
+      the same fields. The `memberships` property of a task contains the project/section
+      pairs a task belongs to when applicable.
+
+      See [Task, Project, and Section Associations](/developers/api-reference/tasks#projects)
+      for more techniques on managing sections.
+
 actions:
 
   # Create, Retrieve, Update, Delete
 
   - name: create
+    class: create
     method: POST
     path: "/projects"
     params:
@@ -106,6 +131,7 @@ actions:
       Returns the full record of the newly created project.
 
   - name: createInWorkspace
+    class: create
     method: POST
     path: "/workspaces/%d/projects"
     params:
@@ -120,6 +146,7 @@ actions:
       Returns the full record of the newly created project.
 
   - name: createInTeam
+    class: create
     method: POST
     path: "/teams/%d/projects"
     params:
@@ -133,6 +160,7 @@ actions:
       Returns the full record of the newly created project.
 
   - name: findById
+    class: get-single
     method: GET
     path: "/projects/%d"
     params:
@@ -144,6 +172,7 @@ actions:
       Returns the complete project record for a single project.
 
   - name: update
+    class: update
     method: PUT
     path: "/projects/%d"
     params:
@@ -163,6 +192,7 @@ actions:
       Returns the complete updated project record.
 
   - name: delete
+    class: delete
     method: DELETE
     path: "/projects/%d"
     params:
@@ -177,6 +207,7 @@ actions:
       Returns an empty data record.
 
   - name: findAll
+    class: query
     method: GET
     path: "/projects"
     collection: true
@@ -197,6 +228,7 @@ actions:
           this parameter.
 
   - name: findByWorkspace
+    class: query
     method: GET
     path: "/workspaces/%d/projects"
     params:
@@ -214,6 +246,7 @@ actions:
       Returns the compact project records for all projects in the workspace.
 
   - name: findByTeam
+    class: query
     method: GET
     path: "/teams/%d/projects"
     params:
@@ -230,6 +263,29 @@ actions:
     comment: |
       Returns the compact project records for all projects in the team.
 
-  # Children
+  - name: sections
+    class: sections
+    method: GET
+    path: "/projects/%d/sections"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to get sections from.
+    collection: true
+    comment: |
+      Returns compact records for all sections in the specified project.
 
-  # TODO: sections
+  - name: getTasksInProject
+    class: get-tasks
+    method: GET
+    path: "/projects/%d/tasks"
+    params:
+      - name: projectId
+        <<: *Param.ProjectId
+        required: true
+        comment: The project in which to search for tasks.
+    collection: true
+    comment: |
+      Returns the compact task records for all tasks within the given project,
+      ordered by their priority within the project. Tasks can exist in more than one project at a time.

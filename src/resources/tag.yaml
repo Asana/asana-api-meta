@@ -35,11 +35,11 @@ properties:
   - name: color
     <<: *PropType.ProjectColor
     comment: |
-      Color of the project. Must be either 'null' or one of: 'dark-pink',
-      'dark-green', 'dark-blue', 'dark-red', 'dark-teal', 'dark-brown',
-      'dark-orange', 'dark-purple', 'dark-warm-gray', 'light-pink', 'light-green',
-      'light-blue', 'light-red', 'light-teal', 'light-yellow', 'light-orange',
-      'light-purple', 'light-warm-gray'.
+      Color of the project. Must be either `null` or one of: `dark-pink`,
+      `dark-green`, `dark-blue`, `dark-red`, `dark-teal`, `dark-brown`,
+      `dark-orange`, `dark-purple`, `dark-warm-gray`, `light-pink`, `light-green`,
+      `light-blue`, `light-red`, `light-teal`, `light-yellow`, `light-orange`,
+      `light-purple`, `light-warm-gray`.
 
   - name: notes
     <<: *PropType.ProjectNotes
@@ -53,11 +53,24 @@ properties:
       tags cannot be moved to a different workspace. This attribute can only
       be specified at creation time.
 
+action_classes:
+  - name: Create a tag
+    url: create
+  - name: Get a single tag
+    url: get-single
+  - name: Update a tag
+    url: update
+  - name: Query for tags
+    url: query
+  - name: Get tasks with tag
+    url: get-tasks
+
 actions:
 
   # Create, Retrieve, Update, Delete
 
   - name: create
+    class: create
     method: POST
     path: "/tags"
     params:
@@ -76,6 +89,7 @@ actions:
       Returns the full record of the newly created tag.
 
   - name: createInWorkspace
+    class: create
     method: POST
     path: "/workspaces/%d/tags"
     params:
@@ -94,6 +108,7 @@ actions:
       Returns the full record of the newly created tag.
 
   - name: findById
+    class: get-single
     method: GET
     path: "/tags/%d"
     params:
@@ -105,6 +120,7 @@ actions:
       Returns the complete tag record for a single tag.
 
   - name: update
+    class: update
     method: PUT
     path: "/tags/%d"
     params:
@@ -123,6 +139,7 @@ actions:
       Returns the complete updated tag record.
 
   - name: delete
+    class: delete
     method: DELETE
     path: "/tags/%d"
     params:
@@ -137,6 +154,7 @@ actions:
       Returns an empty data record.
 
   - name: findAll
+    class: query
     method: GET
     path: "/tags"
     collection: true
@@ -157,6 +175,7 @@ actions:
           this parameter.
 
   - name: findByWorkspace
+    class: query
     method: GET
     path: "/workspaces/%d/tags"
     params:
@@ -167,3 +186,17 @@ actions:
     collection: true
     comment: |
       Returns the compact tag records for all tags in the workspace.
+
+  - name: getTasksWithTag
+    class: get-tasks
+    method: GET
+    path: "/tags/%d/tasks"
+    params:
+      - name: tag
+        <<: *Param.TagId
+        required: true
+        comment: The tag to fetch tasks from.
+    collection: true
+    comment: |
+      Returns the compact task records for all tasks with the given tag.
+      Tasks can have more than one tag at a time.

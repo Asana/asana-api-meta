@@ -29,11 +29,20 @@ properties:
     comment: |
       Whether the workspace is an _organization_.
 
+action_classes:
+  - name: Get available workspaces
+    url: get
+  - name: Update a workspace
+    url: update
+  - name: Typeahead search
+    url: typeahead
+
 actions:
 
   # Create, Retrieve, Update, Delete
 
   - name: findById
+    class: get
     method: GET
     path: "/workspaces/%d"
     params:
@@ -44,6 +53,7 @@ actions:
       Returns the full workspace record for a single workspace.
 
   - name: findAll
+    class: get
     method: GET
     path: "/workspaces"
     collection: true
@@ -51,6 +61,7 @@ actions:
       Returns the compact records for all workspaces visible to the authorized user.
 
   - name: update
+    class: update
     method: PUT
     path: "/workspaces/%d"
     params:
@@ -62,6 +73,7 @@ actions:
       Update properties on a workspace. Returns the complete, updated workspace record.
 
   - name: typeahead
+    class: typeahead
     method: GET
     path: "/workspaces/%d/typeahead"
     params:

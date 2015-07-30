@@ -11,11 +11,18 @@ properties:
     comment: |
       The name of the team.
 
+action_classes:
+  - name: Get teams in organization
+    url: get
+  - name: Get team members
+    url: users
+
 actions:
 
   # Create, Retrieve, Update, Delete
 
   - name: findById
+    class: get
     method: GET
     path: "/teams/%d"
     params:
@@ -26,6 +33,7 @@ actions:
       Returns the full record for a single team.
 
   - name: findByOrganization
+    class: get
     method: GET
     path: "/organizations/%d/teams"
     collection: true
@@ -40,6 +48,7 @@ actions:
   # Users
 
   - name: users
+    class: users
     method: GET
     path: "/teams/%d/users"
     collection: true

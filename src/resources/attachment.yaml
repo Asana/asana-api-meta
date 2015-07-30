@@ -19,7 +19,7 @@ properties:
       The URL containing the content of the attachment.
     notes:
       - |
-        May be 'null' if the attachment is hosted by box. If present, this URL
+        May be `null` if the attachment is hosted by box. If present, this URL
         may only be valid for 1 hour from the time of retrieval. You should avoid
         persisting this URL somewhere and just refresh it on demand to ensure you
         do not keep stale URLs.
@@ -27,8 +27,8 @@ properties:
   - name: host
     <<: *PropType.Host
     comment: |
-      The service hosting the attachment. Valid values are 'asana', 'dropbox',
-      'gdrive' and 'box'.
+      The service hosting the attachment. Valid values are `asana`, `dropbox`,
+      `gdrive` and `box`.
 
   - name: name
     <<: *PropType.FileName
@@ -46,11 +46,20 @@ properties:
       The URL where the attachment can be viewed, which may be friendlier to
       users in a browser than just directing them to a raw file.
 
+action_classes:
+  - name: Get single attachment
+    url: get-single
+  - name: Get all attachments
+    url: get-all-task
+  - name: Upload an attachment
+    url: upload
+
 actions:
 
   # Create, Retrieve, Update, Delete
 
   - name: findById
+    class: get-single
     method: GET
     path: "/attachments/%d"
     params:
@@ -61,6 +70,7 @@ actions:
       Returns the full record for a single attachment.
 
   - name: findByTask
+    class: get-all-task
     method: GET
     path: "/tasks/%d/attachments"
     collection: true
@@ -72,6 +82,7 @@ actions:
       Returns the compact records for all attachments on the task.
 
   - name: createOnTask
+    class: upload
     method: POST
     path: "/tasks/%d/attachments"
     no_code: true  # Uploading attachments must be hand-coded
@@ -82,8 +93,51 @@ actions:
       - name: file
         type: File
         example_values:
-          - TBD
+          - file.txt
         required: true
-        comment: TBD
+        comment: The file you want to upload.
+        notes:
+          - |
+            **Notes on using curl:**
+
+            Be sure to add an '@' before the file path, and use the --form
+            option instead of the -u option.
+
+            When uploading PDFs with curl, force the content-type to be pdf by
+            appending the content type to the file path: --form
+            "file=@file.pdf;type=application/pdf".
     comment: |
-      Returns the compact records for all attachments on the task.
+      This method uploads an attachment to a task and returns the compact
+      records for all attachments on the task. It is not possible to attach
+      files from third party services such as Dropbox, Box & Google Drive via
+      the API. You must download the file content first and then upload it as any
+      other attachment.
+
+      The 100MB size limit on attachments in Asana is enforced on this endpoint.
+    notes:
+      - |
+        This endpoint expects a multipart/form-data encoded request containing
+        the full contents of the file to be uploaded.
+
+        Below is an example of what a well formed multipart/form-data encoded
+        request might look like.
+
+            Authorization: Basic <BASE64_ENCODED_API_KEY> \
+            Content-Type: multipart/form-data; boundary=<UNIQUE_BOUNDARY> \
+            User-Agent: Java/1.7.0_76 \
+            Host: localhost \
+            Accept: */* \
+            Connection: keep-alive \
+            Content-Length: 141
+
+            --<UNIQUE_BOUNDARY> \
+            Content-Disposition: form-data; name="file"; filename="example.txt" \
+            Content-Type: text/plain
+
+            <RAW_FILE_DATA>
+
+            --<UNIQUE_BOUNDARY>--
+
+        Requests made should follow the HTTP/1.1 specification that line terminators are of the form `CRLF` or `\r\n`
+        outlined [here](http://www.w3.org/Protocols/HTTP/1.1/draft-ietf-http-v11-spec-01#Basic-Rules) in order for the server
+        to reliably and properly handle the request.
