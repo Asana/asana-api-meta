@@ -19,20 +19,15 @@ comment: |
 
 properties:
 
-  - name: id
-    <<: *PropType.Id
-
   - name: name
-    type: String
-    example_values:
-      - "Apollo Moon Landing"
+    <<: *PropType.WorkspaceName
     comment: |
       The name of the workspace.
 
   - name: is_organization
     <<: *PropType.Bool
     comment: |
-      True iff the workspace is an _organization_.
+      Whether the workspace is an _organization_.
 
 actions:
 

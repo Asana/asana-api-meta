@@ -6,13 +6,8 @@ comment: |
   organization. Each project in an organization is associated with a team.
 properties:
 
-  - name: id
-    <<: *PropType.Id
-
   - name: name
-    type: String
-    example_values:
-      - "Engineering"
+    <<: *PropType.TeamName
     comment: |
       The name of the team.
 

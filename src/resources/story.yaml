@@ -11,10 +11,77 @@ comment: |
   Once generated, it is not possible to modify a story.
 properties:
 
-  - name: id
-    <<: *PropType.Id
+  - name: created_at
+    <<: *PropType.DateTime
+    comment: |
+      The time at which this story was created.
 
-  # TODO: properties
+  - name: created_by
+    <<: *PropType.User
+    comment: |
+      The user who created the story.
+
+  - name: hearted
+    <<: *PropType.Bool
+    comment: |
+      True if the story is hearted by the authorized user, false if not.
+    notes:
+      - |
+        This property only exists for stories that provide hearts.
+
+  - name: hearts
+    <<: *PropType.UserArray
+    access: Read-only
+    comment: |
+      Array of users who have hearted this story.
+    notes:
+      - |
+        This property only exists for stories that provide hearts.
+
+  - name: num_hearts
+    <<: *PropType.Count
+    access: Read-only
+    comment: |
+      The number of users who have hearted this story.
+    notes:
+      - |
+        This property only exists for stories that provide hearts.
+
+  - name: text
+    <<: *PropType.StoryText
+    comment: |
+      Human-readable text for the story or comment. This will not include the
+      name of the creator.
+    notes:
+      - |
+        This is not guaranteed to be stable for a given type of story. For
+        example, text for a reassignment may not always say “assigned to …”.
+        The API currently does not provide a structured way of inspecting the
+        meaning of a story.
+
+  - name: html_text
+    <<: *PropType.HtmlText
+    comment: |
+      HTML formatted text for a comment. This will not include the name of the creator.
+    notes:
+      - |
+        This field is only returned if explicitly requested using the 'opt_fields'
+        query parameter.
+
+  - name: target
+    <<: *PropType.Task
+    comment: |
+      The object this story is associated with. Currently may only be a task.
+
+  - name: source
+    <<: *PropType.StorySource
+    comment: |
+      The component of the Asana product the user used to trigger the story.
+
+  - name: type
+    <<: *PropType.StoryType
+    comment: |
+      The type of story this is.
 
 actions:
 

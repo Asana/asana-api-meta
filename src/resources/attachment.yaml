@@ -7,10 +7,44 @@ comment: |
   such as Dropbox or Google Drive.
 properties:
 
-  - name: id
-    <<: *PropType.Id
+  - name: created_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this attachment was uploaded.
 
-  # TODO: properties
+  - name: download_url
+    <<: *PropType.DownloadUrl
+    comment: |
+      The URL containing the content of the attachment.
+    notes:
+      - |
+        May be 'null' if the attachment is hosted by box. If present, this URL
+        may only be valid for 1 hour from the time of retrieval. You should avoid
+        persisting this URL somewhere and just refresh it on demand to ensure you
+        do not keep stale URLs.
+
+  - name: host
+    <<: *PropType.Host
+    comment: |
+      The service hosting the attachment. Valid values are 'asana', 'dropbox',
+      'gdrive' and 'box'.
+
+  - name: name
+    <<: *PropType.FileName
+    comment: |
+      The name of the file.
+
+  - name: parent
+    <<: *PropType.Task
+    comment: |
+      The task this attachment is attached to.
+
+  - name: view_url
+    <<: *PropType.ViewUrl
+    comment: |
+      The URL where the attachment can be viewed, which may be friendlier to
+      users in a browser than just directing them to a raw file.
 
 actions:
 

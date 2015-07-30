@@ -14,10 +14,66 @@ comment: |
 
 properties:
 
-  - name: id
-    <<: *PropType.Id
+  - name: archived
+    <<: *PropType.Bool
+    comment: |
+      True if the project is archived, false if not. Archived projects do not
+      show in the UI by default and may be treated differently for queries.
 
-  # TODO more properties
+  - name: created_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this project was created.
+
+  - name: followers
+    <<: *PropType.UserArray
+    access: Read-only
+    comment: |
+      Array of users following this project.
+
+  - name: modified_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this project was last modified.
+    notes:
+      - |
+        This does not currently reflect any changes in associations such as tasks
+        or comments that may have been added or removed from the project.
+
+  - name: name
+    <<: *PropType.ProjectName
+    comment: |
+      Name of the project. This is generally a short sentence fragment that fits
+      on a line in the UI for maximum readability. However, it can be longer.
+
+  - name: color
+    <<: *PropType.ProjectColor
+    comment: |
+      Color of the project. Must be either 'null' or one of: 'dark-pink',
+      'dark-green', 'dark-blue', 'dark-red', 'dark-teal', 'dark-brown',
+      'dark-orange', 'dark-purple', 'dark-warm-gray', 'light-pink', 'light-green',
+      'light-blue', 'light-red', 'light-teal', 'light-yellow', 'light-orange',
+      'light-purple', 'light-warm-gray'.
+
+  - name: notes
+    <<: *PropType.ProjectNotes
+    comment: |
+      More detailed, free-form textual information associated with the project.
+
+  - name: workspace
+    <<: *PropType.Workspace
+    comment: |
+      The workspace or organization this project is associated with. Once created,
+      projects cannot be moved to a different workspace. This attribute can only
+      be specified at creation time.
+
+  - name: team
+    <<: *PropType.Team
+    comment: |
+      The team that this project is shared with. This field only exists for
+      projects in organizations.
 
 actions:
 

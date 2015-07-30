@@ -12,11 +12,46 @@ comment: |
   are associated with.
 
 properties:
+# We borrow a bunch of the project templates here because they're literally
+# exactly the same
+  - name: created_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this tag was created.
 
-  - name: id
-    <<: *PropType.Id
+  - name: followers
+    <<: *PropType.UserArray
+    access: Read-only
+    comment: |
+      Array of users following this tag.
 
-  # TODO more properties
+  - name: name
+    <<: *PropType.ProjectName
+    comment: |
+      Name of the tag. This is generally a short sentence fragment that fits
+      on a line in the UI for maximum readability. However, it can be longer.
+
+  - name: color
+    <<: *PropType.ProjectColor
+    comment: |
+      Color of the project. Must be either 'null' or one of: 'dark-pink',
+      'dark-green', 'dark-blue', 'dark-red', 'dark-teal', 'dark-brown',
+      'dark-orange', 'dark-purple', 'dark-warm-gray', 'light-pink', 'light-green',
+      'light-blue', 'light-red', 'light-teal', 'light-yellow', 'light-orange',
+      'light-purple', 'light-warm-gray'.
+
+  - name: notes
+    <<: *PropType.ProjectNotes
+    comment: |
+      More detailed, free-form textual information associated with the tag.
+
+  - name: workspace
+    <<: *PropType.Workspace
+    comment: |
+      The workspace or organization this tag is associated with. Once created,
+      tags cannot be moved to a different workspace. This attribute can only
+      be specified at creation time.
 
 actions:
 

@@ -22,7 +22,121 @@ properties:
       Scheduling status of this task for the user it is assigned to.
       This field can only be set if the `assignee` is non-null.
 
-  # TODO more properties
+  - name: created_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this task was created.
+
+  - name: completed
+    <<: *PropType.Bool
+    comment: |
+      True if the task is currently marked complete, false if not.
+
+  - name: completed_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this task was completed, or null if the task is incomplete.
+
+  - name: due_on
+    <<: *PropType.Date
+    comment: |
+      Date on which this task is due, or null if the task has no due date. This
+      takes a date with YYYY-MM-DD format and should not be used together with
+      'due_at'.
+
+  - name: due_at
+    <<: *PropType.DateTime
+    comment: |
+      Date and time on which this task is due, or null if the task has no due
+      time. This takes a UTC timestamp and should not be used together with
+      'due_on'.
+
+  - name: external
+    <<: *PropType.External
+    comment: |
+      The external field allows you to store app-specific metadata on tasks,
+      including an id that can be used to retrieve tasks and a data blob that
+      can store app-specific character strings. Note that you will need to
+      authenticate with Oauth to access or modify this data. Once an external
+      id is set, you can use the notation 'external:custom_id' to reference your
+      object anywhere in the API where you may use the original object id.
+      See the page on Custom External Data for more details.
+
+  - name: followers
+    <<: *PropType.UserArray
+    comment: |
+      Array of users following this task.
+
+  - name: hearted
+    <<: *PropType.Bool
+    comment: |
+      True if the task is hearted by the authorized user, false if not.
+
+  - name: hearts
+    <<: *PropType.UserArray
+    access: Read-only
+    comment: |
+      Array of users who have hearted this task.
+
+  - name: modified_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this task was last modified.
+    notes:
+      - |
+        This does not currently reflect any changes in associations such as
+        projects or comments that may have been added or removed from the task.
+
+  - name: name
+    <<: *PropType.TaskName
+    comment: |
+      Name of the task. This is generally a short sentence fragment that fits
+      on a line in the UI for maximum readability. However, it can be longer.
+
+  - name: notes
+    <<: *PropType.TaskNotes
+    comment: |
+      More detailed, free-form textual information associated with the task.
+
+  - name: num_hearts
+    <<: *PropType.Count
+    access: Read-only
+    comment: |
+      The number of users who have hearted this task.
+
+  - name: projects
+    <<: *PropType.ProjectArray
+    comment: |
+      Array of projects this task is associated with. At task creation time,
+      this array can be used to add the task to many projects at once. After
+      task creation, these associations can be modified using the 'addProject'
+      and 'removeProject' endpoints.
+
+  - name: parent
+    <<: *PropType.Task
+    comment: |
+      The parent of this task, or 'null' if this is not a subtask. This property
+      cannot be modified using a PUT request but you can change it with the
+      'setParent' endpoint. You can create subtasks by using the subtasks endpoint.
+
+  - name: workspace
+    <<: *PropType.Workspace
+    comment: |
+      The workspace this task is associated with. Once created, task cannot be
+      moved to a different workspace. This attribute can only be specified at
+      creation time.
+
+  - name: memberships
+    <<: *PropType.Memberships
+    comment: |
+      Array of projects this task is associated with and the section it is in.
+      At task creation time, this array can be used to add the task to specific
+      sections. After task creation, these associations can be modified using
+      the 'addProject' and 'removeProject' endpoints. Note that over time, more
+      types of memberships may be added to this property.
 
 actions:
 
@@ -142,12 +256,14 @@ actions:
         <<: *Param.UserId
         comment: The assignee to filter tasks on.
         notes:
-          - If you specify `assignee`, you must also specify the `workspace` to filter on.
+          - |
+            If you specify `assignee`, you must also specify the `workspace` to filter on.
       - name: workspace
         <<: *Param.WorkspaceId
         comment: The workspace or organization to filter tasks on.
         notes:
-          - If you specify `workspace`, you must also specify the `assignee` to filter on.
+          - |
+            If you specify `workspace`, you must also specify the `assignee` to filter on.
       - name: completed_since
         <<: *Param.DateTime
         comment: |
