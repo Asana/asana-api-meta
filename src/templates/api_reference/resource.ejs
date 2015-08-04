@@ -13,8 +13,8 @@ _layout: dev
 # Sidebar nav
 side_nav:
   <% _.forEach(resource.action_classes, function(action_class) {%><%= '-'%>
-    <%= 'name: ' + action_class.name%>
-    <%= 'url: ' + action_class.url%>
+    name: <%= action_class.name%>
+    url: <%= action_class.url%>
 <%});%>
 
 # Header
@@ -34,16 +34,16 @@ header_search: true;
 
 | Field | Description |
 |---|---|<% _.forEach(resource.properties, function(property) {%>
-<%= '| ' + property.name + ' | '%><%_.forEach(property.example_values, function(value) {
-  %><%= '<code class="table-example">' + value + '</code> '%><%});%><%if (property.access) {
-%><%= '**' + property.access + '.** '%><%}%><%= removeLineBreaks(property.comment)%><%if (property.notes) {
+| <%= property.name%> | <%_.forEach(property.example_values, function(value) {
+%><code class="table-example"><%= value%></code><%});%><%if (property.access) {
+%>**<%= property.access%>.** <%}%><%= removeLineBreaks(property.comment)%><%if (property.notes) {
 %><br><br>**Note:** <% _.forEach(property.notes, function(note) {%><%= removeLineBreaks(note, "<br><br>")%><%})};%>|<%});%>
 
 <% _.forEach(resource.action_classes, function(action_class) {
   var matchingActions = resource.actions.filter(function(action) {
     return action.class == action_class.url;
   });
-%><%= '<a name="' + action_class.url + '"></a>'%>
+%><a name="<%= action_class.url%>"></a>
 <%= '**[' + action_class.name.toUpperCase() + '](#' + action_class.url + ')**'
 %>
 <%if (action_class.comment) {%><%= removeLineBreaks(action_class.comment)
@@ -59,9 +59,9 @@ header_search: true;
 %><%if (action.params) {%>
 | Parameter | Description |
 |---|---|<% _.forEach(action.params, function(param) {%>
-<%= '| ' + param.name + ' | '%><%_.forEach(param.example_values, function(value) {
-%><%= '<code class="table-example">' + value + '</code> '%><%});%><%if (param.required) {
-%><%= '**Required:** '%><%}%><%= removeLineBreaks(param.comment)%><%if (param.notes) {
+| <%= param.name%> | <%_.forEach(param.example_values, function(value) {
+%><code class="table-example"><%= value%></code> <%});%><%if (param.required) {
+%>**Required:** <%}%><%= removeLineBreaks(param.comment)%><%if (param.notes) {
 %><br><br>**Note:** <% _.forEach(param.notes, function(note) {%><%= removeLineBreaks(note, "<br><br>")%><%})};%>|<%
 });}%>
 

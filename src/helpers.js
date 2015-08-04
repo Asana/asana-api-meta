@@ -83,6 +83,7 @@ function paramsForAction(action) {
 
 // Removes line breaks but preserves paragraphs (double newlines).
 // Also reserves line breaks denoted with an optional delimiter.
+// TODO: make this un-hacky
 function removeLineBreaks(text, opt_paragraph_delim) {
   var paragraph_delim = opt_paragraph_delim || "\n\n";
   text = text.replace(/\\\n/gm, "XX");
@@ -94,10 +95,6 @@ function removeLineBreaks(text, opt_paragraph_delim) {
 
 function genericPath(action, pathParams) {
   var path = action.path;
-  //var numPathParams = (action.path.match(/%/g) || []).length;
-  //for (var i = 0; i < numPathParams; i++) {
-  //  path = action.path.replace(/%./, action.params[i].name + "-id");
-  //}
   _.forEach(pathParams, function(pathParam) {
     path = path.replace(/%./, pathParam.name + "-id");
   });
@@ -121,7 +118,7 @@ function addDataForSpecialActions(resource, action, data) {
         data.push('-d "notes=\'Petsmart is out of catnip\'"');
         break;
       case 'addProject':
-        // Very hacky, but this action can only take one param for the insertion location
+        // Hacky, but this action can only take one param for the insertion location
         _.remove(data, function(param, index) {
           return index > 1;
         });
