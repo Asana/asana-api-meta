@@ -43,13 +43,13 @@ properties:
         or comments that may have been added or removed from the project.
 
   - name: name
-    <<: *PropType.ProjectName
+    <<: *PropType.PotName
     comment: |
       Name of the project. This is generally a short sentence fragment that fits
       on a line in the UI for maximum readability. However, it can be longer.
 
   - name: color
-    <<: *PropType.ProjectColor
+    <<: *PropType.PotColor
     comment: |
       Color of the project. Must be either `null` or one of: `dark-pink`,
       `dark-green`, `dark-blue`, `dark-red`, `dark-teal`, `dark-brown`,
@@ -58,7 +58,7 @@ properties:
       `light-purple`, `light-warm-gray`.
 
   - name: notes
-    <<: *PropType.ProjectNotes
+    <<: *PropType.PotNotes
     comment: |
       More detailed, free-form textual information associated with the project.
 

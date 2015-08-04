@@ -20,7 +20,9 @@ comment: |
 properties:
 
   - name: name
-    <<: *PropType.WorkspaceName
+    type: String
+    example_values:
+      - "'My Favorite Workspace'"
     comment: |
       The name of the workspace.
 

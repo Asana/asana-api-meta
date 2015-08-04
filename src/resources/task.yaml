@@ -18,7 +18,6 @@ notes:
     Use [field selectors](/developers/documentation/getting-started/input-output-options) to manipulate what data is included in a response.
 
 properties:
-
   - name: assignee
     <<: *PropType.User
     comment: |
@@ -100,13 +99,17 @@ properties:
         projects or comments that may have been added or removed from the task.
 
   - name: name
-    <<: *PropType.TaskName
+    type: String
+    example_values:
+      - "'Buy catnip'"
     comment: |
       Name of the task. This is generally a short sentence fragment that fits
       on a line in the UI for maximum readability. However, it can be longer.
 
   - name: notes
-    <<: *PropType.TaskNotes
+    type: String
+    example_values:
+      - "'Mittens really likes the stuff from Humboldt.'"
     comment: |
       More detailed, free-form textual information associated with the task.
 

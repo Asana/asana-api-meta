@@ -48,7 +48,10 @@ properties:
         This property only exists for stories that provide hearts.
 
   - name: text
-    <<: *PropType.StoryText
+    type: String
+    example_values:
+      - "'marked today'"
+    access: Create-only
     comment: |
       Human-readable text for the story or comment. This will not include the
       name of the creator.

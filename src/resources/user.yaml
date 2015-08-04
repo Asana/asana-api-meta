@@ -17,9 +17,11 @@ comment: |
   a user ID is accepted, to refer to the current authenticated user.
 
 properties:
-
   - name: name
-    <<: *PropType.UserName
+    type: String
+    example_values:
+      - "'Greg Sanchez'"
+    access: Read-only
     comment: |
       The user's name.
 
@@ -36,7 +38,7 @@ properties:
       PNG format.
 
   - name: workspaces
-    <<: *PropType.Workspaces
+    <<: *PropType.WorkspaceArray
     comment: |
       Workspaces and organizations this user may access.
     notes:

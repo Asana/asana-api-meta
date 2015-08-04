@@ -7,7 +7,9 @@ comment: |
 properties:
 
   - name: name
-    <<: *PropType.TeamName
+    type: String
+    example_values:
+      - "'Engineering'"
     comment: |
       The name of the team.
 

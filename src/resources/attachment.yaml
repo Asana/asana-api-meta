@@ -14,7 +14,11 @@ properties:
       The time at which this attachment was uploaded.
 
   - name: download_url
-    <<: *PropType.DownloadUrl
+    type: String
+    example_values:
+      - "'https://www.dropbox.com/s/123/Screenshot.png?dl=1'"
+      - "null"
+    access: Read-only
     comment: |
       The URL containing the content of the attachment.
     notes:
@@ -25,13 +29,19 @@ properties:
         do not keep stale URLs.
 
   - name: host
-    <<: *PropType.Host
+    type: String
+    example_values:
+      - "'dropbox'"
+    access: Read-only
     comment: |
       The service hosting the attachment. Valid values are `asana`, `dropbox`,
       `gdrive` and `box`.
 
   - name: name
-    <<: *PropType.FileName
+    type: String
+    example_values:
+      - "'Screenshot.png'"
+    access: Read-only
     comment: |
       The name of the file.
 
@@ -41,7 +51,11 @@ properties:
       The task this attachment is attached to.
 
   - name: view_url
-    <<: *PropType.ViewUrl
+    type: String
+    example_values:
+      - "'https://www.dropbox.com/s/123/Screenshot.png'"
+      - "null"
+    access: Read-only
     comment: |
       The URL where the attachment can be viewed, which may be friendlier to
       users in a browser than just directing them to a raw file.
