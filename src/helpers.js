@@ -1,4 +1,5 @@
 var inflect = require('inflect');
+var util = require('util');
 var _ = require('lodash');
 
 /**
@@ -81,22 +82,52 @@ function paramsForAction(action) {
 }
 
 // Removes line breaks but preserves paragraphs (double newlines).
-// Preserves line breaks denoted with "\".
-function removeLineBreaks(text) {
+// Also reserves line breaks denoted with an optional delimiter.
+function removeLineBreaks(text, opt_paragraph_delim) {
+  var paragraph_delim = opt_paragraph_delim || "\n\n";
   text = text.replace(/\\\n/gm, "XX");
   text = text.replace(/\n\n/gm, "CC");
   text = text.replace(/\r\n|\n|\r/gm, " ");
   text = text.replace(/XX/g, "\n");
-  return text.replace(/CC/g, "\n\n");
+  return text.replace(/CC/g, paragraph_delim);
 }
 
-function genericPath(action) {
+function genericPath(action, pathParams) {
   var path = action.path;
-  var numPathParams = (action.path.match(/%/g) || []).length;
-  for (var i = 0; i < numPathParams; i++) {
-    path = action.path.replace(/%./, action.params[i].name + "-id");
-  }
+  //var numPathParams = (action.path.match(/%/g) || []).length;
+  //for (var i = 0; i < numPathParams; i++) {
+  //  path = action.path.replace(/%./, action.params[i].name + "-id");
+  //}
+  _.forEach(pathParams, function(pathParam) {
+    path = path.replace(/%./, pathParam.name + "-id");
+  });
   return path;
+}
+
+function samplePath(action, pathParams) {
+  var path = action.path;
+  _.forEach(pathParams, function(pathParam) {
+    path = path.replace(/%./, pathParam.example_values[0]);
+  });
+  return path;
+}
+
+function addDataForSpecialActions(resource, action, data) {
+  if (resource === 'task') {
+    switch(action) {
+      case 'addSubtask':
+        // We don't have templates for subtasks but would like the copy to be different from regular tasks
+        data.push('-d "name=\'Make trip to Cats R Us\'"');
+        data.push('-d "notes=\'Petsmart is out of catnip\'"');
+        break;
+      case 'addProject':
+        // Very hacky, but this action can only take one param for the insertion location
+        _.remove(data, function(param, index) {
+          return index > 1;
+        });
+        break;
+    }
+  }
 }
 
 var common = {
@@ -110,8 +141,6 @@ var common = {
   dash: inflect.dasherize,
   param: inflect.parameterize,
   human: inflect.humanize,
-  removeLineBreaks: removeLineBreaks,
-  genericPath: genericPath,
   paramsForAction: paramsForAction
 };
 
@@ -142,7 +171,11 @@ var langs = {
   }),
   api_reference: _.merge({}, common, {
     typeName: typeNameTranslator("md"),
-    comment: null
+    comment: null,
+    removeLineBreaks: removeLineBreaks,
+    genericPath: genericPath,
+    samplePath: samplePath,
+    addDataForSpecialActions: addDataForSpecialActions
   })
 };
 

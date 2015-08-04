@@ -221,6 +221,11 @@ actions:
     class: create
     method: POST
     path: "/tasks"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace to create a task in.
     comment: |
       Creating a new task is as easy as POSTing to the `/tasks` endpoint
       with a data block containing the fields you'd like to set on the task.
@@ -552,12 +557,9 @@ actions:
         <<: *Param.TaskId
         required: true
         comment: The task to add a subtask to.
-      - name: subtask
-        <<: *Param.TaskId
-        required: true
-        comment: The subtask to add to the task.
     comment: |
-      Makes an existing task a subtask of another. Returns an empty data block.
+      Creates a new subtask and adds it to the parent task. Returns the full record
+      for the newly created subtask.
 
   - name: setParent
     class: subtasks

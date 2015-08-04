@@ -358,6 +358,8 @@ templates:
           required: true
         - name: text
           type: String
+          example_values:
+            - "'This is a comment.'"
           required: true
           comment: The plain text of the comment to add.
       comment: |
