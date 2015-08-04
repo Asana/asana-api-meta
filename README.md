@@ -6,6 +6,9 @@ This repository contains descriptions of the various resources in the API and th
 It is currently used to build the following client libraries:
 
   * [`node-asana`](https://github.com/Asana/node-asana)
+  * [`ruby-asana`](https://github.com/Asana/ruby-asana)
+  * [`php-asana`](https://github.com/Asana/php-asana)
+  * [`java-asana`](https://github.com/Asana/java-asana)
 
 ## Workflow
 
@@ -56,4 +59,3 @@ This is the preferred method for using templates since it places the template fo
 ### Local Templates
 
 These are used if the language configuration does not have a `templatePath`, and it will assume the template package is in `src/templates/LANG` (that means it will load `src/templates/LANG/index.js`).
-
