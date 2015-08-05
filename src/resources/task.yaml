@@ -227,7 +227,6 @@ actions:
     params:
       - name: workspace
         <<: *Param.WorkspaceId
-        required: true
         comment: The workspace to create a task in.
     comment: |
       Creating a new task is as easy as POSTing to the `/tasks` endpoint

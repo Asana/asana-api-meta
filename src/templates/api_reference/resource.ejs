@@ -1,6 +1,5 @@
 <%
 var thisType = plural(cap(resource.name));
-// special actions that require extra includes in their examples
 
 %>---
 parent-title: API Reference
@@ -29,7 +28,6 @@ header_search: true;
 <%if (resource.notes) {%><% _.forEach(resource.notes, function(note) {%>
 <%= removeLineBreaks(note)%>
 <%})};%>
-
 <%= thisType%> have the following fields:
 
 | Field | Description |
@@ -39,7 +37,8 @@ header_search: true;
 %>**<%= property.access%>.** <%}%><%= removeLineBreaks(property.comment)%><%if (property.notes) {
 %><br><br>**Note:** <% _.forEach(property.notes, function(note) {%><%= removeLineBreaks(note, "<br><br>")%><%})};%>|<%});%>
 
-<% _.forEach(resource.action_classes, function(action_class) {
+<%var examples = examplesForResource(thisType);
+  _.forEach(resource.action_classes, function(action_class) {
   var matchingActions = resource.actions.filter(function(action) {
     return action.class == action_class.url;
   });
@@ -55,7 +54,7 @@ header_search: true;
 <%= removeLineBreaks(action.comment)%>
 <%if (action.notes) {%><% _.forEach(action.notes, function(note) {%>
 <%= removeLineBreaks(note)%>
-<%})};
+<%})}
 %><%if (action.params) {%>
 | Parameter | Description |
 |---|---|<% _.forEach(action.params, function(param) {%>
@@ -65,62 +64,19 @@ header_search: true;
 %><br><br>**Note:** <% _.forEach(param.notes, function(note) {%><%= removeLineBreaks(note, "<br><br>")%><%})};%>|<%
 });}%>
 
-    # Request
-    curl<%if (action.method === 'PUT') {%> --request PUT<%} else if (action.method === 'DELETE') {%> --request DELETE<%}%> -H "Authorization: Bearer <personal_access_token> \
-    <%var url = samplePath(action, params.pathParams);
-    // possible: concat explicit npp and options and just include everything?
-    if (params.explicitNonPathParams.length > 0) {
-      url += '?';
-    }
-    _.forEach(params.explicitNonPathParams, function(npp, index) {
-      url += npp.name + '=' + npp.example_values[0];
-      if (index !== params.explicitNonPathParams.length - 1) {
-        url += '&';
-      }
-    });
-    var dataForRequest = [];
-    if (action.method === 'GET' && params.optionParams.length > 0) {
-      url += '?';
-      _.forEach(params.optionParams, function(op, index) {
-        url += op.name + '=' + op.example_values[0];
-        if (index !== params.optionParams.length - 1) {
-          url += '&';
-        }
-      });
-    } else if (action.method !== 'DELETE') {
-      _.forEach(params.optionParams, function(op) {
-        if (op.type === 'Array') {      // exception for array types because of curl weirdness
-          var value = JSON.parse(op.example_values[0])[0];
-          dataForRequest.push('-d "' + op.name + '[0]=' + value + '"');
-        } else if (op.type === 'File') {    // exception for files
-          dataForRequest.push ('--form "' + op.name + "=@" + op.example_values[0] + '"');
-        } else {
-          dataForRequest.push('-d "' + op.name + '=' + op.example_values[0] + '"');
-        }
-      });
-      if (action.class === 'create') {
-        var name = _.find(resource.properties, function(prop) {
-          return prop.name === 'name';
-        });
-        dataForRequest.push('-d "name=' + name.example_values[0] + '"');
-        var notes = _.find(resource.properties, function (prop) {
-          return prop.name === 'notes';
-        });
-        dataForRequest.push('-d "notes=' + notes.example_values[0] + '"');
-      } else if (action.class === 'update') {
-        var name = _.find(resource.properties, function (prop) {
-          return prop.name === 'name';
-        });
-        dataForRequest.push('-d "name=' + name.example_values[0] + '"');
-      }
-    }
-    addDataForSpecialActions(resource.name, action.name, dataForRequest);
-    %>https://app.asana.com/api/1.0<%= url%><%_.forEach(dataForRequest, function(data) {%> \
-    <%= data%><%});%>
+<%var curl = curlExamplesForAction(action, examples);
+  _.forEach(curl, function(example) {%><%if (example.description) {%>**<%= example.description%>**
 
+<%}%>    # Request
+    <%= example.request%> \
+    <%= example.url%><%if (example.dataForRequest.length > 0) {%> \<%}%>
+    <%_.forEach(example.dataForRequest, function(data, index) {
+      %><%= data%><%if (index < example.dataForRequest.length -1) {%> \<%}%>
+    <%});%>
     # Response
-    // TBD
+    <%= example.responseStatus%>
+    <%= indent(example.response, '    ', true)%>
 
----
+<%});%>---
 <%});%>
 <%});%>
