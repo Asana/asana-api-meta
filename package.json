@@ -1,6 +1,6 @@
 {
   "name": "asana-api-meta",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Metadata for Asana API for generating client libraries and documenation",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Asana/asana-api-meta",
   "devDependencies": {
+    "bluebird": "^2.9.34",
     "fs-extra": "^0.15.0",
     "gulp": "^3.8.10",
     "gulp-bump": "^0.1.11",
