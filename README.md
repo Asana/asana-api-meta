@@ -16,7 +16,7 @@ It is currently used to build the following client libraries:
   2. `gulp build`        _# builds and tests changes_
   3. `git commit -a -m ...`
   4. `gulp bump-patch`   _# or `bump-feature` or `bump-release`_
-  5. `git push origin master --tags`  _# pushes changes; travis will deploy all generated files to client libs_
+  5. `git push origin <branchname> --tags`  _# pushes changes (submit pull request if branchname is not master); travis will deploy all generated files to client libs_
 
 Then, for each client library, pull and merge from the branch the deployment pushed to (usually `api-meta-incoming`), update versions, etc.
 

@@ -1,5 +1,9 @@
 var inflect = require('inflect');
+var util = require('util');
+var path = require('path')
 var _ = require('lodash');
+var fs = require('fs')
+var yaml = require('js-yaml');
 
 /**
  * Helpers for code-generation templates
@@ -80,6 +84,109 @@ function paramsForAction(action) {
   return results;
 }
 
+// Removes line breaks but preserves paragraphs (double newlines).
+// Also reserves line breaks denoted with an optional delimiter.
+// TODO: make this un-hacky
+function removeLineBreaks(text, opt_paragraph_delim) {
+  var paragraph_delim = opt_paragraph_delim || "\n\n";
+  text = text.replace(/\\\n/gm, "XX");
+  text = text.replace(/\n\n/gm, "CC");
+  text = text.replace(/\r\n|\n|\r/gm, " ");
+  text = text.replace(/XX/g, "\n");
+  return text.replace(/CC/g, paragraph_delim);
+}
+
+function genericPath(action, pathParams) {
+  var path = action.path;
+  _.forEach(pathParams, function(pathParam) {
+    path = path.replace(/%./, pathParam.name + "-id");
+  });
+  return path;
+}
+
+function samplePath(action, pathParams) {
+  var path = action.path;
+  _.forEach(pathParams, function(pathParam) {
+    path = path.replace(/%./, pathParam.example_values[0]);
+  });
+  return path;
+}
+
+function addDataForSpecialActions(resource, action, data) {
+  if (resource === 'task') {
+    switch(action) {
+      case 'addSubtask':
+        // We don't have templates for subtasks but would like the copy to be different from regular tasks
+        data.push('-d "name=\'Make trip to Cats R Us\'"');
+        data.push('-d "notes=\'Petsmart is out of catnip\'"');
+        break;
+      case 'addProject':
+        // Hacky, but this action can only take one param for the insertion location
+        _.remove(data, function(param, index) {
+          return index > 1;
+        });
+        break;
+    }
+  }
+}
+
+function examplesForResource(resource) {
+  var yamlFile = fs.readFileSync(path.join(__dirname, './templates/examples.yaml'), 'utf8');
+  var examples = yaml.load(yamlFile);
+  return examples[resource];
+}
+
+function curlExamplesForAction(action, resource_examples) {
+  var action_examples = _.filter(resource_examples, function(example) {
+    var regex = action.path.replace(/%d/, "\\d+").replace(/\//, "\\/");
+    return example.method === action.method.toLowerCase() && example.endpoint.match(regex);
+  });
+  var curlExamples = [];
+  _.forEach(action_examples, function(example) {
+    var request = 'curl';
+    if (example.method === 'put') {
+      request += ' --request PUT';
+    } else if (example.method === 'delete') {
+      request += ' --request DELETE';
+    }
+    request += ' -H "Authorization: Bearer <personal_access_token>"';
+    var url = 'https://app.asana.com/api/1.0' + example.endpoint;
+    var data = [];
+    if (example.request_data) {
+      _.forEach(example.request_data, function(value, param_name) {
+        var line;
+        if (Array.isArray(value)) {   // exception for array types because of curl weirdness
+          line = '-d "' + param_name + '[0]=' + value[0] + '"';
+        } else if (param_name === 'file') {    // exception for files
+          line = '--form "' + param_name + "=" + value + '"';
+        } else {
+          line = '-d "' + param_name + "=" + value + '"';
+        }
+        data.push(line);
+      })
+    }
+    var response_status = "";
+    var response = {};
+    _.forEach(example.response, function(value, field_name) {
+      if (field_name === 'status') {
+        response_status = "HTTP/1.1 " + example.response.status;
+      } else {
+        response[field_name] = value;
+      }
+    });
+    var ex = {
+      description: action_examples.length > 1 ? example.description : null,
+      request: request,
+      url: url,
+      dataForRequest: data,
+      responseStatus: response_status,
+      response: JSON.stringify(response, null, '  ')
+    };
+    curlExamples.push(ex);
+  });
+  return curlExamples;
+}
+
 var common = {
   prefix: prefixLines,
   plural: inflect.pluralize,
@@ -91,7 +198,8 @@ var common = {
   dash: inflect.dasherize,
   param: inflect.parameterize,
   human: inflect.humanize,
-  paramsForAction: paramsForAction
+  paramsForAction: paramsForAction,
+  examplesForResource: examplesForResource
 };
 
 var langs = {
@@ -118,6 +226,13 @@ var langs = {
   api_explorer: _.merge({}, common, {
     typeName: typeNameTranslator("js"),
     comment: wrapStarComment
+  }),
+  api_reference: _.merge({}, common, {
+    typeName: typeNameTranslator("md"),
+    indent: prefixLines,
+    removeLineBreaks: removeLineBreaks,
+    genericPath: genericPath,
+    curlExamplesForAction: curlExamplesForAction
   })
 };
 

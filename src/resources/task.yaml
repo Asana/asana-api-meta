@@ -7,9 +7,17 @@ comment: |
   centered. In the Asana application, multiple tasks populate the middle pane
   according to some view parameters, and the set of selected tasks determines
   the more detailed information presented in the details pane.
+notes:
+  - |
+    A _section_, at its core, is a task whose name ends with the colon character `:`. Sections are unique in that they will
+    be included in the `memberships` field of task objects returned in the API when the task is within a section. As
+    explained [below](#projects) they can also be used to manipulate the ordering of a task within a project.
+
+    [Queries](#query) return a compact representation of each object which is typically the `id` and `name` fields.
+    Interested in a specific set of fields or *all* of the fields?
+    Use [field selectors](/developers/documentation/getting-started/input-output-options) to manipulate what data is included in a response.
 
 properties:
-
   - name: assignee
     <<: *PropType.User
     comment: |
@@ -44,14 +52,14 @@ properties:
     comment: |
       Date on which this task is due, or null if the task has no due date. This
       takes a date with YYYY-MM-DD format and should not be used together with
-      'due_at'.
+      `due_at`.
 
   - name: due_at
     <<: *PropType.DateTime
     comment: |
       Date and time on which this task is due, or null if the task has no due
       time. This takes a UTC timestamp and should not be used together with
-      'due_on'.
+      `due_on`.
 
   - name: external
     <<: *PropType.External
@@ -60,7 +68,7 @@ properties:
       including an id that can be used to retrieve tasks and a data blob that
       can store app-specific character strings. Note that you will need to
       authenticate with Oauth to access or modify this data. Once an external
-      id is set, you can use the notation 'external:custom_id' to reference your
+      id is set, you can use the notation `external:custom_id` to reference your
       object anywhere in the API where you may use the original object id.
       See the page on Custom External Data for more details.
 
@@ -91,13 +99,17 @@ properties:
         projects or comments that may have been added or removed from the task.
 
   - name: name
-    <<: *PropType.TaskName
+    type: String
+    example_values:
+      - "'Buy catnip'"
     comment: |
       Name of the task. This is generally a short sentence fragment that fits
       on a line in the UI for maximum readability. However, it can be longer.
 
   - name: notes
-    <<: *PropType.TaskNotes
+    type: String
+    example_values:
+      - "'Mittens really likes the stuff from Humboldt.'"
     comment: |
       More detailed, free-form textual information associated with the task.
 
@@ -112,15 +124,15 @@ properties:
     comment: |
       Array of projects this task is associated with. At task creation time,
       this array can be used to add the task to many projects at once. After
-      task creation, these associations can be modified using the 'addProject'
-      and 'removeProject' endpoints.
+      task creation, these associations can be modified using the `addProject`
+      and `removeProject` endpoints.
 
   - name: parent
     <<: *PropType.Task
     comment: |
-      The parent of this task, or 'null' if this is not a subtask. This property
+      The parent of this task, or `null` if this is not a subtask. This property
       cannot be modified using a PUT request but you can change it with the
-      'setParent' endpoint. You can create subtasks by using the subtasks endpoint.
+      `setParent` endpoint. You can create subtasks by using the subtasks endpoint.
 
   - name: workspace
     <<: *PropType.Workspace
@@ -135,16 +147,87 @@ properties:
       Array of projects this task is associated with and the section it is in.
       At task creation time, this array can be used to add the task to specific
       sections. After task creation, these associations can be modified using
-      the 'addProject' and 'removeProject' endpoints. Note that over time, more
+      the `addProject` and `removeProject` endpoints. Note that over time, more
       types of memberships may be added to this property.
+
+action_classes:
+  - name: Create a task
+    url: create
+  - name: Get a task
+    url: get
+  - name: Update a task
+    url: update
+  - name: Delete a task
+    url: delete
+  - name: Query for tasks
+    url: query
+  - name: Work with subtasks
+    url: subtasks
+    comment: |
+      Creating a subtask is the same as a creating an normal task, but instead of specifying a workspace you must specify a
+      parent task. Each task can only have a single parent and you can use the `setParent` endpoint to add or remove a parent from an existing task.
+
+      Created subtasks are added to the end of their parent's list of subtasks.
+
+      You can find all of the subtasks of a task via the `tasks/:ID/subtasks` endpoint.
+
+  - name: Task activity and comments
+    url: stories
+    comment: |
+      Tasks, like some other objects in the system, have a series of <a href="/developers/api-reference/stories">stories</a>
+      associated with them. A story can be an indicator of some action taken on a task (such as completing it), or it could be a comment left by a user.
+
+      See the sections on <a href="/developers/api-reference/stories#get-all">querying for all stories</a>
+      and <a href="/developers/api-reference/stories#post-comment">commenting on an object</a> for more information.
+
+  - name: Task, project, and section associations
+    url: projects
+    comment: |
+      Each task can be associated with zero or more <a href="/developers/api-reference/projects">projects</a>.
+
+      The `projects` endpoint on a task will return a compact representation of each of the projects on the task specified.
+
+      The `addProject` or `removeProject` endpoints can be used to add and remove projects that a task is a member of by
+      providing the required `project` parameter.
+
+      Note that a task may belong to many projects and a single section within each project.
+
+      Requests to add/remove projects, if successful, will return success and an empty data block.
+
+  - name: Tags on tasks
+    url: tags
+    comment: |
+      Each task can be associated with zero or more <a href="/developers/api-reference/tags">tags</a> in the system.
+      The API allows you to query and change those associations.
+
+      You can get the list of tags associated with a task by using the `tags` endpoint on a task, which will return a compact
+      representation of each of the tags on the task specified.
+
+      You can add or remove a tag using the `addTag` or `removeTag` endpoints, respectively, providing the parameters below.
+
+      Requests to add/remove tags, if successful, will return success and an empty data block.
+
+  - name: Followers on tasks
+    url: followers
+    comment: |
+      Each task can be associated with zero or more followers in the system.
+
+      You can add or remove followers using the `addFollowers` or `removeFollowers` endpoints, respectively, providing the parameters below.
+
+      Requests to add/remove followers, if successful, will return the complete updated task record, described above.
 
 actions:
 
   # Create, Retrieve, Update, Delete
 
   - name: create
+    class: create
     method: POST
     path: "/tasks"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        comment: The workspace to create a task in.
     comment: |
       Creating a new task is as easy as POSTing to the `/tasks` endpoint
       with a data block containing the fields you'd like to set on the task.
@@ -155,6 +238,7 @@ actions:
       explicitly if you specify a `project` or a `parent` task instead.
 
   - name: createInWorkspace
+    class: create
     method: POST
     path: "/workspaces/%d/tasks"
     params:
@@ -169,9 +253,10 @@ actions:
 
       Every task is required to be created in a specific workspace, and this
       workspace cannot be changed once set. The workspace need not be set
-      explicitly if you specify a project or a parent task instead.
+      explicitly if you specify a `project` or a `parent` task instead.
 
   - name: findById
+    class: get
     method: GET
     path: "/tasks/%d"
     params:
@@ -183,6 +268,7 @@ actions:
       Returns the complete task record for a single task.
 
   - name: update
+    class: update
     method: PUT
     path: "/tasks/%d"
     params:
@@ -202,6 +288,7 @@ actions:
       Returns the complete updated task record.
 
   - name: delete
+    class: delete
     method: DELETE
     path: "/tasks/%d"
     params:
@@ -220,6 +307,7 @@ actions:
   # Query
 
   - name: findByProject
+    class: query
     method: GET
     path: "/projects/%d/tasks"
     params:
@@ -233,6 +321,7 @@ actions:
       ordered by their priority within the project.
 
   - name: findByTag
+    class: query
     method: GET
     path: "/tags/%d/tasks"
     params:
@@ -245,6 +334,7 @@ actions:
       Returns the compact task records for all tasks with the given tag.
 
   - name: findAll
+    class: query
     method: GET
     path: "/tasks"
     collection: true
@@ -285,6 +375,7 @@ actions:
   # Followers
 
   - name: addFollowers
+    class: followers
     method: POST
     path: "/tasks/%d/addFollowers"
     params:
@@ -301,6 +392,7 @@ actions:
       following. Returns the complete, updated record for the affected task.
 
   - name: removeFollowers
+    class: followers
     method: POST
     path: "/tasks/%d/removeFollowers"
     params:
@@ -319,6 +411,7 @@ actions:
   # Projects
 
   - name: projects
+    class: projects
     method: GET
     path: "/tasks/%d/projects"
     collection: true
@@ -331,6 +424,7 @@ actions:
       Returns a compact representation of all of the projects the task is in.
 
   - name: addProject
+    class: projects
     method: POST
     path: "/tasks/%d/addProject"
     params:
@@ -376,6 +470,7 @@ actions:
       Returns an empty data block.
 
   - name: removeProject
+    class: projects
     method: POST
     path: "/tasks/%d/removeProject"
     params:
@@ -396,6 +491,7 @@ actions:
   # Tags
 
   - name: tags
+    class: tags
     method: GET
     path: "/tasks/%d/tags"
     collection: true
@@ -408,6 +504,7 @@ actions:
       Returns a compact representation of all of the tags the task has.
 
   - name: addTag
+    class: tags
     method: POST
     path: "/tasks/%d/addTag"
     params:
@@ -423,6 +520,7 @@ actions:
       Adds a tag to a task. Returns an empty data block.
 
   - name: removeTag
+    class: tags
     method: POST
     path: "/tasks/%d/removeTag"
     params:
@@ -440,6 +538,7 @@ actions:
   # Subtasks
 
   - name: subtasks
+    class: subtasks
     method: GET
     path: "/tasks/%d/subtasks"
     collection: true
@@ -452,6 +551,7 @@ actions:
       Returns a compact representation of all of the subtasks of a task.
 
   - name: addSubtask
+    class: subtasks
     method: POST
     path: "/tasks/%d/subtasks"
     params:
@@ -459,14 +559,12 @@ actions:
         <<: *Param.TaskId
         required: true
         comment: The task to add a subtask to.
-      - name: subtask
-        <<: *Param.TaskId
-        required: true
-        comment: The subtask to add to the task.
     comment: |
-      Makes an existing task a subtask of another. Returns an empty data block.
+      Creates a new subtask and adds it to the parent task. Returns the full record
+      for the newly created subtask.
 
   - name: setParent
+    class: subtasks
     method: POST
     path: "/tasks/%d/setParent"
     # TODO: we need allow_null to gen the code for this. We would also need
@@ -489,6 +587,7 @@ actions:
   # Stories
 
   - name: stories
+    class: stories
     method: GET
     path: "/tasks/%d/stories"
     collection: true
@@ -501,4 +600,5 @@ actions:
       Returns a compact representation of all of the stories on the task.
 
   - name: addComment
+    class: stories
     <<: *Action.CommentOnTask
