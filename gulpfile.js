@@ -12,6 +12,7 @@ var yaml = require('js-yaml');
 var resource = require('./src/resource');
 var helpers = require('./src/helpers');
 var _ = require('lodash');
+var Bluebird = require('bluebird');
 
 /**
  * Paths
@@ -115,11 +116,19 @@ Object.keys(languages).forEach(function(lang) {
   var repoRoot = paths.repo(lang);
   var token = process.env.ASANA_GITHUB_TOKEN || null;
 
-  function echoAndExec() {
+  function echoAndExec(command, options) {
     if (process.env.GULP_DEBUG) {
       console.log('+ ' + arguments[0]);
     }
-    return exec.apply(null, arguments);
+    return new Bluebird(function(resolve, reject) {
+      return exec(command, options, function(err, stdout, stderr) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(stdout);
+        }
+      });
+    });
   }
 
   function resTaskName(resourceName) {
@@ -138,38 +147,28 @@ Object.keys(languages).forEach(function(lang) {
   /**
    * Checkout target repo, for build and deploy
    */
-  gulp.task('checkout-' + lang, ['clean-' + lang], function(cb) {
+  gulp.task('checkout-' + lang, ['clean-' + lang], function() {
+    return Bluebird.resolve().then(function() {
 
-    cloneRepo(cb);
-
-    function cloneRepo(cb) {
       fs.removeSync(repoRoot);
       var url = (token !== null)
           ? util.format('https://github.com/%s', config.repo)
           : util.format('git@github.com:%s', config.repo);
-      echoAndExec(
-          util.format('git clone %s %s', url, repoRoot),
-          switchToBranch);
-    }
+      return echoAndExec(
+          util.format('git clone %s %s', url, repoRoot));
 
-    function switchToBranch(err, stdout, stderr) {
-      if (err) { cb(err); return; }
+    }).then(function() {
+
       var branch = config.branch;
-      echoAndExec(
+      return echoAndExec(
           util.format('git checkout --track -b %s origin/%s', branch, branch),
-          {cwd: repoRoot},
-          updateFromMaster);
-    }
+          {cwd: repoRoot});
 
-    function updateFromMaster(err, stdout, stderr) {
-      if (err) { cb(err); return; }
-      echoAndExec('git merge origin/master', done);
-    }
+    }).then(function() {
 
-    function done(err, stdout, stderr) {
-      if (err) { cb(err); return; }
-      cb();
-    }
+      return echoAndExec('git merge origin/master');
+
+    });
   });
 
   /**
@@ -208,64 +207,46 @@ Object.keys(languages).forEach(function(lang) {
   /**
    * Deploy
    */
-  gulp.task('deploy-' + lang, ['build-' + lang], function(cb) {
+  gulp.task('deploy-' + lang, ['build-' + lang], function() {
     var version;
 
     // We depend on the build step which checks out the repo, so we start by
     // setting our credentials so we can push to it.
-    configureCredentials();
+    return Bluebird.resolve().then(function() {
 
-    // TODO: use some kind of promisify libraries to clean all this async code
-
-    function configureCredentials(err, stdout, stderr) {
-      if (err) { cb(err); return; }
       if (token !== null) {
-        echoAndExec(
+        return echoAndExec(
             'git config credential.helper "store --file=.git/credentials"',
-            {cwd: repoRoot},
-            writeCredentials);
-      } else {
-        copyToRepo();
+            {cwd: repoRoot})
+            .then(function() {
+              fs.writeFileSync(
+                  util.format('%s/.git/credentials', repoRoot),
+                  util.format('https://%s:@github.com', token));
+            });
       }
-    }
 
-    function writeCredentials(err, stdout, stderr) {
-      if (err) { cb(err); return; }
-      fs.writeFileSync(
-          util.format('%s/.git/credentials', repoRoot),
-          util.format('https://%s:@github.com', token));
-      copyToRepo();
-    }
+    }).then(function() {
 
-    function copyToRepo(err, stdout, stderr) {
-      if (err) { cb(err); return; }
       fs.mkdirpSync(outputPath);
-      fs.copy(paths.dist(lang), outputPath, gitAdd);
-    }
+      fs.copySync(paths.dist(lang), outputPath);
+      return echoAndExec(
+          util.format('git add %s', paths.repoOutputRelative(lang)),
+          {cwd: repoRoot});
 
-    function gitAdd(err) {
-      if (err) { cb(err); return; }
-      echoAndExec('git add ' + paths.repoOutputRelative(lang), {cwd: repoRoot}, gitCommit);
-    }
+    }).then(function() {
 
-    function gitCommit(err) {
-      if (err) { cb(err); return; }
       version = readPackage().version;
-      echoAndExec(util.format('git commit --allow-empty -a -m "Deploy from asana-api-meta v%s"', version), {cwd: repoRoot}, gitPush);
-    }
+      return echoAndExec(
+          util.format('git commit --allow-empty -a -m "Deploy from asana-api-meta v%s"', version),
+          {cwd: repoRoot});
 
-    function gitPush(err) {
-      if (err) { cb(err); return; }
-      echoAndExec(
+    }).then(function() {
+
+      return echoAndExec(
           util.format('git push origin %s', config.branch),
-          {cwd: repoRoot},
-          done);
-    }
+          {cwd: repoRoot});
 
-    function done(err, stdout, stderr) {
-      if (err) { cb(err); return; }
-      cb();
-    }
+    });
   });
 });
 
