@@ -104,32 +104,6 @@ function genericPath(action, pathParams) {
   return path;
 }
 
-function samplePath(action, pathParams) {
-  var path = action.path;
-  _.forEach(pathParams, function(pathParam) {
-    path = path.replace(/%./, pathParam.example_values[0]);
-  });
-  return path;
-}
-
-function addDataForSpecialActions(resource, action, data) {
-  if (resource === 'task') {
-    switch(action) {
-      case 'addSubtask':
-        // We don't have templates for subtasks but would like the copy to be different from regular tasks
-        data.push('-d "name=\'Make trip to Cats R Us\'"');
-        data.push('-d "notes=\'Petsmart is out of catnip\'"');
-        break;
-      case 'addProject':
-        // Hacky, but this action can only take one param for the insertion location
-        _.remove(data, function(param, index) {
-          return index > 1;
-        });
-        break;
-    }
-  }
-}
-
 function examplesForResource(resource) {
   var yamlFile = fs.readFileSync(path.join(__dirname, './templates/examples.yaml'), 'utf8');
   var examples = yaml.load(yamlFile);
