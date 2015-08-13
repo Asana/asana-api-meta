@@ -20,7 +20,9 @@ comment: |
 properties:
 
   - name: name
-    <<: *PropType.WorkspaceName
+    type: String
+    example_values:
+      - "'My Favorite Workspace'"
     comment: |
       The name of the workspace.
 
@@ -29,11 +31,20 @@ properties:
     comment: |
       Whether the workspace is an _organization_.
 
+action_classes:
+  - name: Get available workspaces
+    url: get
+  - name: Update a workspace
+    url: update
+  - name: Typeahead search
+    url: typeahead
+
 actions:
 
   # Create, Retrieve, Update, Delete
 
   - name: findById
+    class: get
     method: GET
     path: "/workspaces/%d"
     params:
@@ -44,6 +55,7 @@ actions:
       Returns the full workspace record for a single workspace.
 
   - name: findAll
+    class: get
     method: GET
     path: "/workspaces"
     collection: true
@@ -51,6 +63,7 @@ actions:
       Returns the compact records for all workspaces visible to the authorized user.
 
   - name: update
+    class: update
     method: PUT
     path: "/workspaces/%d"
     params:
@@ -59,9 +72,16 @@ actions:
         required: true
         comment: The workspace to update.
     comment: |
-      Update properties on a workspace. Returns the complete, updated workspace record.
+      A specific, existing workspace can be updated by making a PUT request on
+      the URL for that workspace. Only the fields provided in the data block
+      will be updated; any unspecified fields will remain unchanged.
+
+      Currently the only field that can be modified for a workspace is its `name`.
+
+      Returns the complete, updated workspace record.
 
   - name: typeahead
+    class: typeahead
     method: GET
     path: "/workspaces/%d/typeahead"
     params:
@@ -71,6 +91,8 @@ actions:
         comment: The workspace to fetch objects from.
       - name: type
         type: Enum
+        example_values:
+          - user
         values:
           - name: task
             comment: A task.
@@ -87,12 +109,16 @@ actions:
           in singular form (e.g. `task`). Using multiple types is not yet supported.
       - name: query
         type: String
+        example_values:
+          - Greg
         comment: |
           The string that will be used to search for relevant objects. If an
           empty string is passed in, the API will currently return an empty
           result set.
       - name: count
         type: Number
+        example_values:
+          - "10"
         comment: |
           The number of results to return. The default is `20` if this
           parameter is omitted, with a minimum of `1` and a maximum of `100`.

@@ -50,6 +50,19 @@
         }
       }
     },
+    "action_classes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "url"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {"type": "string"},
+          "url": {"type": "string"},
+          "comment": {"type": "string"}
+        }
+      }
+    },
     "actions": {
       "type": "array",
       "items": {
@@ -58,6 +71,7 @@
         "additionalProperties": false,
         "properties": {
           "name": { "type": "string" },
+          "class": { "type": "string" },
           "method": { "type": "string" },
           "path": { "type": "string" },
           "comment": { "type": "string" },

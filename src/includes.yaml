@@ -88,12 +88,6 @@ templates:
         Globally unique identifier for the story.
 
   # Types of properties
-  # The templates include type, enum values, and example values.
-  # Comments and notes live in the individual resources.
-  # Access (read-only, create-only, etc.) is here for the most part, but there
-  # are a couple exceptions.
-
-  # General
 
   - template: &PropType.Id
     - type: Id
@@ -156,15 +150,9 @@ templates:
       example_values:
         - "'task'"
 
-  # By resource
+  # By resource - organized like this for neatness, but proptypes can be used anywhere
 
   ## User
-  - template: &PropType.UserName
-    - type: String
-      example_values:
-        - "'Greg Sanchez'"
-      access: Read-only
-
   - template: &PropType.Email
     - type: String
       example_values:
@@ -177,7 +165,7 @@ templates:
         - "{ 'image_21x21': 'https://...', ... }"
       access: Read-only
 
-  - template: &PropType.Workspaces
+  - template: &PropType.WorkspaceArray
     - type: Array
       example_values:
         - "[ { id: 14916, name: 'My Workspace' }, ... ]"
@@ -204,16 +192,6 @@ templates:
         - "{ id: 'my_id', data: 'A blob of information.' }"
       access: Oauth Required
 
-  - template: &PropType.TaskName
-    - type: String
-      example_values:
-        - "'Buy catnip'"
-
-  - template: &PropType.TaskNotes
-    - type: String
-      example_values:
-        - "'Mittens really likes the stuff from Humboldt.'"
-
   - template: &PropType.ProjectArray
     - type: Array
       example_values:
@@ -227,17 +205,17 @@ templates:
       access: Create-only
 
   ## Project/Tag
-  - template: &PropType.ProjectName
+  - template: &PropType.PotName
     - type: String
       example_values:
         - "'Stuff to buy'"
 
-  - template: &PropType.ProjectColor
+  - template: &PropType.PotColor
     - type: Enum
       example_values:
-        - "'2012-02-22T02:06:58.147Z'"
+        - "'dark-purple'"
 
-  - template: &PropType.ProjectNotes
+  - template: &PropType.PotNotes
     - type: String
       example_values:
         - "'These are things we need to purchase.'"
@@ -249,12 +227,6 @@ templates:
       access: Create-only
 
   ## Story
-  - template: &PropType.StoryText
-    - type: String
-      example_values:
-        - "'marked today'"
-      access: Create-only
-
   - template: &PropType.HtmlText
     - type: String
       example_values:
@@ -275,7 +247,7 @@ templates:
         - name: api
           comment: Via the Asana API.
         - name: unknown
-          comment: Unkonw or unrecorded.
+          comment: Unknown or unrecorded.
       access: Read-only
 
   - template: &PropType.StoryType
@@ -287,45 +259,6 @@ templates:
           comment: A comment from a user. The text will be the message portion of the comment.
         - name: system
           comment:  A system-generated story based on a user action. The text will be a description of the action.
-      access: Read-only
-
-  ## Workspace
-  - template: &PropType.WorkspaceName
-    - type: String
-      example_values:
-        - "'My Favorite Workspace'"
-
-  ## Team
-  - template: &PropType.TeamName
-    - type: String
-      example_values:
-        - "'Engineering'"
-
-  ## Attachment
-  - template: &PropType.DownloadUrl
-    - type: String
-      example_values:
-        - "'https://www.dropbox.com/s/123/Screenshot.png?dl=1'"
-        - "null"
-      access: Read-only
-
-  - template: &PropType.ViewUrl
-    - type: String
-      example_values:
-        - "'https://www.dropbox.com/s/123/Screenshot.png'"
-        - "null"
-      access: Read-only
-
-  - template: &PropType.Host
-    - type: String
-      example_values:
-        - "'dropbox'"
-      access: Read-only
-
-  - template: &PropType.FileName
-    - type: String
-      example_values:
-        - "'Screenshot.png'"
       access: Read-only
 
   ## Events
@@ -358,6 +291,8 @@ templates:
           required: true
         - name: text
           type: String
+          example_values:
+            - "'This is a comment.'"
           required: true
           comment: The plain text of the comment to add.
       comment: |

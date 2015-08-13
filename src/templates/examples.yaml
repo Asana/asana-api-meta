@@ -1,0 +1,637 @@
+---
+  Tasks: 
+    - 
+      response: 
+        status: 201
+        data: 
+          created_at: "2012-02-22T02:06:58.158Z"
+          name: "Hello, world!"
+          parent: null
+          completed_at: null
+          notes: "How are you today?"
+          modified_at: "2012-02-22T02:06:58.158Z"
+          assignee_status: "inbox"
+          assignee: 
+            id: 1235
+            name: "Tim Bizarro"
+          completed: false
+          followers: 
+            - 
+              id: 5678
+              name: "Greg Sanchez"
+          workspace: 
+            id: 14916
+            name: "My Favorite Workspace"
+          due_on: null
+          id: 1001
+          projects: 
+            - 
+              id: 14641
+              name: "Cat Stuff"
+      request_data: 
+        assignee: 1235
+        notes: "How are you today?"
+        followers: 
+          - 5678
+        name: "Hello, world!"
+        workspace: 14916
+      endpoint: "/tasks"
+      description: "Create a task."
+      method: "post"
+    - 
+      response: 
+        status: 200
+        data: 
+          assignee: 
+            id: 1234
+            name: "Tim Bizarro"
+          created_at: "2012-02-22T02:06:58.158Z"
+          ~: "..."
+      endpoint: "/tasks/1001"
+      description: "Show a task."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          assignee: 
+            id: 1234
+            name: "Tim Bizarro"
+          id: 1001
+          ~: "..."
+      request_data: 
+        assignee: "me"
+      endpoint: "/tasks/1001"
+      description: "Assign a task to yourself."
+      method: "put"
+    - 
+      response: 
+        status: 200
+        data: {}
+      request_data: {}
+      endpoint: "/tasks/1001"
+      description: "Delete a task."
+      method: "delete"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 1248
+            name: "Buy catnip"
+          - 
+            id: 24816
+            name: "Reflect on role of kittens in society"
+          - 
+            ~: "..."
+      endpoint: "/tasks?workspace=14916&assignee=me"
+      description: "Show tasks assigned to me in a workspace or organization."
+      method: "get"
+    - 
+      - 
+        response: 
+          status: 201
+          data: 
+            created_at: "2012-02-22T02:06:58.158Z"
+            name: "Tell Luke"
+            parent: 
+              id: 2272
+              name: "Tell kids I am their father."
+            completed_at: null
+            notes: "He's going to be upset."
+            modified_at: "2012-02-22T02:06:58.158Z"
+            assignee_status: "inbox"
+            assignee: 
+              id: 1235
+              name: "Darth Vader"
+            completed: false
+            followers: 
+              - 
+                id: 5678
+                name: "Emperor Palpatine"
+            workspace: 
+              id: 14916
+              name: "Star Wars"
+            due_on: null
+            id: 1001
+            projects: []
+        request_data: 
+          assignee: 1235
+          notes: "He's going to be upset."
+          followers: 
+            - 5678
+          name: "Tell Luke"
+        endpoint: "/tasks/2272/subtasks"
+        description: "Create a subtask."
+        method: "post"
+      - 
+        response: 
+          data: 
+            - 
+              id: 5005
+              name: "Steal Underwear"
+            - 
+              id: 6709
+              name: "???"
+            - 
+              id: 9812
+              name: "Profit"
+        endpoint: "/tasks/7331/subtasks"
+        description: "Show all of a task's subtasks."
+        method: "get"
+      - 
+        response: 
+          status: 200
+          data: 
+            ~: "..."
+            id: 2272
+            parent: 
+              - 
+                id: 1331
+                name: "Tell kids I am their father"
+            name: "Tell Luke"
+        request_data: 
+          parent: 1331
+        endpoint: "/tasks/2272/setParent"
+        description: "Set the parent for an existing task."
+        method: "post"
+    - 
+      - 
+        response: 
+          data: 
+            - 
+              id: 1331
+              name: "Things To Buy"
+            - 
+              id: 14641
+              name: "Cat Stuff"
+        endpoint: "/tasks/1001/projects"
+        description: "Show list of projects on a task."
+        method: "get"
+      - 
+        response: 
+          data: {}
+        request_data: 
+          project: 14641
+        endpoint: "/tasks/1001/addProject"
+        description: "Add project to a task."
+        method: "post"
+      - 
+        response: 
+          data: {}
+        request_data: 
+          project: 14641
+        endpoint: "/tasks/1001/removeProject"
+        description: "Remove project from a task."
+        method: "post"
+    - 
+      - 
+        response: 
+          data: 
+            - 
+              id: 1331
+              name: "orange"
+            - 
+              id: 1771
+              name: "fluffy"
+        endpoint: "/tasks/1001/tags"
+        description: "Show list of tags on a task."
+        method: "get"
+      - 
+        response: 
+          data: {}
+        request_data: 
+          tag: 1771
+        endpoint: "/tasks/1001/addTag"
+        description: "Add tag to a task."
+        method: "post"
+      - 
+        response: 
+          data: {}
+        request_data: 
+          tag: 1771
+        endpoint: "/tasks/1001/removeTag"
+        description: "Remove tag from a task."
+        method: "post"
+    - 
+      - 
+        response: 
+          status: 200
+          data: 
+            followers: 
+              - 
+                id: 1235
+                name: "Darth Vader"
+            id: 1001
+            ~: "..."
+        request_data: 
+          followers: 
+            - 1235
+        endpoint: "/tasks/1001/addFollowers"
+        description: "Add followers to a task."
+        method: "post"
+      - 
+        response: 
+          status: 200
+          data: 
+            followers: []
+            id: 1001
+            ~: "..."
+        request_data: 
+          followers: 
+            - 1235
+        endpoint: "/tasks/1001/removeFollowers"
+        description: "Remove followers from a task."
+        method: "post"
+  Workspaces and Organizations: 
+    - 
+      response: 
+        data: 
+          - 
+            id: 1337
+            name: "My Favorite Workspace"
+          - "~..."
+      endpoint: "/workspaces"
+      description: "Show all available workspaces."
+      method: "get"
+    - 
+      response: 
+        data: 
+          id: 1337
+          name: "Everyone's Favorite Workspace"
+      request_data: 
+        name: "Everyone's Favorite Workspace"
+      endpoint: "/workspaces/1337"
+      description: "Rename a workspace."
+      method: "put"
+  Tags: 
+    - 
+      response: 
+        status: 201
+        data: 
+          ~: "..."
+          id: 1771
+          name: "fluffy"
+      request_data: 
+        name: "fluffy"
+        workspace: 14916
+      endpoint: "/tags"
+      description: "Create a new tag."
+      method: "post"
+    - 
+      response: 
+        status: 200
+        data: 
+          notes: "These are things we want to purchase."
+          ~: "..."
+          id: 1331
+          name: "Things to Buy"
+      endpoint: "/tags/1331"
+      description: "Show a specific tag."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          ~: "..."
+          id: 1331
+          name: "Things to Sell"
+      request_data: 
+        name: "Things to Sell"
+      endpoint: "/tags/1331"
+      description: "Update tag name."
+      method: "put"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 2001
+            name: "Catnip"
+          - 
+            id: 2002
+            name: "Kitty litter"
+          - "~..."
+      endpoint: "/tags/1331/tasks"
+      description: "Get all tasks with a tag."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 1331
+            name: "Things to buy"
+          - 
+            id: 14641
+            name: "Cat Stuff"
+          - "~..."
+      endpoint: "/workspaces/14916/tags"
+      description: "Show all tags in a workspace."
+      method: "get"
+  Attachments: 
+    - 
+      response: 
+        status: 200
+        data: 
+          name: "Screenshot.png"
+          parent: 
+            id: 1337
+            name: "My Task"
+          view_url: "https://www.dropbox.com/s/1234567890abcdef/Screenshot.png"
+          created_at: ""
+          download_url: "https://www.dropbox.com/s/1234567890abcdef/Screenshot.png?dl=1"
+          host: "dropbox"
+          id: 5678
+      endpoint: "/attachments/5678"
+      description: "Show a single attachment."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 5678
+            name: "Background.png"
+          - 
+            id: 9012
+            name: "New Design Draft.pdf"
+          - "~..."
+      endpoint: "/tasks/1234/attachments"
+      description: "Get filenames and IDs of all attachments on a task."
+      method: "get"
+    - 
+      request_data: 
+        file: "@file.txt"
+      endpoint: "/tasks/1337/attachments"
+      description: "Upload an attachment."
+      method: "post"
+      multipart: 
+        boundary: "----------------------------52e7e55a770f"
+        parts: 
+          - 
+            - "Content-Disposition: form-data; name=\"file\"; filename=\"file.txt\""
+            - "Content-Type: application/octet-stream"
+            - "(file content)"
+      response: 
+        status: 200
+        data: 
+          id: 5678
+          name: "file.txt"
+  Teams: 
+    - 
+      response: 
+        data: 
+          - 
+            id: 5832
+            name: "Atlanta Braves"
+          - 
+            id: 15923
+            name: "New York Yankees"
+          - "~..."
+      endpoint: "/organizations/13523"
+      description: "Show all teams in the the MLB organization."
+      method: "get"
+  Typeahead: 
+    - 
+      response: 
+        data: 
+          - 
+            ~: "..."
+            id: 999
+            name: "Greg Sanchez"
+          - "~..."
+      endpoint: "/workspaces/1337/typeahead?type=user&query=Greg"
+      description: "Show all users whose names contain \"Greg\""
+      method: "get"
+  Stories: 
+    - 
+      response: 
+        data: 
+          - 
+            text: "added to Things To Buy"
+            created_at: "2011-12-21T23:23:01.259Z"
+            type: "system"
+            id: 2001
+            created_by: 
+              id: 5678
+              name: "Greg Sanchez"
+          - 
+            text: "Again? Wow, we really go through this stuff fast."
+            created_at: "2012-01-02T21:32:40.112Z"
+            type: "comment"
+            id: 2002
+            created_by: 
+              id: 1234
+              name: "Tim Bizarro"
+      endpoint: "/tasks/1001/stories"
+      description: "Show all stories on a task."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          target: 
+            id: 1234
+            name: "Buy catnip"
+          text: "Yes, please!"
+          created_at: "2012-02-22T02:06:58.147Z"
+          created_by: 
+            id: 1123
+            name: "Mittens"
+          source: "web"
+          type: "comment"
+          id: 2001
+      endpoint: "/stories/2001"
+      description: "Show a specific story."
+      method: "get"
+    - 
+      response: 
+        data: 
+          target: 
+            id: 1001
+            name: "Buy catnip"
+          text: "This is a very nice comment."
+          created_at: "2011-12-21T23:23:01.259Z"
+          created_by: 
+            id: 5678
+            name: "Greg Sanchez"
+          source: "api"
+          type: "comment"
+          id: 2001
+      request_data: 
+        text: "This is a very nice comment."
+      endpoint: "/tasks/1001/stories"
+      description: "Comment on a task."
+      method: "post"
+  Events: 
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            resource: 
+              id: 1337
+              name: "My Task"
+            parent: null
+            created_at: "2013-08-21T18:20:37.972Z"
+            user: 
+              id: 1123
+              name: "Tom Bizarro"
+            action: "changed"
+            type: "task"
+          - 
+            resource: 
+              id: 1338
+              name: "My Other Task"
+            parent: null
+            created_at: "2013-08-21T18:22:45.421Z"
+            user: 
+              id: 1428
+              name: "Greg Sanchez"
+            action: "changed"
+            type: "task"
+        sync: "edfc0896b370b7a479886d316131bf5c:0"
+      endpoint: "/events?resource=14321&sync=de4774f6915eae04714ca93bb2f5ee81:3"
+      description: "Get recent events"
+      method: "get"
+    - 
+      response: 
+        status: "412 Precondition Failed"
+        message: "Sync token invalid or too old. If you are attemping to keep resources in sync, you must re-fetch the full dataset for this query now."
+        sync: "edfc0896b370b7a479886d316131bf5c:0"
+      endpoint: "/project/3214312/events?sync=de4774f6915eae04714ca93bb2f5ee81:3"
+      description: "Get recent events on a project"
+      method: "get"
+  Projects: 
+    - 
+      response: 
+        status: 201
+        data: 
+          notes: "These are things we want to purchase."
+          ~: "..."
+          id: 1331
+          name: "Things to Buy"
+      request_data: 
+        notes: "These are things we want to purchase."
+        name: "Things to Buy"
+        workspace: 14916
+      endpoint: "/projects"
+      description: "Create a new project."
+      method: "post"
+    - 
+      response: 
+        status: 200
+        data: 
+          notes: "These are things we want to purchase."
+          ~: "..."
+          id: 1331
+          name: "Things to Buy"
+      endpoint: "/projects/1331"
+      description: "Show a specific project."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          notes: "These are things we NEED to purchase."
+          ~: "..."
+          id: 1331
+          name: "Things to Buy"
+      request_data: 
+        notes: "These are things we NEED to purchase."
+      endpoint: "/projects/1331"
+      description: "Update project notes."
+      method: "put"
+    - 
+      response: 
+        status: 200
+        data: {}
+      request_data: {}
+      endpoint: "/projects/1331"
+      description: "Delete a project."
+      method: "delete"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 2001
+            name: "Catnip"
+          - 
+            id: 2002
+            name: "Kitty litter"
+          - "~..."
+      endpoint: "/projects/1331/tasks"
+      description: "Get visible tasks on a project."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 2001
+            name: "High Priority:"
+          - 
+            id: 2002
+            name: "Low Priority:"
+          - "~..."
+      endpoint: "/projects/1331/sections"
+      description: "Get visible sections on a project."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 1331
+            name: "Things to buy"
+          - 
+            id: 14641
+            name: "Cat Stuff"
+          - "~..."
+      endpoint: "/workspaces/14916/projects"
+      description: "Show all projects in a workspace or organization."
+      method: "get"
+  Users: 
+    - 
+      response: 
+        status: 200
+        data: 
+          workspaces: 
+            - 
+              id: 1337
+              name: "My Favorite Workspace"
+            - "~..."
+          id: 5678
+          name: "Greg Sanchez"
+          email: "gsanchez@example.com"
+      endpoint: "/users/5678"
+      description: "Show a single user."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 1234
+            name: "Tim Bizarro"
+            email: "tbizarro@example.com"
+          - 
+            id: 5678
+            name: "Greg Sanchez"
+            email: "gsanchez@example.com"
+          - "~..."
+      endpoint: "/users?opt_fields=name,email"
+      description: "Show names and emails of all users in all workspaces and organizations you're a member of."
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 5678
+            name: "Greg Sanchez"
+      endpoint: "/workspaces/1337/users"
+      description: "Show all users in a single workspace or organization."
+      method: "get"

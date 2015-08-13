@@ -33,7 +33,7 @@ var languages = {
     repo: 'Asana/php-asana',
     branch: 'api-meta-incoming',
     templatePath: 'templates',
-    outputPath: 'src/Asana/Resources/Gen',
+    outputPath: 'src/Asana/Resources/Gen'
   },
   java: {
     repo: 'Asana/java-asana',
@@ -46,7 +46,7 @@ var languages = {
     repo: 'Asana/python-asana',
     branch: 'api-meta-incoming',
     // templatePath: 'src/templates',
-    destPath: 'asana/resources/gen',
+    destPath: 'asana/resources/gen'
   },
   ruby: {
     repo: 'Asana/ruby-asana',
@@ -60,6 +60,12 @@ var languages = {
     branch: 'api-meta-incoming',
     templatePath: 'src/resources/templates',
     outputPath: 'src/resources/gen'
+  },
+  api_reference: {
+    repo: 'Asana/api-reference',
+    branch: 'api-meta-incoming',
+    // templatePath: 'templates',
+    outputPath: 'gen'
   }
 };
 
