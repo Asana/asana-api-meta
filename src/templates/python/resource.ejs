@@ -1,9 +1,13 @@
 <%
 var thisType = plural(cap(resource.name));
 
+function paramNameInComment(param) {
+  return param.required ? param.name : ('[' + param.name + ']');
+}
 %>
 class _<%= thisType %>:
-    <%= '"""' + prefix(resource.comment, "    ", true) + '"""' %>
+    <%= '"""' + prefix(resource.comment, "    ", true)%>
+    """
 
     def __init__(self, client=None):
         self.client = client
@@ -35,22 +39,23 @@ class _<%= thisType %>:
     var params = paramsForAction(action);
     var pathParamNames = params.pathParams.map(function(param) { return param.name; });
     var explicitParams = params.pathParams.concat(params.explicitNonPathParams).concat(extraParam ? [extraParam] : []);
-    var documentedParams = explicitParams.concat(params.optionParams);
+    //var documentedParams = explicitParams.concat(params.optionParams);
   %>
     def <%= name %>(self, <%= pathParamNames.concat([""]).join(", ") %>params={}, **options): 
         """<%= prefix(action.comment, "        ", true) %>
 
         Parameters
-        ----------<% _.forEach(documentedParams, function(param) { %>
-        <%= prefix(param.name + ' : ' + typeName(param.type), "        ", true) %>
-          <%= prefix(param.comment, "          ", true) %><% }); %>
-        """
-        <% if (pathParamNames.length > 0) { %>
+        ----------<% _.forEach(explicitParams, function(param) { %>
+        <%= prefix(paramNameInComment(param) + ' : {' + typeName(param.type) + "} " +
+          param.comment, "        ", true) %><% }); %><%_.forEach(params.optionParams, function(param) {%>
+          - <%= prefix(paramNameInComment(param) + ' : {' + typeName(param.type) + "} " +
+            param.comment, "          ", true) %><%});%>
+        """<%
+        if (pathParamNames.length > 0) { %>
         path = <%= JSON.stringify(action.path) %> % (<%= pathParamNames.join(", ") %>)
         return self.client.<%= method %>(path, params, **options)
         <% } else { %>
         return self.client.<%= method %>(<%= JSON.stringify(action.path) %>, params, **options)
-        <% } %>
-  <%
+        <% } %><%
   });
   %>
