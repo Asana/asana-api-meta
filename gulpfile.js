@@ -45,8 +45,8 @@ var languages = {
   python: {
     repo: 'Asana/python-asana',
     branch: 'api-meta-incoming',
-    // templatePath: 'src/templates',
-    destPath: 'asana/resources/gen'
+    templatePath: 'templates',
+    outputPath: 'asana/resources/gen'
   },
   ruby: {
     repo: 'Asana/ruby-asana',
@@ -162,11 +162,11 @@ Object.keys(languages).forEach(function(lang) {
       var branch = config.branch;
       return echoAndExec(
           util.format('git checkout --track -b %s origin/%s', branch, branch),
-          {cwd: repoRoot});
+          {cwd: repoRoot});p
 
     }).then(function() {
 
-      return echoAndExec('git merge origin/master');
+      return echoAndExec('git merge origin/master', {cwd: repoRoot});
 
     });
   });
