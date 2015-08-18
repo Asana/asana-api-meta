@@ -162,7 +162,7 @@ Object.keys(languages).forEach(function(lang) {
       var branch = config.branch;
       return echoAndExec(
           util.format('git checkout --track -b %s origin/%s', branch, branch),
-          {cwd: repoRoot});p
+          {cwd: repoRoot});
 
     }).then(function() {
 
