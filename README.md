@@ -1,3 +1,5 @@
+[![Build Status][travis-image]][travis-url] 
+
 # Asana API Metadata
 Metadata for Asana API for generating client libraries and documenation
 
@@ -59,3 +61,6 @@ This is the preferred method for using templates since it places the template fo
 ### Local Templates
 
 These are used if the language configuration does not have a `templatePath`, and it will assume the template package is in `src/templates/LANG` (that means it will load `src/templates/LANG/index.js`).
+
+[travis-url]: http://travis-ci.org/Asana/asana-api-meta
+[travis-image]: https://api.travis-ci.org/Asana/asana-api-meta.svg?style=flat-square&branch=master
