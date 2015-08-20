@@ -281,7 +281,7 @@ actions:
     method: GET
     path: "/projects/%d/tasks"
     params:
-      - name: projectId
+      - name: project
         <<: *Param.ProjectId
         required: true
         comment: The project in which to search for tasks.
