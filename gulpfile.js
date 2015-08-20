@@ -2,6 +2,7 @@ var bump = require('gulp-bump');
 var exec = require('child_process').exec;
 var fs = require('fs-extra');
 var git = require('gulp-git');
+var syncToGitHub = require('sync-to-github');
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var rename = require('gulp-rename');
@@ -62,10 +63,12 @@ var languages = {
     outputPath: 'src/resources/gen'
   },
   api_reference: {
-    repo: 'Asana/api-reference',
+    repo: 'AsanaOps/asanastatic',
     branch: 'api-meta-incoming',
     // templatePath: 'templates',
-    outputPath: 'gen'
+    outputPath: '_content/developers/api-reference',
+    largeRepo: true,
+    preserveRepoFiles: true
   }
 };
 
@@ -120,6 +123,7 @@ Object.keys(languages).forEach(function(lang) {
     if (process.env.GULP_DEBUG) {
       console.log('+ ' + arguments[0]);
     }
+
     return new Bluebird(function(resolve, reject) {
       return exec(command, options, function(err, stdout, stderr) {
         if (err) {
@@ -148,6 +152,11 @@ Object.keys(languages).forEach(function(lang) {
    * Checkout target repo, for build and deploy
    */
   gulp.task('checkout-' + lang, ['clean-' + lang], function() {
+    if (config.largeRepo) {
+      // Do not checkout large repos.
+      return;
+    }
+
     return Bluebird.resolve().then(function() {
 
       fs.removeSync(repoRoot);
@@ -207,7 +216,8 @@ Object.keys(languages).forEach(function(lang) {
   /**
    * Deploy
    */
-  gulp.task('deploy-' + lang, ['build-' + lang], function() {
+
+  function deployToClonedRepo() {
     var version;
 
     // We depend on the build step which checks out the repo, so we start by
@@ -247,8 +257,31 @@ Object.keys(languages).forEach(function(lang) {
           {cwd: repoRoot});
 
     });
-  });
+  }
+
+  function deployToLargeRepo() {
+    var version = readPackage().version;
+    var repoParts = config.repo.split('/');
+    return syncToGitHub({
+      oauthToken: token,
+      user: repoParts[0],
+      repo: repoParts[1],
+      localPath: paths.dist(lang),
+      repoPath: paths.repoOutputRelative(lang),
+      branch: 'api-meta-incoming',
+      message: util.format('Deploy from asana-api-meta v%s', version),
+      preserveRepoFiles: config.preserveRepoFiles,
+      pullToBranch: 'master',
+      debug: !!process.env.GULP_DEBUG
+    });
+  }
+
+  gulp.task(
+      'deploy-' + lang,
+      ['build-' + lang],
+      config.largeRepo ? deployToLargeRepo : deployToClonedRepo);
 });
+
 
 /**
  * Bumping version number and tagging the repository with it.
