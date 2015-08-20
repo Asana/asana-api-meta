@@ -1,6 +1,4 @@
-[![Build Status][travis-image]][travis-url] 
-
-# Asana API Metadata
+# Asana API Metadata [![Build Status][travis-image]][travis-url]
 Metadata for Asana API for generating client libraries and documenation
 
 This repository contains descriptions of the various resources in the API and their endpoints. The metadata is rich in structural information and comments, such that we can use it to build both documentation and functioning client library objects.
