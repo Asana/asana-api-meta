@@ -35,6 +35,6 @@
     "js-yaml": "^3.2.5",
     "jsonschema": "^1.0.0",
     "lodash": "^2.4.1",
-    "sync-to-github": "^0.0.4"
+    "sync-to-github": "^0.0.7"
   }
 }
