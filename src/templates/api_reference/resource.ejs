@@ -43,7 +43,7 @@ header_search: true;
     return action.class == action_class.url;
   });
 %><a name="<%= action_class.url%>"></a>
-<%= '**[' + action_class.name.toUpperCase() + '](#' + action_class.url + ')**'
+<%= '**[' + action_class.name.toUpperCase() + '](#' + action_class.url + ')**\n'
 %>
 <%if (action_class.comment) {%><%= removeLineBreaks(action_class.comment)
 %>
