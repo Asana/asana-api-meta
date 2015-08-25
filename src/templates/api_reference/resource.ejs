@@ -2,6 +2,13 @@
 var thisType = plural(cap(resource.name));
 
 %>---
+***** WARNING *****
+
+This file is auto generated upon deploy of https://github.com/Asana/asana-api-meta. To contribute please
+familiarize yourself with the process as documented in the README.md found in that repository *****
+
+***** WARNING *****
+
 parent-title: API Reference
 title: <%= thisType %>
 description:
@@ -43,9 +50,9 @@ header_search: true;
     return action.class == action_class.url;
   });
 %><a name="<%= action_class.url%>"></a>
-<%= '**[' + action_class.name.toUpperCase() + '](#' + action_class.url + ')**\n'
+<%= '**[' + action_class.name.toUpperCase() + '](#' + action_class.url + ')**'
 %>
-<%if (action_class.comment) {%><%= removeLineBreaks(action_class.comment)
+<%if (action_class.comment) {%><%= '\n' + removeLineBreaks(action_class.comment)
 %>
 <%}%><% _.forEach(matchingActions, function(action) {
     var params = paramsForAction(action);%>
