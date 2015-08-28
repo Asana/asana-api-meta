@@ -133,7 +133,7 @@ actions:
   - name: createInWorkspace
     class: create
     method: POST
-    path: "/workspaces/%d/projects"
+    path: "/workspaces/%s/projects"
     params:
       - name: workspace
         <<: *Param.WorkspaceId
@@ -148,7 +148,7 @@ actions:
   - name: createInTeam
     class: create
     method: POST
-    path: "/teams/%d/projects"
+    path: "/teams/%s/projects"
     params:
       - name: team
         <<: *Param.TeamId
@@ -162,7 +162,7 @@ actions:
   - name: findById
     class: get-single
     method: GET
-    path: "/projects/%d"
+    path: "/projects/%s"
     params:
       - name: project
         <<: *Param.ProjectId
@@ -174,7 +174,7 @@ actions:
   - name: update
     class: update
     method: PUT
-    path: "/projects/%d"
+    path: "/projects/%s"
     params:
       - name: project
         <<: *Param.ProjectId
@@ -194,7 +194,7 @@ actions:
   - name: delete
     class: delete
     method: DELETE
-    path: "/projects/%d"
+    path: "/projects/%s"
     params:
       - name: project
         <<: *Param.ProjectId
@@ -230,7 +230,7 @@ actions:
   - name: findByWorkspace
     class: query
     method: GET
-    path: "/workspaces/%d/projects"
+    path: "/workspaces/%s/projects"
     params:
       - name: workspace
         <<: *Param.WorkspaceId
@@ -248,7 +248,7 @@ actions:
   - name: findByTeam
     class: query
     method: GET
-    path: "/teams/%d/projects"
+    path: "/teams/%s/projects"
     params:
       - name: team
         <<: *Param.TeamId
@@ -266,7 +266,7 @@ actions:
   - name: sections
     class: sections
     method: GET
-    path: "/projects/%d/sections"
+    path: "/projects/%s/sections"
     params:
       - name: project
         <<: *Param.ProjectId
@@ -279,7 +279,7 @@ actions:
   - name: tasks
     class: get-tasks
     method: GET
-    path: "/projects/%d/tasks"
+    path: "/projects/%s/tasks"
     params:
       - name: project
         <<: *Param.ProjectId
