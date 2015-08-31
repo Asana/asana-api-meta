@@ -13,4 +13,4 @@ env:
   global:
     - GULP_DEBUG=1
     # ASANA_GITHUB_TOKEN=...
-    - secure: "krbw7SRVcFTRWGkg60V9qk3uJGGGCQgYGYbUC6KG3tQDT9/z9D8+vKvrhtfeMDisF1xgCN0vcUVRjm9qhjrjZhIK0Lcexp9QICOVrKbnlU72E532tg0pf5nJlzN6x3EMl10jBt9HWWA7gUK2rPZ6w84MjU5MfUijoxmbytFnMj8="
+    - secure: "AkS+8f6jqmjcC7eIJavvpx05vAX9pljuvBIycFeUsFkHtyXCvDwiVMTkthf9dybl/xsx5jI5qxz6MsdmbO/jDIVW7+69krlJzBQiiCoZpwTFYpSk9+n2pnn5peR7rJL5RHyK8YEcmVRuG974tCFqYd2pKJu+6UEHutp/kn9VYVc="
