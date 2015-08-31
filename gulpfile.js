@@ -219,7 +219,6 @@ Object.keys(languages).forEach(function(lang) {
    */
 
   function deployToClonedRepo() {
-    var version = readPackage().version;
 
     // We depend on the build step which checks out the repo, so we start by
     // setting our credentials so we can push to it.
@@ -247,28 +246,13 @@ Object.keys(languages).forEach(function(lang) {
           {cwd: repoRoot});
 
     }).then(function() {
-      // Use various git / github calls to get commit information.
-      var github = githubClient(token);
-      var getUser = Bluebird.promisify(github.user.get, github.user);
-      var revParse = Bluebird.promisify(git.revParse, git);
 
-      return getUser({}).then(function(user) {
-        var githubUserName = user.login;
-        return revParse({args: '--abbrev-ref HEAD'}).then(function(branchName) {
-          return revParse({args: '--short HEAD'}).then(function(commitHash) {
-            var commitDesc = branchName.trim() ?
-                util.format("%s/%s", commitHash, branchName.trim()) :
-                commitHash;
-            var commitMessage = util.format(
-                "Deploy from asana-api-meta v%s (%s) by %s",
-                version, commitDesc, githubUserName);
-
-            return echoAndExec(
-                util.format('git commit --allow-empty -a -m "%s"', commitMessage),
-                {cwd: repoRoot});
-          });
-        });
+      return createCommitMessage().then(function(commitMessage) {
+        return echoAndExec(
+            util.format('git commit --allow-empty -a -m "%s"', commitMessage),
+            {cwd: repoRoot});
       });
+
     }).then(function() {
 
       return echoAndExec(
@@ -278,20 +262,45 @@ Object.keys(languages).forEach(function(lang) {
     });
   }
 
-  function deployToLargeRepo() {
+  /**
+   * @returns {Promise<String>} The commit message to provide for a deployment.
+   */
+  function createCommitMessage() {
     var version = readPackage().version;
-    var repoParts = config.repo.split('/');
-    return syncToGitHub({
-      oauthToken: token,
-      user: repoParts[0],
-      repo: repoParts[1],
-      localPath: paths.dist(lang),
-      repoPath: paths.repoOutputRelative(lang),
-      branch: 'api-meta-incoming',
-      message: util.format('Deploy from asana-api-meta v%s', version),
-      preserveRepoFiles: config.preserveRepoFiles,
-      pullToBranch: 'master',
-      debug: !!process.env.GULP_DEBUG
+    var github = githubClient(token);
+    var getUser = Bluebird.promisify(github.user.get, github.user);
+    var revParse = Bluebird.promisify(git.revParse, git);
+
+    return getUser({}).then(function(user) {
+      var githubUserName = user.login;
+      return revParse({args: '--abbrev-ref HEAD'}).then(function(branchName) {
+        return revParse({args: '--short HEAD'}).then(function(commitHash) {
+          var commitDesc = branchName.trim() ?
+              util.format("%s/%s", commitHash, branchName.trim()) :
+              commitHash;
+          return util.format(
+              "Deploy from asana-api-meta v%s (%s) by %s",
+              version, commitDesc, githubUserName);
+        });
+      });
+    });
+  }
+
+  function deployToLargeRepo() {
+    return createCommitMessage().then(function(commitMessage) {
+      var repoParts = config.repo.split('/');
+      return syncToGitHub({
+        oauthToken: token,
+        user: repoParts[0],
+        repo: repoParts[1],
+        localPath: paths.dist(lang),
+        repoPath: paths.repoOutputRelative(lang),
+        branch: 'api-meta-incoming',
+        message: commitMessage,
+        preserveRepoFiles: config.preserveRepoFiles,
+        pullToBranch: 'master',
+        debug: !!process.env.GULP_DEBUG
+      });
     });
   }
 
