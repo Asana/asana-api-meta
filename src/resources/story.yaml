@@ -11,6 +11,11 @@ comment: |
   Once generated, it is not possible to modify a story.
 properties:
 
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the story.
+
   - name: created_at
     <<: *PropType.DateTime
     comment: |

@@ -19,6 +19,11 @@ comment: |
 
 properties:
 
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the workspace.
+
   - name: name
     type: String
     example_values:
