@@ -76,7 +76,7 @@ actions:
         <<: *Param.TeamId
         required: true
       - name: user
-        type: String
+        <<: *Param.User
         required: true
         comment: The user to invite to the team.
     comment: |
@@ -94,7 +94,7 @@ actions:
         <<: *Param.TeamId
         required: true
       - name: user
-        type: String
+        <<: *Param.User
         required: true
         comment: The user to remove from the team.
     comment: |

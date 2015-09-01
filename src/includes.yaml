@@ -52,12 +52,16 @@ templates:
       comment: |
         Globally unique identifier for the task.
 
-  - template: &Param.UserId
-      type: Id
+  - template: &Param.User
+      type: String
       example_values:
         - "14641"
+        - "me"
+        - "sashimi@asana.com"
       comment: |
-        Globally unique identifier for the user.
+        An identifier for the user. Can be one of an email address,
+        the globally unique identifier for the user, or the keyword `me`
+        to indicate the current user making the request.
 
   - template: &Param.WorkspaceId
       type: Id
