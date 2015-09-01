@@ -70,7 +70,7 @@ actions:
   - name: addUser
     class: users
     method: POST
-    path: "/teams/%d/addUser"
+    path: "/teams/%s/addUser"
     params:
       - name: team
         <<: *Param.TeamId
@@ -88,7 +88,7 @@ actions:
   - name: removeUser
     class: users
     method: POST
-    path: "/teams/%d/removeUser"
+    path: "/teams/%s/removeUser"
     params:
       - name: team
         <<: *Param.TeamId
