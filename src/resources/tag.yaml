@@ -91,7 +91,7 @@ actions:
   - name: createInWorkspace
     class: create
     method: POST
-    path: "/workspaces/%d/tags"
+    path: "/workspaces/%s/tags"
     params:
       - name: workspace
         <<: *Param.WorkspaceId
@@ -110,7 +110,7 @@ actions:
   - name: findById
     class: get-single
     method: GET
-    path: "/tags/%d"
+    path: "/tags/%s"
     params:
       - name: tag
         <<: *Param.TagId
@@ -122,7 +122,7 @@ actions:
   - name: update
     class: update
     method: PUT
-    path: "/tags/%d"
+    path: "/tags/%s"
     params:
       - name: tag
         <<: *Param.TagId
@@ -141,7 +141,7 @@ actions:
   - name: delete
     class: delete
     method: DELETE
-    path: "/tags/%d"
+    path: "/tags/%s"
     params:
       - name: tag
         <<: *Param.TagId
@@ -177,7 +177,7 @@ actions:
   - name: findByWorkspace
     class: query
     method: GET
-    path: "/workspaces/%d/tags"
+    path: "/workspaces/%s/tags"
     params:
       - name: workspace
         <<: *Param.WorkspaceId
@@ -190,7 +190,7 @@ actions:
   - name: getTasksWithTag
     class: get-tasks
     method: GET
-    path: "/tags/%d/tasks"
+    path: "/tags/%s/tasks"
     params:
       - name: tag
         <<: *Param.TagId

@@ -101,7 +101,7 @@ actions:
   - name: findById
     class: get-all
     method: GET
-    path: "/stories/%d"
+    path: "/stories/%s"
     params:
       - name: story
         <<: *Param.StoryId
@@ -112,7 +112,7 @@ actions:
   - name: findByTask
     class: get-single
     method: GET
-    path: "/tasks/%d/stories"
+    path: "/tasks/%s/stories"
     collection: true
     params:
       - name: task

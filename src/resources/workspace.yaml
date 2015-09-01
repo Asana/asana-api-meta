@@ -46,7 +46,7 @@ actions:
   - name: findById
     class: get
     method: GET
-    path: "/workspaces/%d"
+    path: "/workspaces/%s"
     params:
       - name: workspace
         <<: *Param.WorkspaceId
@@ -65,7 +65,7 @@ actions:
   - name: update
     class: update
     method: PUT
-    path: "/workspaces/%d"
+    path: "/workspaces/%s"
     params:
       - name: workspace
         <<: *Param.WorkspaceId
@@ -83,7 +83,7 @@ actions:
   - name: typeahead
     class: typeahead
     method: GET
-    path: "/workspaces/%d/typeahead"
+    path: "/workspaces/%s/typeahead"
     params:
       - name: workspace
         <<: *Param.WorkspaceId

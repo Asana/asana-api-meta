@@ -240,7 +240,7 @@ actions:
   - name: createInWorkspace
     class: create
     method: POST
-    path: "/workspaces/%d/tasks"
+    path: "/workspaces/%s/tasks"
     params:
       - name: workspace
         <<: *Param.WorkspaceId
@@ -258,7 +258,7 @@ actions:
   - name: findById
     class: get
     method: GET
-    path: "/tasks/%d"
+    path: "/tasks/%s"
     params:
       - name: task
         <<: *Param.TaskId
@@ -270,7 +270,7 @@ actions:
   - name: update
     class: update
     method: PUT
-    path: "/tasks/%d"
+    path: "/tasks/%s"
     params:
       - name: task
         <<: *Param.TaskId
@@ -290,7 +290,7 @@ actions:
   - name: delete
     class: delete
     method: DELETE
-    path: "/tasks/%d"
+    path: "/tasks/%s"
     params:
       - name: task
         <<: *Param.TaskId
@@ -309,7 +309,7 @@ actions:
   - name: findByProject
     class: query
     method: GET
-    path: "/projects/%d/tasks"
+    path: "/projects/%s/tasks"
     params:
       - name: projectId
         <<: *Param.ProjectId
@@ -323,7 +323,7 @@ actions:
   - name: findByTag
     class: query
     method: GET
-    path: "/tags/%d/tasks"
+    path: "/tags/%s/tasks"
     params:
       - name: tag
         <<: *Param.TagId
@@ -377,7 +377,7 @@ actions:
   - name: addFollowers
     class: followers
     method: POST
-    path: "/tasks/%d/addFollowers"
+    path: "/tasks/%s/addFollowers"
     params:
       - name: task
         <<: *Param.TaskId
@@ -394,7 +394,7 @@ actions:
   - name: removeFollowers
     class: followers
     method: POST
-    path: "/tasks/%d/removeFollowers"
+    path: "/tasks/%s/removeFollowers"
     params:
       - name: task
         <<: *Param.TaskId
@@ -413,7 +413,7 @@ actions:
   - name: projects
     class: projects
     method: GET
-    path: "/tasks/%d/projects"
+    path: "/tasks/%s/projects"
     collection: true
     params:
       - name: task
@@ -426,7 +426,7 @@ actions:
   - name: addProject
     class: projects
     method: POST
-    path: "/tasks/%d/addProject"
+    path: "/tasks/%s/addProject"
     params:
       - name: task
         <<: *Param.TaskId
@@ -472,7 +472,7 @@ actions:
   - name: removeProject
     class: projects
     method: POST
-    path: "/tasks/%d/removeProject"
+    path: "/tasks/%s/removeProject"
     params:
       - name: task
         <<: *Param.TaskId
@@ -493,7 +493,7 @@ actions:
   - name: tags
     class: tags
     method: GET
-    path: "/tasks/%d/tags"
+    path: "/tasks/%s/tags"
     collection: true
     params:
       - name: task
@@ -506,7 +506,7 @@ actions:
   - name: addTag
     class: tags
     method: POST
-    path: "/tasks/%d/addTag"
+    path: "/tasks/%s/addTag"
     params:
       - name: task
         <<: *Param.TaskId
@@ -522,7 +522,7 @@ actions:
   - name: removeTag
     class: tags
     method: POST
-    path: "/tasks/%d/removeTag"
+    path: "/tasks/%s/removeTag"
     params:
       - name: task
         <<: *Param.TaskId
@@ -540,7 +540,7 @@ actions:
   - name: subtasks
     class: subtasks
     method: GET
-    path: "/tasks/%d/subtasks"
+    path: "/tasks/%s/subtasks"
     collection: true
     params:
       - name: task
@@ -553,7 +553,7 @@ actions:
   - name: addSubtask
     class: subtasks
     method: POST
-    path: "/tasks/%d/subtasks"
+    path: "/tasks/%s/subtasks"
     params:
       - name: task
         <<: *Param.TaskId
@@ -566,7 +566,7 @@ actions:
   - name: setParent
     class: subtasks
     method: POST
-    path: "/tasks/%d/setParent"
+    path: "/tasks/%s/setParent"
     # TODO: we need allow_null to gen the code for this. We would also need
     # casting (to number) but that will be unnecessary when we move to TS.
     no_code: true
@@ -589,7 +589,7 @@ actions:
   - name: stories
     class: stories
     method: GET
-    path: "/tasks/%d/stories"
+    path: "/tasks/%s/stories"
     collection: true
     params:
       - name: task
