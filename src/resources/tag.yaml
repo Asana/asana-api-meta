@@ -14,6 +14,12 @@ comment: |
 properties:
 # We borrow a bunch of the project templates here because they're literally
 # exactly the same
+
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the tag.
+
   - name: created_at
     <<: *PropType.DateTime
     access: Read-only

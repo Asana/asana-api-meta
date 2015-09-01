@@ -6,6 +6,11 @@ comment: |
   organization. Each project in an organization is associated with a team.
 properties:
 
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the team.
+
   - name: name
     type: String
     example_values:
