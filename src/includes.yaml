@@ -226,6 +226,11 @@ templates:
         - "{ id: 692353, name: 'organization.com Marketing' }"
       access: Create-only
 
+  - template: &PropType.Status
+    - type: Struct
+      example_values:
+        - "{ 'color': green, 'text': 'All gravy!', 'author':{ ... } ... } "
+
   ## Story
   - template: &PropType.HtmlText
     - type: String
