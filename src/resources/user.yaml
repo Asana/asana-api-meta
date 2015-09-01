@@ -17,6 +17,12 @@ comment: |
   a user ID is accepted, to refer to the current authenticated user.
 
 properties:
+
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the user.
+
   - name: name
     type: String
     example_values:

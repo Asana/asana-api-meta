@@ -18,6 +18,12 @@ notes:
     Use [field selectors](/developers/documentation/getting-started/input-output-options) to manipulate what data is included in a response.
 
 properties:
+
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the task.
+
   - name: assignee
     <<: *PropType.User
     comment: |
