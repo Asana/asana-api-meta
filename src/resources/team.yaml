@@ -6,6 +6,11 @@ comment: |
   organization. Each project in an organization is associated with a team.
 properties:
 
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the team.
+
   - name: name
     type: String
     example_values:
@@ -26,7 +31,7 @@ actions:
   - name: findById
     class: get
     method: GET
-    path: "/teams/%d"
+    path: "/teams/%s"
     params:
       - name: team
         <<: *Param.TeamId
@@ -37,7 +42,7 @@ actions:
   - name: findByOrganization
     class: get
     method: GET
-    path: "/organizations/%d/teams"
+    path: "/organizations/%s/teams"
     collection: true
     params:
       - name: organization
@@ -52,7 +57,7 @@ actions:
   - name: users
     class: users
     method: GET
-    path: "/teams/%d/users"
+    path: "/teams/%s/users"
     collection: true
     collection_cannot_paginate: true
     params:

@@ -7,6 +7,11 @@ comment: |
   such as Dropbox or Google Drive.
 properties:
 
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the attachment.
+
   - name: created_at
     <<: *PropType.DateTime
     access: Read-only
@@ -75,7 +80,7 @@ actions:
   - name: findById
     class: get-single
     method: GET
-    path: "/attachments/%d"
+    path: "/attachments/%s"
     params:
       - name: attachment
         <<: *Param.AttachmentId
@@ -86,7 +91,7 @@ actions:
   - name: findByTask
     class: get-all-task
     method: GET
-    path: "/tasks/%d/attachments"
+    path: "/tasks/%s/attachments"
     collection: true
     params:
       - name: task
@@ -98,7 +103,7 @@ actions:
   - name: createOnTask
     class: upload
     method: POST
-    path: "/tasks/%d/attachments"
+    path: "/tasks/%s/attachments"
     no_code: true  # Uploading attachments must be hand-coded
     params:
       - name: task

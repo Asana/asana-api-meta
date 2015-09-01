@@ -11,6 +11,11 @@ comment: |
   Once generated, it is not possible to modify a story.
 properties:
 
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the story.
+
   - name: created_at
     <<: *PropType.DateTime
     comment: |
@@ -101,7 +106,7 @@ actions:
   - name: findById
     class: get-all
     method: GET
-    path: "/stories/%d"
+    path: "/stories/%s"
     params:
       - name: story
         <<: *Param.StoryId
@@ -112,7 +117,7 @@ actions:
   - name: findByTask
     class: get-single
     method: GET
-    path: "/tasks/%d/stories"
+    path: "/tasks/%s/stories"
     collection: true
     params:
       - name: task

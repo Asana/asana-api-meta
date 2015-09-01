@@ -14,6 +14,7 @@ var resource = require('./src/resource');
 var helpers = require('./src/helpers');
 var _ = require('lodash');
 var Bluebird = require('bluebird');
+var GitHubApi = require('github');
 
 /**
  * Paths
@@ -196,7 +197,7 @@ Object.keys(languages).forEach(function(lang) {
       // Find the template info for resources
       var resourceInstance = resource.load(resourceName);
       var templateHelpers = helpers(lang);
-      templateHelpers.resources = resourceNames
+      templateHelpers.resources = resourceNames;
       return gulp.src(templatePath + '/' + resourceTemplateInfo.template)
           .pipe(
               template(resourceInstance, {
@@ -218,13 +219,14 @@ Object.keys(languages).forEach(function(lang) {
    */
 
   function deployToClonedRepo() {
-    var version;
 
     // We depend on the build step which checks out the repo, so we start by
     // setting our credentials so we can push to it.
     return Bluebird.resolve().then(function() {
 
       if (token !== null) {
+        // Write credentials and repo to a file so they don't show up in
+        // command line
         return echoAndExec(
             'git config credential.helper "store --file=.git/credentials"',
             {cwd: repoRoot})
@@ -245,10 +247,11 @@ Object.keys(languages).forEach(function(lang) {
 
     }).then(function() {
 
-      version = readPackage().version;
-      return echoAndExec(
-          util.format('git commit --allow-empty -a -m "Deploy from asana-api-meta v%s"', version),
-          {cwd: repoRoot});
+      return createCommitMessage().then(function(commitMessage) {
+        return echoAndExec(
+            util.format('git commit --allow-empty -a -m "%s"', commitMessage),
+            {cwd: repoRoot});
+      });
 
     }).then(function() {
 
@@ -259,26 +262,64 @@ Object.keys(languages).forEach(function(lang) {
     });
   }
 
-  function deployToLargeRepo() {
+  /**
+   * @returns {Promise<String>} The commit message to provide for a deployment.
+   */
+  function createCommitMessage() {
     var version = readPackage().version;
-    var repoParts = config.repo.split('/');
-    return syncToGitHub({
-      oauthToken: token,
-      user: repoParts[0],
-      repo: repoParts[1],
-      localPath: paths.dist(lang),
-      repoPath: paths.repoOutputRelative(lang),
-      branch: 'api-meta-incoming',
-      message: util.format('Deploy from asana-api-meta v%s', version),
-      preserveRepoFiles: config.preserveRepoFiles,
-      pullToBranch: 'master',
-      debug: !!process.env.GULP_DEBUG
+    var github = githubClient(token);
+    var getUser = Bluebird.promisify(github.user.get, github.user);
+    var revParse = Bluebird.promisify(git.revParse, git);
+
+    return getUser({}).then(function(user) {
+      var githubUserName = user.login;
+      return revParse({args: '--abbrev-ref HEAD'}).then(function(branchName) {
+        return revParse({args: '--short HEAD'}).then(function(commitHash) {
+          var commitDesc = branchName.trim() ?
+              util.format("%s/%s", commitHash, branchName.trim()) :
+              commitHash;
+          return util.format(
+              "Deploy from asana-api-meta v%s (%s) by %s",
+              version, commitDesc, githubUserName);
+        });
+      });
     });
+  }
+
+  function deployToLargeRepo() {
+    return createCommitMessage().then(function(commitMessage) {
+      var repoParts = config.repo.split('/');
+      return syncToGitHub({
+        oauthToken: token,
+        user: repoParts[0],
+        repo: repoParts[1],
+        localPath: paths.dist(lang),
+        repoPath: paths.repoOutputRelative(lang),
+        branch: 'api-meta-incoming',
+        message: commitMessage,
+        preserveRepoFiles: config.preserveRepoFiles,
+        pullToBranch: 'master',
+        debug: !!process.env.GULP_DEBUG
+      });
+    });
+  }
+
+  function githubClient(token) {
+    var github = new GitHubApi({
+      version: '3.0.0',
+      protocol: 'https',
+      host: 'api.github.com'
+    });
+    github.authenticate({
+      type: 'oauth',
+      token: token
+    });
+    return github;
   }
 
   gulp.task(
       'deploy-' + lang,
-      ['build-' + lang],
+      ['ensure-git-clean', 'build-' + lang],
       config.largeRepo ? deployToLargeRepo : deployToClonedRepo);
 });
 
@@ -320,7 +361,14 @@ gulp.task('ensure-git-clean', function() {
   git.status(function(err, out) {
     if (err) { throw err; }
     if (!/working directory clean/.exec(out)) {
-      throw new Error('Git working directory not clean, will not bump version');
+      // Working directory must be clean for some operations.
+      // For bumping the version, this prevents accidental commits of
+      // unintended or partial changes.
+      // For deployment, this ensures that the deploy is tagged with a commit
+      // and that can be used to reference the exact state of the repo (if we
+      // allowed changes then the commit would not tell us what the code
+      // actually looked like).
+      throw new Error('Git working directory not clean, will not proceed.');
     }
   });
 });

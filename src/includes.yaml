@@ -284,7 +284,7 @@ templates:
   
   - template: &Action.CommentOnTask
       method: POST
-      path: "/tasks/%d/stories"
+      path: "/tasks/%s/stories"
       params:
         - name: task
           <<: *Param.TaskId
