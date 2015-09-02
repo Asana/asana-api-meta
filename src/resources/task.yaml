@@ -349,7 +349,7 @@ actions:
       or more of the parameters provided to filter the tasks returned.
     params:
       - name: assignee
-        <<: *Param.UserId
+        <<: *Param.User
         comment: The assignee to filter tasks on.
         notes:
           - |
