@@ -40,7 +40,7 @@ function Action(action) {
     }
 
     if (this.idParams.length == 1 &&
-        action.path.match(/%d/) &&
+        action.path.match(/%s/) &&
         (action.name.match(/Id/) || (this.isInstanceAction && this.mainIdParam == undefined))) {
             var mainIdParam = this.idParams[0]
             this.mainIdParam = mainIdParam
@@ -82,7 +82,7 @@ function Action(action) {
     // Endpoint path
     this.path = _.reduce(this.idParams, function(acc, id) {
         var localName = that.mainIdParam == id ? "id" : id.name
-        return acc.replace("\%d", "#{" + localName + "}")
+        return acc.replace("\%s", "#{" + localName + "}")
     }, action.path)
 
     // Extra params (not in the URL) to be passed in the body of the call
