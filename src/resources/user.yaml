@@ -128,7 +128,6 @@ actions:
       - name: user
         <<: *Param.User
         required: true
-        comment: The email address to send the invite to.
     comment: |
       The user can be referenced by their globally unique user ID or their email address.
       Returns the full user record for the invited user.
@@ -145,7 +144,6 @@ actions:
       - name: user
         <<: *Param.User
         required: true
-        comment: The user to invite
     comment: |
       The user making this call must be an admin in the workspace.
       Returns an empty data record.
