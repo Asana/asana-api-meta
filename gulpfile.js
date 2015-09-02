@@ -47,7 +47,7 @@ var languages = {
     repo: 'Asana/python-asana',
     branch: 'api-meta-incoming',
     outputPath: 'asana/resources/gen',
-    preserveRepoFiles: false
+    preserveRepoFiles: true
   },
   ruby: {
     repo: 'Asana/ruby-asana',
