@@ -12,5 +12,6 @@ after_success:
 env:
   global:
     - GULP_DEBUG=1
+    - PROD=1
     # ASANA_GITHUB_TOKEN=...
     - secure: "AkS+8f6jqmjcC7eIJavvpx05vAX9pljuvBIycFeUsFkHtyXCvDwiVMTkthf9dybl/xsx5jI5qxz6MsdmbO/jDIVW7+69krlJzBQiiCoZpwTFYpSk9+n2pnn5peR7rJL5RHyK8YEcmVRuG974tCFqYd2pKJu+6UEHutp/kn9VYVc="
