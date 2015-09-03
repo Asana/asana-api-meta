@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Asana/asana-api-meta",
   "devDependencies": {
     "bluebird": "^2.9.34",
+    "dateformat": "^1.0.11",
     "fs-extra": "^0.15.0",
     "github": "^0.2.4",
     "gulp": "^3.8.10",
@@ -35,6 +36,6 @@
     "js-yaml": "^3.2.5",
     "jsonschema": "^1.0.0",
     "lodash": "^2.4.1",
-    "sync-to-github": "^0.0.7"
+    "sync-to-github": "^0.1.0"
   }
 }
