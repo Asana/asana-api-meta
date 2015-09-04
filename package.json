@@ -1,6 +1,6 @@
 {
   "name": "asana-api-meta",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Metadata for Asana API for generating client libraries and documenation",
   "main": "index.js",
   "scripts": {
