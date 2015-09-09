@@ -15,7 +15,6 @@ var helpers = require('./src/helpers');
 var _ = require('lodash');
 var Bluebird = require('bluebird');
 var GitHubApi = require('github');
-var dateFormat = require('dateformat');
 
 /**
  * Paths
@@ -28,40 +27,45 @@ var test = 'test/**/*';
 var languages = {
   js: {
     repo: 'Asana/node-asana',
+    branch: 'api-meta-incoming',
     outputPath: 'lib/resources/gen',
     preserveRepoFiles: false
   },
   php: {
     repo: 'Asana/php-asana',
+    branch: 'api-meta-incoming',
     outputPath: 'src/Asana/Resources/Gen',
     preserveRepoFiles: false
   },
   java: {
     repo: 'Asana/java-asana',
+    branch: 'api-meta-incoming',
     outputPath: 'src/main/java/com/asana/resources/gen',
     preserveRepoFiles: false
   },
   python: {
     repo: 'Asana/python-asana',
+    branch: 'api-meta-incoming',
     outputPath: 'asana/resources/gen',
-    // Keep the __init__.py file there
     preserveRepoFiles: true
   },
   ruby: {
     repo: 'Asana/ruby-asana',
+    branch: 'api-meta-incoming',
     outputPath: 'lib/asana/resources',
     preserveRepoFiles: false,
     skip: ['event']
   },
   api_explorer: {
     repo: 'Asana/api-explorer',
+    branch: 'api-meta-incoming',
     outputPath: 'src/resources/gen',
     preserveRepoFiles: false
   },
   api_reference: {
     repo: 'AsanaOps/asanastatic',
+    branch: 'api-meta-incoming',
     outputPath: '_content/developers/api-reference',
-    // Keep the other markdown pages and metadata there
     preserveRepoFiles: true
   }
 };
@@ -97,11 +101,6 @@ gulp.task('deploy', ['ensure-git-clean', 'build'].concat(Object.keys(languages).
   return 'deploy-' + lang;
 })));
 
-
-// Store a single timestamp representing right now.
-var nowTimestamp = dateFormat('yyyymmdd-HHMMss');
-
-
 /**
  * Generate build and deploy rules for each language
  */
@@ -109,7 +108,6 @@ var resourceNames = resource.names();
 Object.keys(languages).forEach(function(lang) {
   var config = languages[lang];
   var token = process.env.ASANA_GITHUB_TOKEN || null;
-  var isProd = (process.env.PROD == '1');
 
   function echoAndExec(command, options) {
     if (process.env.GULP_DEBUG) {
@@ -178,50 +176,41 @@ Object.keys(languages).forEach(function(lang) {
   /**
    * @returns {Promise<String>} The commit message to provide for a deployment.
    */
-  function createCommitMessage(user) {
+  function createCommitMessage() {
     var version = readPackage().version;
+    var github = githubClient(token);
+    var getUser = Bluebird.promisify(github.user.get, github.user);
     var revParse = Bluebird.promisify(git.revParse, git);
 
-    var githubUserName = user.login;
-    return revParse({args: '--abbrev-ref HEAD'}).then(function(branchName) {
-      return revParse({args: '--short HEAD'}).then(function(commitHash) {
-        var commitDesc = branchName.trim() ?
-            util.format("%s/%s", commitHash, branchName.trim()) :
-            commitHash;
-        return util.format(
-            "Deploy from asana-api-meta v%s (%s) by %s",
-            version, commitDesc, githubUserName);
+    return getUser({}).then(function(user) {
+      var githubUserName = user.login;
+      return revParse({args: '--abbrev-ref HEAD'}).then(function(branchName) {
+        return revParse({args: '--short HEAD'}).then(function(commitHash) {
+          var commitDesc = branchName.trim() ?
+              util.format("%s/%s", commitHash, branchName.trim()) :
+              commitHash;
+          return util.format(
+              "Deploy from asana-api-meta v%s (%s) by %s",
+              version, commitDesc, githubUserName);
+        });
       });
     });
   }
 
-  function getGitHubUser() {
-    var github = githubClient(token);
-    var getUser = Bluebird.promisify(github.user.get, github.user);
-    return getUser({});
-  }
-
   function deployWithGithubApi() {
-    return getGitHubUser().then(function(user) {
-      var branchName = isProd ?
-          'api-meta-incoming' :
-          (user.login + '-' + nowTimestamp);
-      return createCommitMessage(user).then(function(commitMessage) {
-        var repoParts = config.repo.split('/');
-        return syncToGitHub({
-          oauthToken: token,
-          user: repoParts[0],
-          repo: repoParts[1],
-          localPath: paths.dist(lang),
-          repoPath: paths.repoOutputRelative(lang),
-          branch: branchName,
-          baseBranch: 'master',
-          createBranch: true,
-          message: commitMessage,
-          preserveRepoFiles: !!config.preserveRepoFiles,
-          createPullRequest: isProd,
-          debug: !!process.env.GULP_DEBUG
-        });
+    return createCommitMessage().then(function(commitMessage) {
+      var repoParts = config.repo.split('/');
+      return syncToGitHub({
+        oauthToken: token,
+        user: repoParts[0],
+        repo: repoParts[1],
+        localPath: paths.dist(lang),
+        repoPath: paths.repoOutputRelative(lang),
+        branch: 'api-meta-incoming',
+        message: commitMessage,
+        preserveRepoFiles: !!config.preserveRepoFiles,
+        pullToBranch: 'master',
+        debug: !!process.env.GULP_DEBUG
       });
     });
   }
