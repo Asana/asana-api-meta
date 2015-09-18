@@ -13,9 +13,7 @@ It is currently used to build the following client libraries:
   
 It is also used to build the [Asana API Reference](https://asana.com/developers/api-reference) in the developer documentation. 
 
-## Contributor Workflow
-
-### Making Changes
+## Contributing
 
   1. Clone the repo:
      `git clone git@github.com:Asana/asana-api-meta.git`
@@ -24,7 +22,52 @@ It is also used to build the [Asana API Reference](https://asana.com/developers/
   3. Make changes on the topic branch.
   4. Run `gulp build` to build the output for all languages. You can inspect the final output in `dist/`.
   5. When satisfied, make a pull request.
-  
+
+## How It Works
+
+### Language Configuration
+
+Each language has its own configuration that determines how the output files are built. These configurations are specified in `gulpfile.js` as `var languages = ...`. Each record has the following schema:
+
+  * `repo`: Name of the target repository where built files will be pushed to.
+  * `branch`: Name of the branch in the repository to push to.
+  * `outputPath`: Path, relative to the root of `repo`, where template output will go.
+  * `preserveRepoFiles`: Set to true if when the files are built and pushed to the target, any existing files are preserved. If false, it will clear out `outputPath` each time it pushes.
+  * `skip`: An array of resource names to avoid generating output files for.
+
+### Resource Definitions
+
+Resources are defined in individual YAML files under `src/resources`. The one-resource-per-file convention keeps the files manageable.
+
+A schema is provided for resources, and the resources are validated against it during testing. It can be found in `test/resource_schema.json`, and uses the [JSON Schema](http://json-schema.org/) syntax, with the [`jsonschema`](http://json-schema.org/) Node package for validation.
+
+The schemas make heavy use of the "anchor" and "alias" features of YAML, so the files can be more normalized and avoid excessive repetition. These are mostly used to define commonly-used components like types, properties, and parameters that appear in multiple (sometimes many, many) places.
+
+Definitions for value types (like `Email`, `ProjectColor`, `TeamId` etc.) that may appear as a parameter or resource property in more than one place should go in the `src/includes.yaml` file.
+
+### Templates
+
+This module uses templates for generating library source files from the resources.
+
+The build system will, for each language `LANG` it is building (e.g. `LANG='js'`):
+  1. For each resource:
+    2. Read in the resource definition file, `src/resources/NAME.yaml`.
+    3. Read in the template definition file, `src/templates/LANG/index.js`.
+      4. Find the `resource` key.
+      5. Read in the `template` to find the input template, and the `filename` function to generate the output filename.
+    4. Execute the template against the resource definition.
+    5. Output the result into the file `dist/LANG/OUTPUTFILE`.
+
+All templates use the [`lodash`](https://www.npmjs.com/package/lodash) library for generation. `gulpfile.js` has the build rules that execute the templates. It provides various helpers to the template that are configurable on a per-library basis, by scoping the file `helpers.js` into the template namespace. These include utilities for common code-generation patterns.
+
+Authors modifying the templates should ensure that they *generate pretty code*, at the expense of the prettiness of the template. Trivial issues like bad indents in the output should be fixed.
+
+### Helpers
+
+Rather than pour a bunch of logic into the template, it's better style to put them into helpers. Currently there is only a single `helpers` file, but we should break this into a set of language-specific files (that might each call some useful common helpers where appropriate).
+
+Examples of places where extracting helpers is useful are `paramsForAction` or `wrapComment`.
+
 ## Owner Workflow
 
 ### Testing Proposed Changes
@@ -54,38 +97,6 @@ It is also used to build the [Asana API Reference](https://asana.com/developers/
   2. Review and merge the pull requests as appropriate.
   3. Update package versions according to [semantic versioning](http://semver.org/), and push.
 
-
-## Language Configuration
-
-These are specified in `gulpfile.js` as `var languages = ...`. Each record has the following schema:
-
-  * `repo`: Name of the repository holding the client library
-  * `branch`: Name of the branch in the repository to push to
-  * `templatePath`: [Optional] Path, relative to the root of `repo`, for a module defining the templates. There should be a file named `index.js` in that path. If omitted, will search for local templates in the `asana-api-meta` repository.
-  * `outputPath`: Path, relative to the root of `repo`, where template output will go.
-
-## Resource Definitions
-
-Resources are defined in individual YAML files under `src/resources`. The one-resource-per-file convention keeps the files manageable.
-
-A schema is provided for resources, and the resources are validated against it during testing. It can be found in `test/resource_schema.json`, and uses the [JSON Schema](http://json-schema.org/) syntax, with the [`jsonschema`](http://json-schema.org/) Node package for validation.
-
-The schemas make heavy use of the "anchor" and "alias" features of YAML, so the files can be more normalized and avoid excessive repetition. These are mostly used to define commonly-used components like types, properties, and parameters that appear in multiple (sometimes many, many) places.
-
-## Templates
-
-This module uses templates for generating library source files from the resources.
-
-The build system will, for each language `LANG` it is building (e.g. `LANG='js'`):
-  1. For each resource:
-    2. Read in the resource definition file, `src/resources/NAME.yaml`.
-    3. Read in the template definition file, `src/templates/LANG/index.js`.
-      4. Find the `resource` key.
-      5. Read in the `template` to find the input template, and the `filename` function to generate the output filename.
-    4. Execute the template against the resource definition.
-    5. Output the result into the file `dist/LANG/OUTPUTFILE`.
-
-All templates use the [`lodash`](https://www.npmjs.com/package/lodash) library for generation. `gulpfile.js` has the build rules that execute the templates. It provides various helpers to the template that are configurable on a per-library basis, by scoping the file `helpers.js` into the template namespace. These include utilities for common code-generation patterns.
 
 [travis-url]: http://travis-ci.org/Asana/asana-api-meta
 [travis-image]: https://api.travis-ci.org/Asana/asana-api-meta.svg?style=flat-square&branch=master
