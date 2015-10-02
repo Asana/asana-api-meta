@@ -14,28 +14,38 @@ comment: |
 
 properties:
 
+  - name: name
+    <<: *PropType.PotName
+    comment: |
+      Name of the project. This is generally a short sentence fragment that fits
+      on a line in the UI for maximum readability. However, it can be longer.
+
   - name: id
     <<: *PropType.Id
     comment: |
       Globally unique ID of the project.
 
-  - name: archived
-    <<: *PropType.Bool
+  - name: owner
+    <<: *PropType.User
     comment: |
-      True if the project is archived, false if not. Archived projects do not
-      show in the UI by default and may be treated differently for queries.
+      The current owner of the project, may be null.
+
+  - name: current_status
+    <<: *PropType.Status
+    comment: |
+      A description of the project's status containing a color (must be either
+      `null` or one of: `green`, `yellow`, `red`) and a short description.
+
+  - name: due_date
+    <<: *PropType.Date
+    comment: |
+      The day on which this project is due. This takes a date with format YYYY-MM-DD.
 
   - name: created_at
     <<: *PropType.DateTime
     access: Read-only
     comment: |
       The time at which this project was created.
-
-  - name: followers
-    <<: *PropType.UserArray
-    access: Read-only
-    comment: |
-      Array of users following this project.
 
   - name: modified_at
     <<: *PropType.DateTime
@@ -47,11 +57,29 @@ properties:
         This does not currently reflect any changes in associations such as tasks
         or comments that may have been added or removed from the project.
 
-  - name: name
-    <<: *PropType.PotName
+  - name: archived
+    <<: *PropType.Bool
     comment: |
-      Name of the project. This is generally a short sentence fragment that fits
-      on a line in the UI for maximum readability. However, it can be longer.
+      True if the project is archived, false if not. Archived projects do not
+      show in the UI by default and may be treated differently for queries.
+
+  - name: public
+    <<: *PropType.Bool
+    comment: |
+      True if the project is public to the organization. If false, do not share this project with other users in
+      this organization without explicitly checking to see if they have access.
+
+  - name: members
+    <<: *PropType.UserArray
+    access: Read-only
+    comment: |
+      Array of users who are members of this project.
+
+  - name: followers
+    <<: *PropType.UserArray
+    access: Read-only
+    comment: |
+      Array of users following this project. Followers are members who receive all notifcations for a project (default).
 
   - name: color
     <<: *PropType.PotColor

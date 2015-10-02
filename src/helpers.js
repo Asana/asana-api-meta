@@ -112,7 +112,7 @@ function examplesForResource(resource) {
 
 function curlExamplesForAction(action, resource_examples) {
   var action_examples = _.filter(resource_examples, function(example) {
-    var regex = action.path.replace(/%d/, "\\d+").replace(/\//, "\\/");
+    var regex = action.path.replace(/%s/g, ".+");
     return example.method === action.method.toLowerCase() && example.endpoint.match(regex);
   });
   var curlExamples = [];

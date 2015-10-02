@@ -15,6 +15,7 @@ var helpers = require('./src/helpers');
 var _ = require('lodash');
 var Bluebird = require('bluebird');
 var GitHubApi = require('github');
+var dateFormat = require('dateformat');
 
 /**
  * Paths
@@ -27,48 +28,40 @@ var test = 'test/**/*';
 var languages = {
   js: {
     repo: 'Asana/node-asana',
-    branch: 'api-meta-incoming',
-    templatePath: 'src/templates',
-    outputPath: 'lib/resources/gen'
+    outputPath: 'lib/resources/gen',
+    preserveRepoFiles: false
   },
   php: {
     repo: 'Asana/php-asana',
-    branch: 'api-meta-incoming',
-    templatePath: 'templates',
-    outputPath: 'src/Asana/Resources/Gen'
+    outputPath: 'src/Asana/Resources/Gen',
+    preserveRepoFiles: false
   },
   java: {
     repo: 'Asana/java-asana',
-    branch: 'api-meta-incoming',
-    templatePath: 'templates',
-    outputPath: 'src/main/java/com/asana/resources/gen'
-    // destPath: 'src/main/java/com/asana/resources/gen'
+    outputPath: 'src/main/java/com/asana/resources/gen',
+    preserveRepoFiles: false
   },
   python: {
     repo: 'Asana/python-asana',
-    branch: 'api-meta-incoming',
-    templatePath: 'templates',
-    outputPath: 'asana/resources/gen'
+    outputPath: 'asana/resources/gen',
+    // Keep the __init__.py file there
+    preserveRepoFiles: true
   },
   ruby: {
     repo: 'Asana/ruby-asana',
-    branch: 'api-meta-incoming',
-    templatePath: 'lib/templates',
     outputPath: 'lib/asana/resources',
+    preserveRepoFiles: false,
     skip: ['event']
   },
   api_explorer: {
     repo: 'Asana/api-explorer',
-    branch: 'api-meta-incoming',
-    templatePath: 'src/resources/templates',
-    outputPath: 'src/resources/gen'
+    outputPath: 'src/resources/gen',
+    preserveRepoFiles: false
   },
   api_reference: {
     repo: 'AsanaOps/asanastatic',
-    branch: 'api-meta-incoming',
-    // templatePath: 'templates',
     outputPath: '_content/developers/api-reference',
-    largeRepo: true,
+    // Keep the other markdown pages and metadata there
     preserveRepoFiles: true
   }
 };
@@ -76,12 +69,6 @@ var languages = {
 var paths = {
   dist: function(lang) {
     return 'dist/' + lang;
-  },
-  repo: function(lang) {
-    return 'dist/git/' + lang;
-  },
-  repoOutput: function(lang) {
-    return paths.repo(lang) + '/' + paths.repoOutputRelative(lang);
   },
   repoOutputRelative: function(lang) {
     return languages[lang].outputPath;
@@ -110,15 +97,19 @@ gulp.task('deploy', ['ensure-git-clean', 'build'].concat(Object.keys(languages).
   return 'deploy-' + lang;
 })));
 
+
+// Store a single timestamp representing right now.
+var nowTimestamp = dateFormat('yyyymmdd-HHMMss');
+
+
 /**
  * Generate build and deploy rules for each language
  */
 var resourceNames = resource.names();
 Object.keys(languages).forEach(function(lang) {
   var config = languages[lang];
-  var outputPath = paths.repoOutput(lang);
-  var repoRoot = paths.repo(lang);
   var token = process.env.ASANA_GITHUB_TOKEN || null;
+  var isProd = (process.env.PROD == '1');
 
   function echoAndExec(command, options) {
     if (process.env.GULP_DEBUG) {
@@ -150,48 +141,14 @@ Object.keys(languages).forEach(function(lang) {
   });
 
   /**
-   * Checkout target repo, for build and deploy
-   */
-  gulp.task('checkout-' + lang, ['clean-' + lang], function() {
-    if (config.largeRepo) {
-      // Do not checkout large repos.
-      return;
-    }
-
-    return Bluebird.resolve().then(function() {
-
-      fs.removeSync(repoRoot);
-      var url = (token !== null)
-          ? util.format('https://github.com/%s', config.repo)
-          : util.format('git@github.com:%s', config.repo);
-      return echoAndExec(
-          util.format('git clone %s %s', url, repoRoot));
-
-    }).then(function() {
-
-      var branch = config.branch;
-      return echoAndExec(
-          util.format('git checkout --track -b %s origin/%s', branch, branch),
-          {cwd: repoRoot});
-
-    }).then(function() {
-
-      return echoAndExec('git merge origin/master', {cwd: repoRoot});
-
-    });
-  });
-
-  /**
    * Build rules, per resource.
    */
   var resourcesToSkip = config.skip || [];
   var resourcesToBuild = _.difference(resourceNames, resourcesToSkip);
   resourcesToBuild.forEach(function(resourceName) {
-    gulp.task(resTaskName(resourceName), ['checkout-' + lang], function() {
-      // Support templates existing either locally or in target repo.
-      var templatePath = config.templatePath ?
-          (paths.repo(lang) + '/' + config.templatePath):
-          ('src/templates/' + lang);
+    gulp.task(resTaskName(resourceName), function() {
+      // Support only local templates
+      var templatePath = 'src/templates/' + lang;
       var resourceTemplateInfo = require('./' + templatePath).resource;
 
       // Find the template info for resources
@@ -218,88 +175,53 @@ Object.keys(languages).forEach(function(lang) {
    * Deploy
    */
 
-  function deployToClonedRepo() {
-
-    // We depend on the build step which checks out the repo, so we start by
-    // setting our credentials so we can push to it.
-    return Bluebird.resolve().then(function() {
-
-      if (token !== null) {
-        // Write credentials and repo to a file so they don't show up in
-        // command line
-        return echoAndExec(
-            'git config credential.helper "store --file=.git/credentials"',
-            {cwd: repoRoot})
-            .then(function() {
-              fs.writeFileSync(
-                  util.format('%s/.git/credentials', repoRoot),
-                  util.format('https://%s:@github.com', token));
-            });
-      }
-
-    }).then(function() {
-
-      fs.mkdirpSync(outputPath);
-      fs.copySync(paths.dist(lang), outputPath);
-      return echoAndExec(
-          util.format('git add %s', paths.repoOutputRelative(lang)),
-          {cwd: repoRoot});
-
-    }).then(function() {
-
-      return createCommitMessage().then(function(commitMessage) {
-        return echoAndExec(
-            util.format('git commit --allow-empty -a -m "%s"', commitMessage),
-            {cwd: repoRoot});
-      });
-
-    }).then(function() {
-
-      return echoAndExec(
-          util.format('git push origin %s', config.branch),
-          {cwd: repoRoot});
-
-    });
-  }
-
   /**
    * @returns {Promise<String>} The commit message to provide for a deployment.
    */
-  function createCommitMessage() {
+  function createCommitMessage(user) {
     var version = readPackage().version;
-    var github = githubClient(token);
-    var getUser = Bluebird.promisify(github.user.get, github.user);
     var revParse = Bluebird.promisify(git.revParse, git);
 
-    return getUser({}).then(function(user) {
-      var githubUserName = user.login;
-      return revParse({args: '--abbrev-ref HEAD'}).then(function(branchName) {
-        return revParse({args: '--short HEAD'}).then(function(commitHash) {
-          var commitDesc = branchName.trim() ?
-              util.format("%s/%s", commitHash, branchName.trim()) :
-              commitHash;
-          return util.format(
-              "Deploy from asana-api-meta v%s (%s) by %s",
-              version, commitDesc, githubUserName);
-        });
+    var githubUserName = user.login;
+    return revParse({args: '--abbrev-ref HEAD'}).then(function(branchName) {
+      return revParse({args: '--short HEAD'}).then(function(commitHash) {
+        var commitDesc = branchName.trim() ?
+            util.format("%s/%s", commitHash, branchName.trim()) :
+            commitHash;
+        return util.format(
+            "Deploy from asana-api-meta v%s (%s) by %s",
+            version, commitDesc, githubUserName);
       });
     });
   }
 
-  function deployToLargeRepo() {
-    return createCommitMessage().then(function(commitMessage) {
-      var repoParts = config.repo.split('/');
-      return syncToGitHub({
-        oauthToken: token,
-        user: repoParts[0],
-        repo: repoParts[1],
-        localPath: paths.dist(lang),
-        repoPath: paths.repoOutputRelative(lang),
-        branch: 'api-meta-incoming',
-        message: commitMessage,
-        preserveRepoFiles: config.preserveRepoFiles,
-        pullToBranch: 'master',
-        debug: !!process.env.GULP_DEBUG
+  function getGitHubUser() {
+    var github = githubClient(token);
+    var getUser = Bluebird.promisify(github.user.get, github.user);
+    return getUser({});
+  }
+
+  function deployWithGithubApi() {
+    return getGitHubUser().then(function(user) {
+      var branchName = isProd ?
+          'api-meta-incoming' :
+          (user.login + '-' + nowTimestamp);
+      return createCommitMessage(user).then(function(commitMessage) {
+        var repoParts = config.repo.split('/');
+        return syncToGitHub({
+          oauthToken: token,
+          user: repoParts[0],
+          repo: repoParts[1],
+          localPath: paths.dist(lang),
+          repoPath: paths.repoOutputRelative(lang),
+          branch: branchName,
+          baseBranch: 'master',
+          createBranch: true,
+          message: commitMessage,
+          preserveRepoFiles: !!config.preserveRepoFiles,
+          createPullRequest: isProd,
+          debug: !!process.env.GULP_DEBUG
+        });
       });
     });
   }
@@ -320,7 +242,7 @@ Object.keys(languages).forEach(function(lang) {
   gulp.task(
       'deploy-' + lang,
       ['ensure-git-clean', 'build-' + lang],
-      config.largeRepo ? deployToLargeRepo : deployToClonedRepo);
+      deployWithGithubApi);
 });
 
 
