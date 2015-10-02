@@ -79,10 +79,10 @@ actions:
         <<: *Param.User
         required: true
     comment: |
-       The user making this call must be a member of the team in order to invite others.
-       The user to invite must exist in the same organization as the team in order to be invited.
-       The user to invite can be referenced by their globally unique user ID or their email address.
-       Returns the full user record for the invited user.
+       The user making this call must be a member of the team in order to add others.
+       The user to add must exist in the same organization as the team in order to be added.
+       The user to add can be referenced by their globally unique user ID or their email address.
+       Returns the full user record for the added user.
 
   - name: removeUser
     class: users
