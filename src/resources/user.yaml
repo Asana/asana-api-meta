@@ -76,7 +76,7 @@ actions:
     path: "/users/%s"
     params:
       - name: user
-        <<: *Param.UserId
+        <<: *Param.User
         required: true
     comment: |
       Returns the full user record for the single user with the provided ID.

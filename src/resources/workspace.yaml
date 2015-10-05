@@ -136,3 +136,35 @@ actions:
       not rely on this API to provide extremely accurate search results. The
       result set is limited to a single page of results with a maximum size,
       so you won't be able to fetch large numbers of results.
+
+  - name: addUser
+    class: add-user
+    method: POST
+    path: "/workspaces/%s/addUser"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace or organization to invite the user to.
+      - name: user
+        <<: *Param.User
+        required: true
+    comment: |
+      The user can be referenced by their globally unique user ID or their email address.
+      Returns the full user record for the invited user.
+
+  - name: removeUser
+    class: remove-user
+    method: POST
+    path: "/workspaces/%s/removeUser"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace or organization to invite the user to.
+      - name: user
+        <<: *Param.User
+        required: true
+    comment: |
+      The user making this call must be an admin in the workspace.
+      Returns an empty data record.
