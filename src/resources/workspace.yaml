@@ -43,6 +43,8 @@ action_classes:
     url: update
   - name: Typeahead search
     url: typeahead
+  - name: User Managment
+    url: user-mgmt
 
 actions:
 
@@ -138,7 +140,7 @@ actions:
       so you won't be able to fetch large numbers of results.
 
   - name: addUser
-    class: add-user
+    class: user-mgmt
     method: POST
     path: "/workspaces/%s/addUser"
     params:
@@ -154,7 +156,7 @@ actions:
       Returns the full user record for the invited user.
 
   - name: removeUser
-    class: remove-user
+    class: user-mgmt
     method: POST
     path: "/workspaces/%s/removeUser"
     params:
