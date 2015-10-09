@@ -79,7 +79,8 @@ properties:
     <<: *PropType.UserArray
     access: Read-only
     comment: |
-      Array of users following this project. Followers are members who receive all notifcations for a project (default).
+      Array of users following this project. Followers are members who receive all notifcations for a project which
+      is the default setting when in the Asana application when a user is added as a follower to a project.
 
   - name: color
     <<: *PropType.PotColor
@@ -322,3 +323,67 @@ actions:
     comment: |
       Returns the compact task records for all tasks within the given project,
       ordered by their priority within the project. Tasks can exist in more than one project at a time.
+
+  - name: addFollowers
+    class: followers
+    method: POST
+    path: "/projects/%s/addFollowers"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to add followers to.
+      - name: followers
+        <<: *Param.IdArray
+        required: true
+        comment: An array of followers to add to the project.
+    comment: |
+        Returns the complete project record for the project.
+
+  - name: removeFollowers
+    class: followers
+    method: POST
+    path: "/projects/%s/removeFollowers"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to remove followers from.
+      - name: followers
+        <<: *Param.IdArray
+        required: true
+        comment: An array of followers to remove from the project.
+    comment: |
+        Returns the complete project record for the project.
+
+  - name: addMembers
+    class: members
+    method: POST
+    path: "/projects/%s/addMembers"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to add members to.
+      - name: members
+        <<: *Param.IdArray
+        required: true
+        comment: An array of members to add to the project.
+    comment: |
+        Returns the complete project record for the project.
+
+  - name: removeMembers
+    class: members
+    method: POST
+    path: "/projects/%s/removeMembers"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to remove members from.
+      - name: members
+        <<: *Param.IdArray
+        required: true
+        comment: An array of members to remove from the project.
+    comment: |
+        Returns the complete project record for the project.
