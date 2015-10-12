@@ -338,7 +338,9 @@ actions:
         required: true
         comment: An array of followers to add to the project.
     comment: |
-        Returns the complete project record for the project.
+        Adds the specified list of users as followers to the project. Followers are a subset of members, therefore if
+        the users are not already members of the project they will become members first. Returns the updated project
+        record.
 
   - name: removeFollowers
     class: followers
@@ -354,7 +356,8 @@ actions:
         required: true
         comment: An array of followers to remove from the project.
     comment: |
-        Returns the complete project record for the project.
+        Removes the specified list of users from following the project, this will not affect project membership status.
+        Returns the updated project record.
 
   - name: addMembers
     class: members
@@ -370,7 +373,7 @@ actions:
         required: true
         comment: An array of members to add to the project.
     comment: |
-        Returns the complete project record for the project.
+        Adds the specified list of users as members of the project. Returns the updated project record.
 
   - name: removeMembers
     class: members
@@ -386,4 +389,4 @@ actions:
         required: true
         comment: An array of members to remove from the project.
     comment: |
-        Returns the complete project record for the project.
+        Removes the specified list of members to the project. Returns the updated project record.
