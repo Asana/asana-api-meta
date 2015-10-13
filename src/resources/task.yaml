@@ -162,8 +162,6 @@ properties:
       Array of tags associated with this task. This property may be specified on
       creation using just an array of tag IDs. In order to change tags on an
       existing task use `addTag` and `removeTag`.
-    note: |
-      Read more about [Tags on tasks](#tags) below.
 
 action_classes:
   - name: Create a task
