@@ -12,6 +12,12 @@ comment: |
   have teams and so you should not specify the team of project in a
   regular workspace.
 
+notes: |
+  Followers of a project are a subset of the members of that project. Followers of a project will receive all updates
+  including tasks created, added and removed from that project. Members of the project have access to and will receive
+  status updates of the project. Adding followers to a project will add them as members if they are not already,
+  removing followers from a project will not affect membership.
+
 properties:
 
   - name: name
