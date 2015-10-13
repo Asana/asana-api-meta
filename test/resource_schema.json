@@ -79,6 +79,7 @@
             "type": "array",
             "items": { "type": "string" }
           },
+          "footer": { "type": "string"},
           "no_code": { "type": "boolean" },
           "collection": { "type": "boolean" },
           "collection_cannot_paginate": { "type": "boolean" },

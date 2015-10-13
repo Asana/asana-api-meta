@@ -84,6 +84,8 @@ header_search: true;
     <%= example.responseStatus%>
     <%= indent(example.response, '    ', true)%>
 
-<%});%>---
+<%});%><%if (action.footer) {%><%= removeLineBreaks(action.footer)%>
+
+<%}%>---
 <%});%>
 <%});%>

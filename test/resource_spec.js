@@ -11,7 +11,7 @@ describe('Resource', function() {
     it('should return known resources in order', function() {
       assert.deepEqual(resource.names(), [
         'attachment', 'event', 'project', 'story', 'tag', 'task',
-        'team', 'user', 'workspace'
+        'team', 'user', 'webhook', 'workspace'
       ]);
     });
   });

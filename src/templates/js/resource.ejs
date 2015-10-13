@@ -110,7 +110,7 @@ util.inherits(<%= thisType %>, Resource);
 ) {
   var path = util.format('<%= action.path %>'<% _.forEach(pathParams, function(param) { %>, <%= param.name %><% }); %>);
   <% if (explicitNonPathParams.length > 0) { %>
-  <%= requestOptionsParamName %> = _.extend({}, <%= requestOptionsParamName.name %> || {}, {<% _.forEach(explicitNonPathParams, function(npp, npp_index) { %>
+  <%= requestOptionsParamName %> = _.extend({}, <%= requestOptionsParamName %> || {}, {<% _.forEach(explicitNonPathParams, function(npp, npp_index) { %>
     <%= npp.name %>: <%= npp.name %><%= npp_index !== explicitNonPathParams.length - 1 ? "," : "" %><% }); %>
   });<% } %>
   return this.<%= dispatchName %>(path<%= requestOptionsParamName ? (', ' + requestOptionsParamName) : ''%>, dispatchOptions);

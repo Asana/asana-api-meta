@@ -503,6 +503,41 @@
       endpoint: "/project/3214312/events?sync=de4774f6915eae04714ca93bb2f5ee81:3"
       description: "Get recent events on a project"
       method: "get"
+  Webhooks:
+    -
+      response:
+        status: 200
+        data:
+          -
+            id: 43214
+            resource:
+              id: 1245
+              name: "Bugs"
+            target: "https://example.com/receive-webhook/7654"
+            active: true
+          - "~..."
+      endpoint: "/webhooks?workspace=872547"
+      method: "get"
+    -
+      response:
+        status: 200
+        data:
+          id: 43214
+          resource:
+            id: 1245
+            name: "Bugs"
+          target: "https://example.com/receive-webhook/7654"
+          active: true
+      endpoint: "/webhooks/43214"
+      method: "get"
+    -
+      response:
+        status: 200
+        data: {}
+      request_data: {}
+      endpoint: "/webhooks/43214"
+      description: "Example"
+      method: "delete"
   Projects: 
     - 
       response: 
