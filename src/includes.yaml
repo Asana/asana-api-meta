@@ -91,6 +91,11 @@ templates:
       comment: |
         Globally unique identifier for the story.
 
+  - template: &Param.Target
+    - type: String
+      example_values:
+        - "'https://example.com/receive-webhook/7654'"
+
   # Types of properties
 
   - template: &PropType.Id
@@ -287,6 +292,17 @@ templates:
         - name: undeleted
           comment: A resource was undeleted.
       access: Read-only
+
+  ## Webhooks
+  - template: &PropType.Target
+    - type: String
+      example_values:
+        - "'https://example.com/receive-webhook/7654'"
+
+  - template: &PropType.FailureContent
+    - type: String
+      example_values:
+        - "'500 Server Error\\n\\nCould not complete the request'"
 
   # Full actions that are duplicated across resources, i.e. more than one
   # way of doing something.
