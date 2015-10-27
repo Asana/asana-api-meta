@@ -2,8 +2,14 @@
 
 namespace Asana\Resources\Gen;
 
+/**
+<%= comment(resource.comment) %>
+*/
 class <%= plural(cap(resource.name)) + "Base" %>
 {
+    /**
+     * @param Asana/Client client  The client instance
+     */
     public function __construct($client)
     {
         $this->client = $client;
@@ -39,6 +45,12 @@ class <%= plural(cap(resource.name)) + "Base" %>
     var phpPathParamNames = pathParamNames.map(function(p) { return "$" + p; });
   %>
 
+    /**
+<%= comment(action.comment, 4) %>
+     *<% _.forEach(params.pathParams, function(param) { %>
+<%= comment('@param  ' + param.name + ' ' + param.comment, 4) %><% }); %>
+     * @return response
+     */
     public function <%= action.name %>(<%= phpPathParamNames.concat([""]).join(", ") %>$params = array(), $options = array())
     {<% if (pathParamNames.length > 0) { %>
         $path = sprintf(<%= JSON.stringify(action.path) %>, <%= phpPathParamNames.join(", ") %>);
