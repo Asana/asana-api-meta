@@ -156,6 +156,13 @@ properties:
       the `addProject` and `removeProject` endpoints. Note that over time, more
       types of memberships may be added to this property.
 
+  - name: tags
+    <<: *PropType.ObjectArray
+    comment: |
+      Array of tags associated with this task. This property may be specified on
+      creation using just an array of tag IDs. In order to change tags on an
+      existing task use `addTag` and `removeTag`.
+
 action_classes:
   - name: Create a task
     url: create

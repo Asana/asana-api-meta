@@ -12,6 +12,13 @@ comment: |
   have teams and so you should not specify the team of project in a
   regular workspace.
 
+notes:
+  - |
+    Followers of a project are a subset of the members of that project. Followers of a project will receive all updates
+    including tasks created, added and removed from that project. Members of the project have access to and will receive
+    status updates of the project. Adding followers to a project will add them as members if they are not already,
+    removing followers from a project will not affect membership.
+
 properties:
 
   - name: name
@@ -79,7 +86,8 @@ properties:
     <<: *PropType.UserArray
     access: Read-only
     comment: |
-      Array of users following this project. Followers are members who receive all notifcations for a project (default).
+      Array of users following this project. Followers are a subset of members who receive all notifcations for a
+      project, the default notification setting when adding members to a project in-product.
 
   - name: color
     <<: *PropType.PotColor
@@ -322,3 +330,70 @@ actions:
     comment: |
       Returns the compact task records for all tasks within the given project,
       ordered by their priority within the project. Tasks can exist in more than one project at a time.
+
+  - name: addFollowers
+    class: followers
+    method: POST
+    path: "/projects/%s/addFollowers"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to add followers to.
+      - name: followers
+        <<: *Param.IdArray
+        required: true
+        comment: An array of followers to add to the project.
+    comment: |
+        Adds the specified list of users as followers to the project. Followers are a subset of members, therefore if
+        the users are not already members of the project they will also become members as a result of this operation.
+        Returns the updated project record.
+
+  - name: removeFollowers
+    class: followers
+    method: POST
+    path: "/projects/%s/removeFollowers"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to remove followers from.
+      - name: followers
+        <<: *Param.IdArray
+        required: true
+        comment: An array of followers to remove from the project.
+    comment: |
+        Removes the specified list of users from following the project, this will not affect project membership status.
+        Returns the updated project record.
+
+  - name: addMembers
+    class: members
+    method: POST
+    path: "/projects/%s/addMembers"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to add members to.
+      - name: members
+        <<: *Param.IdArray
+        required: true
+        comment: An array of members to add to the project.
+    comment: |
+        Adds the specified list of users as members of the project. Returns the updated project record.
+
+  - name: removeMembers
+    class: members
+    method: POST
+    path: "/projects/%s/removeMembers"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to remove members from.
+      - name: members
+        <<: *Param.IdArray
+        required: true
+        comment: An array of members to remove from the project.
+    comment: |
+        Removes the specified list of members from the project. Returns the updated project record.

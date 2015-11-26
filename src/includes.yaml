@@ -207,6 +207,12 @@ templates:
         - "[ { id: 1331, name: 'Stuff to Buy' }, ... ]"
       access: Create-only
 
+  - template: &PropType.ObjectArray
+    - type: Array
+      example_values:
+        - "[ { id: 59746, name: 'Grade A' }, ... ]"
+      access: Create-only
+
   - template: &PropType.Memberships
     - type: Array
       example_values:
