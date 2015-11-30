@@ -43,7 +43,7 @@ action_classes:
     url: update
   - name: Typeahead search
     url: typeahead
-  - name: User Managment
+  - name: User Management
     url: user-mgmt
 
 actions:
