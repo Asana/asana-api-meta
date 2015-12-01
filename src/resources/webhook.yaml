@@ -244,6 +244,7 @@ actions:
     class: get
     method: GET
     path: "/webhooks"
+    collection: true
     params:
       - name: workspace
         <<: *Param.WorkspaceId
