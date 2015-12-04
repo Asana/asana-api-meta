@@ -127,7 +127,7 @@ actions:
             "file=@file.pdf;type=application/pdf".
     comment: |
       This method uploads an attachment to a task and returns the compact
-      records for all attachments on the task. It is not possible to attach
+      record for the created attachment object. It is not possible to attach
       files from third party services such as Dropbox, Box & Google Drive via
       the API. You must download the file content first and then upload it as any
       other attachment.
