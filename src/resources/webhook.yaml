@@ -148,7 +148,7 @@ action_classes:
                 "parent": null,\
                 "resource": 1337,\
                 "type": "task",\
-                "user": 1123,\
+                "user": 1123\
               },\
               {\
                 "action": "changed",\
