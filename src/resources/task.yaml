@@ -248,7 +248,10 @@ actions:
 
       Every task is required to be created in a specific workspace, and this
       workspace cannot be changed once set. The workspace need not be set
-      explicitly if you specify a `project` or a `parent` task instead.
+      explicitly if you specify `projects` or a `parent` task instead.
+
+      `projects` can be a comma separated list of projects, or just a single
+      project the task should belong to.
 
   - name: createInWorkspace
     class: create
@@ -353,7 +356,8 @@ actions:
     collection: true
     comment: |
       Returns the compact task records for some filtered set of tasks. Use one
-      or more of the parameters provided to filter the tasks returned.
+      or more of the parameters provided to filter the tasks returned. You must
+      specify a `project` or `tag` if you do not specify `assignee` and `workspace`.
     params:
       - name: assignee
         <<: *Param.User
@@ -449,7 +453,7 @@ actions:
         <<: *Param.ProjectId
         required: true
         comment: The project to add the task to.
-      - name: insertAfter
+      - name: insert_after
         <<: *Param.TaskId
         example_values:
           - "124816"
@@ -457,7 +461,7 @@ actions:
         comment: |
           A task in the project to insert the task after, or `null` to
           insert at the beginning of the list.
-      - name: insertBefore
+      - name: insert_before
         <<: *Param.TaskId
         example_values:
           - "124816"
