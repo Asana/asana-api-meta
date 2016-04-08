@@ -365,6 +365,9 @@ actions:
         notes:
           - |
             If you specify `assignee`, you must also specify the `workspace` to filter on.
+      - name: project
+        <<: *Param.ProjectId
+        comment: The project to filter tasks on.
       - name: workspace
         <<: *Param.WorkspaceId
         comment: The workspace or organization to filter tasks on.
