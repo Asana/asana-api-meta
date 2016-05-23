@@ -9,7 +9,7 @@ templates:
         Success.
 
   # Parameters
-  
+
   - template: &Param.DateTime
       type: String
       example_values:
@@ -83,6 +83,13 @@ templates:
         - "14916"
       comment: |
         Globally unique identifier for the team.
+
+  - template: &Param.UserId
+      type: Id
+      example_values:
+        - "14641"
+      comment: |
+        Globally unique identifier for the user.
 
   - template: &Param.StoryId
       type: Id
@@ -312,7 +319,7 @@ templates:
 
   # Full actions that are duplicated across resources, i.e. more than one
   # way of doing something.
-  
+
   - template: &Action.CommentOnTask
       method: POST
       path: "/tasks/%s/stories"
