@@ -83,14 +83,6 @@ templates:
         - "14916"
       comment: |
         Globally unique identifier for the team.
-
-  - template: &Param.UserId
-      type: Id
-      example_values:
-        - "14641"
-      comment: |
-        Globally unique identifier for the user.
-
   - template: &Param.StoryId
       type: Id
       example_values:

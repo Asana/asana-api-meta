@@ -59,8 +59,11 @@ actions:
     collection: true
     params:
       - name: user
-        <<: *Param.UserId
+        <<: *Param.User
         required: true
+      - name: organization
+        <<: *Param.WorkspaceId
+        comment: The workspace or organization to filter teams on.
     comment: |
       Returns the compact records for all teams to which user is assigned.
 
