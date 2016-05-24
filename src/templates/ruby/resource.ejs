@@ -28,7 +28,7 @@ function Action(action) {
 
     // Params and idParams
     var params = action.params || []
-    this.idParams = _.filter(params, function(p) { return p.type == "Id" })
+    this.idParams = _.filter(params, function(p) { return p.required || p.type == "Id" })
 
     // If it looks like an instance action but it's not, make it one
     if (!this.isInstanceAction) {
