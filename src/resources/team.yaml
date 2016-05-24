@@ -52,6 +52,21 @@ actions:
       Returns the compact records for all teams in the organization visible to
       the authorized user.
 
+  - name: findByUser
+    class: get
+    method: GET
+    path: "/users/%s/teams"
+    collection: true
+    params:
+      - name: user
+        <<: *Param.User
+        required: true
+      - name: organization
+        <<: *Param.WorkspaceId
+        comment: The workspace or organization to filter teams on.
+    comment: |
+      Returns the compact records for all teams to which user is assigned.
+
   # Users
 
   - name: users
