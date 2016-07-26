@@ -31,6 +31,7 @@ header_search: true;
 
 ### <%= thisType%>
 
+<%=partial(resource.name, "pre_description", {resource: resource})%>
 <%= removeLineBreaks(resource.comment)%>
 <%if (resource.notes) {%><% _.forEach(resource.notes, function(note) {%>
 <%= removeLineBreaks(note)%>

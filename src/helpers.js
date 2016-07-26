@@ -161,6 +161,58 @@ function curlExamplesForAction(action, resource_examples) {
   return curlExamples;
 }
 
+// Recursive flattening of N-dimensional array, a la Ruby's array.flatten
+// Useful for passing nested arguments objects to a function lower in the
+// call stack that needs "everything not yet processed" as an array.
+function flatten(arr) {
+  return arr.reduce(function (flat, to_flatten) {
+    return flat.concat(Array.isArray(to_flatten) ? flatten(to_flatten) : to_flatten);
+  }, []);
+}
+
+// Construct a partial name based on a series of path parameters
+// Path parameters are of the form:
+// [path, [...]]
+// The last argument (as in Ruby partials) will have a suffix appended.
+// Unlike Ruby, the filename need not start with an underscore.
+function partialFilename() {
+  var partial_path_arry = flatten(Array.from(arguments));
+  var partial_path = partial_path_arry.join('/') + ".ejs";
+  // path.join takes variable length arguments, so we pre-calculate a standard prefix and suffix
+  var filename = path.join(__dirname, '/templates/api_reference/partials', partial_path);
+  console.log(filename);
+  return filename;
+}
+
+// Test if we can stat a partial, given the path parameters (as in partialFilename)
+function partialExists() {
+  try {
+    var partial_path_arry = flatten(Array.from(arguments));
+    fs.lstatSync(partialFilename(partial_path_arry));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// Evaluate a partial, given the path parameters (as in partialFilename)
+function partial() {
+  var partial_path_arry = flatten(Array.from(arguments));
+  var partial_context = {};
+  // If the last element is not a string, we interpret it as a context for the partial.
+  // This context is used to evaluate variables in that context.
+  if (typeof arguments[arguments.length - 1] !== 'string')
+  {
+    partial_context = partial_path_arry.pop();
+  }
+  if (partialExists(partial_path_arry)) {
+    var template_content = fs.readFileSync(partialFilename(partial_path_arry), 'utf8');
+    return _.template(template_content, partial_context);
+  } else {
+    return '';
+  }
+}
+
 var common = {
   prefix: prefixLines,
   plural: inflect.pluralize,
@@ -205,6 +257,9 @@ var langs = {
     typeName: typeNameTranslator("md"),
     indent: prefixLines,
     removeLineBreaks: removeLineBreaks,
+    partialExists: partialExists,
+    partial: partial,
+    partialFilename: partialFilename,
     genericPath: genericPath,
     curlExamplesForAction: curlExamplesForAction
   })
