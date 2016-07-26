@@ -161,6 +161,63 @@ function curlExamplesForAction(action, resource_examples) {
   return curlExamples;
 }
 
+/** 
+ * Construct a partial name based on a series of path parameters
+ * The last argument (as in Ruby partials) will have a suffix appended.
+ * (Unlike Ruby, the partial name need not start with an underscore)
+ * Example:, the path [resource.name, "pre_description"] resolves to
+ * "{repo_loc}/asana-api-meta/src/templates/api_reference/partials/{task, for example}/pre_description.ejs"
+ */
+function partialFilename() {
+  var partial_path_arry = _.flatten(Array.from(arguments));
+  var partial_path = partial_path_arry.join('/') + ".ejs";
+  // path.join takes variable length arguments, so we pre-calculate a standard prefix and suffix
+  var filename = path.join(__dirname, '/templates/api_reference/partials', partial_path);
+  return filename;
+}
+
+/**
+ * Test if we can stat a partial, given the path parameters (as in partialFilename)
+ */
+function partialExists() {
+  try {
+    var partial_path_arry = _.flatten(Array.from(arguments));
+    fs.lstatSync(partialFilename(partial_path_arry));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+/** Evaluate a partial, given the path parameters (as in partialFilename)
+ * @param [partial_path_arry] {vararg(String, Array)}: [path, [...]] variable length path segments
+ * @param [partial_context] {Object} : context argument for partial's evaluation environment
+ *
+ * Let's break that function signature down:
+ * This function takes a variable number of strings or arrays of strings, followed by an optional
+ * context object. The context object, if present, sets the context for the partial, i.e. sets
+ * the variables in scope for the partial.
+ * The path is processed as in partialFilename(), that is, is resolved to the location that contains
+ * partials based on the arguments passed in partial_path_arry. More info on how these are processed
+ * can be found in partialFilename().
+ */
+function partial() {
+  var partial_path_arry = _.flatten(Array.from(arguments));
+  var partial_context = {};
+  // If the last element is not a string, we interpret it as a context for the partial.
+  // This context is used to evaluate variables in that context.
+  if (typeof arguments[arguments.length - 1] !== 'string')
+  {
+    partial_context = partial_path_arry.pop();
+  }
+  if (partialExists(partial_path_arry)) {
+    var template_content = fs.readFileSync(partialFilename(partial_path_arry), 'utf8');
+    return _.template(template_content, partial_context);
+  } else {
+    return '';
+  }
+}
+
 var common = {
   prefix: prefixLines,
   plural: inflect.pluralize,
@@ -205,6 +262,9 @@ var langs = {
     typeName: typeNameTranslator("md"),
     indent: prefixLines,
     removeLineBreaks: removeLineBreaks,
+    partialExists: partialExists,
+    partial: partial,
+    partialFilename: partialFilename,
     genericPath: genericPath,
     curlExamplesForAction: curlExamplesForAction
   })
