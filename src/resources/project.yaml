@@ -139,6 +139,8 @@ action_classes:
 
       See [Task, Project, and Section Associations](/developers/api-reference/tasks#projects)
       for more techniques on managing sections.
+  - name: Custom field settings
+    url: custom-field-settings
 
 actions:
 
@@ -397,3 +399,41 @@ actions:
         comment: An array of members to remove from the project.
     comment: |
         Removes the specified list of members from the project. Returns the updated project record.
+
+  - name: addCustomFieldSetting
+    class: custom-field-settings
+    method: POST
+    path: "/projects/%s/addCustomFieldSetting"
+    comment: |
+      Create a new custom field setting on the project.
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to associate the custom field with
+      - name: custom_field
+        <<: *Param.CustomFieldId
+        comment: The id of the custom field to associate with this project.
+      - name: is_important
+        <<: *Param.Bool
+        comment: |
+          Whether this field should be considered important to this project.
+
+  - name: removeCustomFieldSetting
+    class: custom-field-settings
+    method: POST
+    path: "/projects/%s/removeCustomFieldSetting"
+    comment: |
+      Remove a custom field setting on the project.
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to associate the custom field with
+      - name: custom_field
+        <<: *Param.CustomFieldId
+        comment: The id of the custom field to associate with this project.
+      - name: is_important
+        <<: *Param.Bool
+        comment: |
+          Whether this field should be considered important to this project.

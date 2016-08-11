@@ -1,0 +1,142 @@
+---
+# See `user.yaml` for more docs on these yaml files.
+!include ../includes.yaml
+name: custom_fields
+comment: |
+  
+  Custom Fields store the metadata that is used in order to add user-specified
+  information to tasks in Asana. Be sure to reference the [Custom
+  Fields](/developers/documentation/getting-started/custom-fields) developer
+  documentation for more information about how custom fields relate to various
+  resources in Asana.
+
+
+properties:
+# We borrow a bunch of the project templates here because they're literally
+# exactly the same
+
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the custom field.
+
+  - name: created_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this custom field was created.
+
+  - name: name
+    <<: *PropType.CustomFieldName
+    access: Read-only
+    comment: |
+      The name of the custom field.
+
+  - name: type
+    <<: *PropType.CustomFieldType
+    access: Read-only
+    comment: |
+      The type of the custom field. Must be one of the given values.
+
+  - name: enum_options
+    <<: *PropType.CustomFieldEnumOptions
+    access: Read-only
+
+  - name: precision
+    <<: *PropType.CustomFieldPrecision
+    access: Read-only
+      
+
+action_classes:
+  - name: Type-specific custom field information
+    url: type-specific
+    comment: |
+      Since custom fields can be defined for one of a number of types, and these types have different data and behaviors, there are fields that are relevant to a particular type. For instance, as noted above, `enum_options` is only relevant for the `enum` type and defines the set of choices that the enum could represent. The examples below show some of these type-specific custom field definitions.
+  - name: Get a custom field (text)
+    url: get-single-text
+  - name: Get a custom field (number)
+    url: get-single-number
+  - name: Get a custom field (enum)
+    url: get-single-enum
+  - name: Query for custom fields
+    url: query-metadata
+
+actions:
+
+  # Create, Retrieve, Update, Delete
+
+  - name: findById
+    class: get-single-enum
+    method: GET
+    path: "/custom_fields/%s"
+    variant: enum
+    params:
+      - name: custom-field
+        <<: *Param.CustomFieldId
+        required: true
+      - name: name
+        <<: *Param.CustomFieldName
+      - name: type
+        <<: *Param.CustomFieldType
+        comment: In this case, `enum`
+      - name: enum_options
+        <<: *Param.CustomFieldEnumOptions
+        comment: |
+          The possible values for this enum to select from.
+
+    comment: |
+      Returns the complete definition of a custom field. In this case, that field is an enum. Note the array of objects for the `enum_objects` parameter. The meaning of the fields on these objects are:
+      
+      **id:** the unique id of this option. 
+      **name**: the display name for this option. 
+      **enabled**: whether or not this option is enabled to be selected. (For more information, refer to the [Custom Fields](/developers/documentation/getting-started/custom-fields) guide.)
+      **color:** the color (if any) of visual elements associated with this option.
+
+  - name: findById
+    class: get-single-text
+    method: GET
+    path: "/custom_fields/%s"
+    variant: text
+    params:
+      - name: custom-field
+        <<: *Param.CustomFieldId
+        required: true
+      - name: name
+        <<: *Param.CustomFieldName
+      - name: type
+        <<: *Param.CustomFieldType
+        comment: In this case, `text`
+    comment: |
+      Returns the complete definition of a custom field. In this case, it is for a text field.
+
+  - name: findById
+    class: get-single-number
+    method: GET
+    path: "/custom_fields/%s"
+    variant: number
+    params:
+      - name: custom-field
+        <<: *Param.CustomFieldId
+        required: true
+      - name: name
+        <<: *Param.CustomFieldName
+      - name: type
+        <<: *Param.CustomFieldType
+        comment: In this case, `number`
+      - name: precision
+        <<: *Param.Number
+        comment: The precision which is set on this custom field.
+    comment: |
+      Returns the complete definition of a custom field. In this case, that field is a number.
+
+  - name: findByWorkspace
+    class: query-metadata
+    method: GET
+    path: "/workspaces/%s/custom_fields"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace or organization to find custom field definitions in.
+    comment: |
+      Returns a list of the compact representation of all of the custom fields in a workspace.

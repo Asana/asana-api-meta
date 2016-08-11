@@ -134,7 +134,7 @@ templates:
     - type: String
     - comment: "The type of the custom field"
       example_values:
-        - "'string'"
+        - "'text'"
         - "'enum'"
         - "'number'"
 
@@ -275,7 +275,7 @@ templates:
   - template: &PropType.CustomFieldType
     - type: String
       example_values:
-        - "'string'"
+        - "'text'"
         - "'enum'"
         - "'number'"
 

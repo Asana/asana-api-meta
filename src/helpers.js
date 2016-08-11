@@ -115,11 +115,11 @@ function examplesForResource(resource) {
 // falls under a blue header that can be linked to.
 function curlExamplesForKeys(keys, resource_examples) {
   var key_examples = _.filter(resource_examples, function(example) {
-    if (! example.key){return false;}
+    if (! example.key) return false;
     var index = _.findIndex(keys, function(key){
-      key === example.keys
+      return key === example.key
     })
-    if(index != 1) {
+    if(index != -1) {
       return true;
     }
     return false
@@ -130,6 +130,9 @@ function curlExamplesForKeys(keys, resource_examples) {
 // Note: this is "action" as in "endpoint description"; `GET /tasks` for example.
 function curlExamplesForAction(action, resource_examples) {
   var action_examples = _.filter(resource_examples, function(example) {
+    //TODO: this is a hack, simply to exclude selection-by-key vs selection-by-action/endpoint
+    if (example.key) return false;
+
     var regex = action.path.replace(/%s/g, ".+");
     if (action.variant) {
       return example.method === action.method.toLowerCase() && example.endpoint.match(regex) && example.variant === action.variant

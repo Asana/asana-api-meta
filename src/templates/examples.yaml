@@ -46,7 +46,7 @@
             id: 1234
             name: "Tim Bizarro"
           created_at: "2012-02-22T02:06:58.158Z"
-          ~: "..."
+          "...": "..."
       endpoint: "/tasks/1001"
       description: "Show a task."
       method: "get"
@@ -58,7 +58,7 @@
             id: 1234
             name: "Tim Bizarro"
           id: 1001
-          ~: "..."
+          "...": "..."
       request_data: 
         assignee: "me"
       endpoint: "/tasks/1001"
@@ -143,7 +143,7 @@
         response: 
           status: 200
           data: 
-            ~: "..."
+            "...": "..."
             id: 2272
             parent: 
               - 
@@ -223,7 +223,7 @@
                 id: 1235
                 name: "Darth Vader"
             id: 1001
-            ~: "..."
+            "...": "..."
         request_data: 
           followers: 
             - 1235
@@ -236,13 +236,51 @@
           data: 
             followers: []
             id: 1001
-            ~: "..."
+            "...": "..."
         request_data: 
           followers: 
             - 1235
         endpoint: "/tasks/1001/removeFollowers"
         description: "Remove followers from a task."
         method: "post"
+    -
+      response:
+        data:
+          id: 1001
+          name: "Hello, world!"
+          completed: false
+          '...': "..."
+          custom_fields:
+            -
+              id: 124578
+              name: "Priority"
+              type: "enum"
+              enum_value:
+                id: 789
+                name: 'Low'
+                enabled: true
+                color: 'blue'
+      key: "custom-field-value-enum"
+      description: "Custom field value for an `enum` field"
+      endpoint: "/tasks/1001"
+      method: "get"
+    -
+      response:
+        data:
+          id: 1001
+          name: "Hello, world!"
+          completed: false
+          '...': "..."
+          custom_fields:
+            -
+              id: 134679
+              name: "Owner"
+              type: "text"
+              text_value: "Greg Sanchez"
+      key: "custom-field-value-text"
+      description: "Custom field value for a `text` field"
+      endpoint: "/tasks/1001"
+      method: "get"
   Workspaces and Organizations: 
     - 
       response: 
@@ -628,6 +666,21 @@
       endpoint: "/workspaces/14916/projects"
       description: "Show all projects in a workspace or organization."
       method: "get"
+    -
+      response:
+        status: 200
+        data: {}
+      endpoint: "/projects/1331/addCustomFieldSetting"
+      description: "Add a custom field setting to a project"
+      method: "post"
+    -
+      response:
+        status: 200
+        data: {}
+      endpoint: "/projects/1331/removeCustomFieldSetting"
+      description: "Remove a custom field setting from a project"
+      method: "post"
+
   Users: 
     - 
       response: 
@@ -669,4 +722,125 @@
             name: "Greg Sanchez"
       endpoint: "/workspaces/1337/users"
       description: "Show all users in a single workspace or organization."
+      method: "get"
+  Custom Fields:
+    -
+      variant: enum
+      response:
+        status: 200
+        data:
+          -
+            id: 124578
+            name: "Priority"
+            type: "enum"
+            enum_options:
+              -
+                id: 789
+                name: 'Low'
+                enabled: true
+                color: 'blue'
+              - 
+                id: 208
+                name: 'Medium'
+                enabled: false
+                color: 'yellow'
+              -
+                id: 439
+                name: 'High'
+                enabled: true
+                color: 'red'
+      endpoint: "/custom_fields/124578"
+      description: "Get the metadata for a custom field when that field of type 'enum'"
+      method: "get"
+    - 
+      variant: text
+      response:
+        status: 200
+        data:
+          -
+            id: 134679
+            name: "Owner"
+            type: "text"
+      endpoint: "/custom_fields/124578"
+      description: "Get the metadata for a custom field of type 'text'"
+      method: "get"
+    - 
+      variant: number
+      response:
+        status: 200
+        data:
+          -
+            id: 938271
+            name: "Price"
+            type: "number"
+            precision: 2
+      endpoint: "/custom_fields/124578"
+      description: "Get the metadata for a custom field of type 'number'"
+      method: "get"
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 124578
+            name: "Priority"
+          - 
+            id: 134679
+            name: "Owner"
+          - "~..."
+      endpoint: "/workspaces/14916/custom_fields"
+      description: "List all custom field metadata in a workspace or organization."
+      method: "get"
+
+  Custom Field Settings:
+    -
+      response:
+        status: 200
+        data:
+          -
+            id: 258147
+            is_important: true
+            custom_field:
+              -
+                id: 124578
+                name: "Priority"
+                type: "enum"
+            project:
+              -
+                id: 1331
+                name: "Things to buy"
+      endpoint: "/custom_field_settings/258147"
+      description: "Get the custom field settings object that specifies information about the relationship between a custom field and a project"
+      method: "get"
+    -
+      response:
+        status: 200
+        data:
+          -
+            id: 258147
+            is_important: true
+            custom_field:
+              -
+                id: 124578
+                name: "Priority"
+                type: "enum"
+            project:
+              -
+                id: 1331
+                name: "Things to buy"
+          -
+            id: 369852
+            is_important: false
+            custom_field:
+              -
+                id: 235689
+                name: "Cost"
+                type: "enum"
+            project:
+              -
+                id: 1331
+                name: "Things to buy"
+          - "~..."
+      endpoint: "/projects/1331/custom_field_settings"
+      description: "Get the custom field settings object that specifies information about the relationship between a custom field and a project"
       method: "get"

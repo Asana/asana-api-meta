@@ -53,6 +53,18 @@ properties:
     comment: |
       The time at which this task was completed, or null if the task is incomplete.
 
+  - name: custom_fields
+    <<: *PropType.CustomFieldArray
+    comment: |
+      Array of custom fields applied to the task. These custom fields represent
+      the values recorded on this task for a particular custom field. For
+      example, these fields will contain an `enum_value` property for custom
+      fields of type `enum`, a `string_value` property for custom fields of
+      type `string`, and so on. Please note that the id returned on each custom
+      field value *is identical* to the id of the custom field, which allows
+      referencing the custom field metadata through the
+      `/custom_fields/custom_field-id` endpoint.
+
   - name: due_on
     <<: *PropType.Date
     comment: |
@@ -163,6 +175,7 @@ properties:
       creation using just an array of tag IDs. In order to change tags on an
       existing task use `addTag` and `removeTag`.
 
+
 action_classes:
   - name: Create a task
     url: create
@@ -228,6 +241,15 @@ action_classes:
       You can add or remove followers using the `addFollowers` or `removeFollowers` endpoints, respectively, providing the parameters below.
 
       Requests to add/remove followers, if successful, will return the complete updated task record, described above.
+
+  - name: Custom field values
+    url: custom-fields
+    comment: |
+      Custom fields define user-specific information that can be used to configure tasks within a project to track information that is specific to one particular project. Be sure to reference the [Custom Fields](/developers/documentation/getting-started/custom-fields) guide to get an understanding for the concepts of custom fields and how they relate to resources within Asana.
+
+      When a custom field is associated with a project, tasks in that project can carry additional _custom field values_ which represent the value of the field on that particular task - for instance, the selected item from an `enum` type custom field. These custom fields will appear as an array in a `custom_fields` property of the task, along with some basic information which can be used to associate the custom field value with the custom field metadata.
+    example_keys: ["custom-field-value-enum", "custom-field-value-text"]
+
 
 actions:
 
