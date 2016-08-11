@@ -1,5 +1,5 @@
 <%
-var thisType = plural(cap(resource.name));
+var thisType = title(plural(resource.name));
 
 %>---
 ***** WARNING *****
@@ -31,7 +31,6 @@ header_search: true;
 
 ### <%= thisType%>
 
-<%=partial(resource.name, "pre_description", {resource: resource})%>
 <%= removeLineBreaks(resource.comment)%>
 <%if (resource.notes) {%><% _.forEach(resource.notes, function(note) {%>
 <%= removeLineBreaks(note)%>
@@ -55,7 +54,10 @@ header_search: true;
 %>
 <%if (action_class.comment) {%><%= '\n' + removeLineBreaks(action_class.comment)
 %>
-<%}%><% _.forEach(matchingActions, function(action) {
+<%}%>
+<%var curl = curlExamplesForKeys(action_class.example_keys, examples);%>
+<%= partial("curl_example", {curl: curl, indent: indent})%>
+<% _.forEach(matchingActions, function(action) {
     var params = paramsForAction(action);%>
     <%= action.method + '    ' + genericPath(action, params.pathParams)%>
 
@@ -72,20 +74,10 @@ header_search: true;
 %><br><br>**Note:** <% _.forEach(param.notes, function(note) {%><%= removeLineBreaks(note, "<br><br>")%><%})};%>|<%
 });}%>
 
-<%var curl = curlExamplesForAction(action, examples);
-  _.forEach(curl, function(example) {%><%if (example.description) {%>**<%= example.description%>**
+<%var curl = curlExamplesForAction(action, examples);%>
+<%= partial("curl_example", {curl: curl, indent: indent})%>
 
-<%}%>    # Request
-    <%= example.request%> \
-    <%= example.url%><%if (example.dataForRequest.length > 0) {%> \<%}%>
-    <%_.forEach(example.dataForRequest, function(data, index) {
-      %><%= data%><%if (index < example.dataForRequest.length -1) {%> \<%}%>
-    <%});%>
-    # Response
-    <%= example.responseStatus%>
-    <%= indent(example.response, '    ', true)%>
-
-<%});%><%if (action.footer) {%><%= removeLineBreaks(action.footer)%>
+<%if (action.footer) {%><%= removeLineBreaks(action.footer)%>
 
 <%}%>---
 <%});%>

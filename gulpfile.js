@@ -303,4 +303,24 @@ gulp.task('test', function(callback) {
       .pipe(mocha({
         reporter: process.env.TRAVIS ? 'spec' : 'nyan'
       }));
+    });
+
+/**
+ * Copy the documents for api-reference to a sibling static site installation.
+ * TODO: it appears that the convention might be to do all of those repos in
+ * subdirs (as opposed to sibling dirs), based on paths.repoOutputRelative
+ */
+
+gulp.task('local-copy-api-reference', ['build-api_reference'], function() {
+  console.log("copying_api_reference");
+  fs.copySync(paths.dist('api_reference'), "../asanastatic/" + paths.repoOutputRelative('api_reference'));
+});
+
+/**
+ * Setup gulp to watch the metadata and depoly to a working copy
+ * of the static site. The only assumptions are that asana-api-meta
+ * and the static site repo are in the same directory.
+ */
+gulp.task('watch-documents', function(callback) {
+  gulp.watch("src/**/*.{js,yaml,ejs}", ['local-copy-api-reference']);
 });

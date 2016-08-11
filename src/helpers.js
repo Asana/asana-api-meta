@@ -110,13 +110,40 @@ function examplesForResource(resource) {
   return examples[resource];
 }
 
+// This is for "action class" as in "action_classes" which is, in this context,
+// "class" as in css class. Basically, we can have a section of only text that
+// falls under a blue header that can be linked to.
+function curlExamplesForKeys(keys, resource_examples) {
+  var key_examples = _.filter(resource_examples, function(example) {
+    if (! example.key){return false;}
+    var index = _.findIndex(keys, function(key){
+      key === example.keys
+    })
+    if(index != 1) {
+      return true;
+    }
+    return false
+  });
+  return buildCurlExamples(key_examples);
+}
+
+// Note: this is "action" as in "endpoint description"; `GET /tasks` for example.
 function curlExamplesForAction(action, resource_examples) {
   var action_examples = _.filter(resource_examples, function(example) {
     var regex = action.path.replace(/%s/g, ".+");
-    return example.method === action.method.toLowerCase() && example.endpoint.match(regex);
+    if (action.variant) {
+      return example.method === action.method.toLowerCase() && example.endpoint.match(regex) && example.variant === action.variant
+    } else {
+      return example.method === action.method.toLowerCase() && example.endpoint.match(regex);
+    }
+
   });
+  return buildCurlExamples(action_examples);
+}
+
+function buildCurlExamples(examples) {
   var curlExamples = [];
-  _.forEach(action_examples, function(example) {
+  _.forEach(examples, function(example) {
     var request = 'curl';
     if (example.method === 'put') {
       request += ' --request PUT';
@@ -149,7 +176,7 @@ function curlExamplesForAction(action, resource_examples) {
       }
     });
     var ex = {
-      description: action_examples.length > 1 ? example.description : null,
+      description: examples.length > 1 ? example.description : null,
       request: request,
       url: url,
       dataForRequest: data,
@@ -160,6 +187,7 @@ function curlExamplesForAction(action, resource_examples) {
   });
   return curlExamples;
 }
+
 
 /** 
  * Construct a partial name based on a series of path parameters
@@ -229,6 +257,7 @@ var common = {
   dash: inflect.dasherize,
   param: inflect.parameterize,
   human: inflect.humanize,
+  title: inflect.titleize,
   paramsForAction: paramsForAction,
   examplesForResource: examplesForResource
 };
@@ -266,7 +295,8 @@ var langs = {
     partial: partial,
     partialFilename: partialFilename,
     genericPath: genericPath,
-    curlExamplesForAction: curlExamplesForAction
+    curlExamplesForAction: curlExamplesForAction,
+    curlExamplesForKeys: curlExamplesForKeys
   })
 };
 
