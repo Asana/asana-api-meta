@@ -305,13 +305,14 @@ gulp.task('test', function(callback) {
       }));
     });
 
+
 /**
  * Copy the documents for api-reference to a sibling static site installation.
  * TODO: it appears that the convention might be to do all of those repos in
  * subdirs (as opposed to sibling dirs), based on paths.repoOutputRelative
  */
 
-gulp.task('local-copy-api-reference', ['build-api_reference'], function() {
+gulp.task('local-copy-api-reference', ['build-api_reference'], function(callback) {
   console.log("copying_api_reference");
   fs.copySync(paths.dist('api_reference'), "../asanastatic/" + paths.repoOutputRelative('api_reference'));
 });

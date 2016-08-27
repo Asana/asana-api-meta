@@ -260,6 +260,7 @@
                 name: 'Low'
                 enabled: true
                 color: 'blue'
+            - "~..."
       key: "custom-field-value-enum"
       description: "Custom field value for an `enum` field"
       endpoint: "/tasks/1001"
@@ -277,8 +278,27 @@
               name: "Owner"
               type: "text"
               text_value: "Greg Sanchez"
+            - "~..."
       key: "custom-field-value-text"
       description: "Custom field value for a `text` field"
+      endpoint: "/tasks/1001"
+      method: "get"
+    -
+      response:
+        data:
+          id: 1001
+          name: "Hello, world!"
+          completed: false
+          '...': "..."
+          custom_fields:
+            -
+              id: 134679
+              name: "Price"
+              type: "number"
+              number_value: "1.56"
+            - "~..."
+      key: "custom-field-value-number"
+      description: "Custom field value for a `number` field"
       endpoint: "/tasks/1001"
       method: "get"
   Workspaces and Organizations: 
@@ -670,6 +690,9 @@
       response:
         status: 200
         data: {}
+      request_data: 
+        custom_field: 124578
+        is_important: true
       endpoint: "/projects/1331/addCustomFieldSetting"
       description: "Add a custom field setting to a project"
       method: "post"
@@ -724,13 +747,41 @@
       description: "Show all users in a single workspace or organization."
       method: "get"
   Custom Fields:
+    - 
+      key: "get-text-custom-field-data"
+      response:
+        status: 200
+        data:
+          -
+            id: 134679
+            created_at: "2016-07-11T14:29:23.249Z"
+            name: "Owner"
+            type: "text"
+      endpoint: "/custom_fields/124578"
+      description: "Get the metadata for a custom field of type 'text'"
+      method: "get"
+    - 
+      key: "get-number-custom-field-data"
+      response:
+        status: 200
+        data:
+          -
+            id: 938271
+            created_at: "2016-07-11T14:29:23.249Z"
+            name: "Price"
+            type: "number"
+            precision: 2
+      endpoint: "/custom_fields/124578"
+      description: "Get the metadata for a custom field of type 'number'"
+      method: "get"
     -
-      variant: enum
+      key: "get-enum-custom-field-data"
       response:
         status: 200
         data:
           -
             id: 124578
+            created_at: "2016-07-11T14:29:23.249Z"
             name: "Priority"
             type: "enum"
             enum_options:
@@ -750,32 +801,7 @@
                 enabled: true
                 color: 'red'
       endpoint: "/custom_fields/124578"
-      description: "Get the metadata for a custom field when that field of type 'enum'"
-      method: "get"
-    - 
-      variant: text
-      response:
-        status: 200
-        data:
-          -
-            id: 134679
-            name: "Owner"
-            type: "text"
-      endpoint: "/custom_fields/124578"
-      description: "Get the metadata for a custom field of type 'text'"
-      method: "get"
-    - 
-      variant: number
-      response:
-        status: 200
-        data:
-          -
-            id: 938271
-            name: "Price"
-            type: "number"
-            precision: 2
-      endpoint: "/custom_fields/124578"
-      description: "Get the metadata for a custom field of type 'number'"
+      description: "Get the metadata for a custom field when that field is of type 'enum'."
       method: "get"
     - 
       response: 
@@ -784,9 +810,11 @@
           - 
             id: 124578
             name: "Priority"
+            type: "enum"
           - 
             id: 134679
             name: "Owner"
+            type: "text"
           - "~..."
       endpoint: "/workspaces/14916/custom_fields"
       description: "List all custom field metadata in a workspace or organization."
@@ -799,6 +827,7 @@
         data:
           -
             id: 258147
+            created_at: "2016-07-11T14:29:23.249Z"
             is_important: true
             custom_field:
               -
@@ -818,7 +847,6 @@
         data:
           -
             id: 258147
-            is_important: true
             custom_field:
               -
                 id: 124578
@@ -830,7 +858,6 @@
                 name: "Things to buy"
           -
             id: 369852
-            is_important: false
             custom_field:
               -
                 id: 235689

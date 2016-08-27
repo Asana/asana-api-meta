@@ -89,6 +89,12 @@ properties:
       Array of users following this project. Followers are a subset of members who receive all notifcations for a
       project, the default notification setting when adding members to a project in-product.
 
+  - name: custom_field_settings
+    <<: *PropType.CustomFieldSettingsCompactArray
+    access: Read-only
+    comment: |
+      Array of Custom Field Settings (in compact form).
+
   - name: color
     <<: *PropType.PotColor
     comment: |
@@ -433,7 +439,3 @@ actions:
       - name: custom_field
         <<: *Param.CustomFieldId
         comment: The id of the custom field to associate with this project.
-      - name: is_important
-        <<: *Param.Bool
-        comment: |
-          Whether this field should be considered important to this project.

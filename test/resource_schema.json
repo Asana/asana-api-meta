@@ -59,7 +59,8 @@
         "properties": {
           "name": {"type": "string"},
           "url": {"type": "string"},
-          "comment": {"type": "string"}
+          "comment": {"type": "string"},
+          "example_keys": {"type": "array"}
         }
       }
     },

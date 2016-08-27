@@ -54,7 +54,7 @@ properties:
       The time at which this task was completed, or null if the task is incomplete.
 
   - name: custom_fields
-    <<: *PropType.CustomFieldArray
+    <<: *PropType.CustomFieldValuesArray
     comment: |
       Array of custom fields applied to the task. These custom fields represent
       the values recorded on this task for a particular custom field. For
@@ -187,6 +187,29 @@ action_classes:
     url: delete
   - name: Query for tasks
     url: query
+  - name: Custom field values
+    url: custom-field-values
+    comment: |
+      Custom fields define user-specific information that can be used to configure tasks within a project to track information that is specific to one particular project. Be sure to reference the [Custom Fields](/developers/documentation/getting-started/custom-fields) guide to get an understanding for the concepts of custom fields and how they relate to resources within Asana.
+
+      When a custom field is associated with a project, tasks in that project can carry additional _custom field values_ which represent the value of the field on that particular task - for instance, the selected item from an `enum` type custom field. These custom fields will appear as an array in a `custom_fields` property of the task, along with some basic information which can be used to associate the custom field value with the custom field metadata.
+    example_keys: ["custom-field-value-text", "custom-field-value-number", "custom-field-value-enum"]
+
+  - name: Custom Field value-specific data
+    url: custom_field_specific_data
+    comment: |
+      Custom fields will return differing properties based on the custom field's type. 
+
+      Custom fields of type `text` will return a `text_value` property containing the string of text for the field.
+      Custom fields of type `number` will return a `number_value` property containing the number for the field.
+      Custom fields of type `enum` will return an `enum_value` property containing an object that represents the selection of the enum value.
+      
+      `enum_value` warrants special consideration: it represents a single entry from the `enum_options` array in the custom field metadata. It has these properties:
+
+      **id**: the id of the selected entry.
+      **name**: the display name of the selected entry.
+      **enabled**: whether the selection is modifiable. (See the documentation on [orphaned values](/developers/documentation/getting-started/custom-fields#orphaned-values) for more information).
+
   - name: Work with subtasks
     url: subtasks
     comment: |
@@ -242,13 +265,6 @@ action_classes:
 
       Requests to add/remove followers, if successful, will return the complete updated task record, described above.
 
-  - name: Custom field values
-    url: custom-fields
-    comment: |
-      Custom fields define user-specific information that can be used to configure tasks within a project to track information that is specific to one particular project. Be sure to reference the [Custom Fields](/developers/documentation/getting-started/custom-fields) guide to get an understanding for the concepts of custom fields and how they relate to resources within Asana.
-
-      When a custom field is associated with a project, tasks in that project can carry additional _custom field values_ which represent the value of the field on that particular task - for instance, the selected item from an `enum` type custom field. These custom fields will appear as an array in a `custom_fields` property of the task, along with some basic information which can be used to associate the custom field value with the custom field metadata.
-    example_keys: ["custom-field-value-enum", "custom-field-value-text"]
 
 
 actions:
