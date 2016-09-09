@@ -145,7 +145,7 @@ action_classes:
 
       See [Task, Project, and Section Associations](/developers/api-reference/tasks#projects)
       for more techniques on managing sections.
-  - name: Custom field settings
+  - name: Modify custom field settings
     url: custom-field-settings
 
 actions:
@@ -419,11 +419,22 @@ actions:
         comment: The project to associate the custom field with
       - name: custom_field
         <<: *Param.CustomFieldId
+        required: true
         comment: The id of the custom field to associate with this project.
       - name: is_important
         <<: *Param.Bool
         comment: |
           Whether this field should be considered important to this project.
+      - name: insert_before
+        <<: *Param.CustomFieldSettingsId
+        comment: |
+          An id of a Custom Field Settings on this project, before which the new Custom Field Settings will be added.
+          `insert_before` and `insert_after` parameters cannot both be specified.
+      - name: insert_after
+        <<: *Param.CustomFieldSettingsId
+        comment: |
+          An id of a Custom Field Settings on this project, after which the new Custom Field Settings will be added.
+          `insert_before` and `insert_after` parameters cannot both be specified.
 
   - name: removeCustomFieldSetting
     class: custom-field-settings
@@ -438,4 +449,4 @@ actions:
         comment: The project to associate the custom field with
       - name: custom_field
         <<: *Param.CustomFieldId
-        comment: The id of the custom field to associate with this project.
+        comment: The id of the custom field to remove from this project.

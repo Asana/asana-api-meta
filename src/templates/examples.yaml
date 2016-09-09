@@ -700,9 +700,12 @@
       response:
         status: 200
         data: {}
+      request_data:
+        custom_field: 124578
       endpoint: "/projects/1331/removeCustomFieldSetting"
       description: "Remove a custom field setting from a project"
       method: "post"
+
 
   Users: 
     - 

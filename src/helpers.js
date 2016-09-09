@@ -186,6 +186,14 @@ function buildCurlExamples(examples) {
   return curlExamples;
 }
 
+/**
+ * Modeled after Ruby's classify inflection. It turns, for example, 'custom field settings'
+ * to 'CustomFieldSettings'
+ */
+function classify(str) {
+  return inflect.titleize(inflect.pluralize(str)).replace(/\s/gi, '');
+}
+
 
 /** 
  * Construct a partial name based on a series of path parameters
@@ -256,6 +264,7 @@ var common = {
   param: inflect.parameterize,
   human: inflect.humanize,
   title: inflect.titleize,
+  classify: classify,
   paramsForAction: paramsForAction,
   examplesForResource: examplesForResource
 };

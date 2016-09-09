@@ -195,7 +195,7 @@ action_classes:
       When a custom field is associated with a project, tasks in that project can carry additional _custom field values_ which represent the value of the field on that particular task - for instance, the selected item from an `enum` type custom field. These custom fields will appear as an array in a `custom_fields` property of the task, along with some basic information which can be used to associate the custom field value with the custom field metadata.
     example_keys: ["custom-field-value-text", "custom-field-value-number", "custom-field-value-enum"]
 
-  - name: Custom Field value-specific data
+  - name: Custom field value-specific data
     url: custom_field_specific_data
     comment: |
       Custom fields will return differing properties based on the custom field's type. 
@@ -209,7 +209,16 @@ action_classes:
       **id**: the id of the selected entry.
       **name**: the display name of the selected entry.
       **enabled**: whether the selection is modifiable. (See the documentation on [orphaned values](/developers/documentation/getting-started/custom-fields#orphaned-values) for more information).
+  
+  - name: Setting custom field values
+    url: setting_custom_field_values
+    comment: |
+      Custom fields are set with PUT requests similarly to setting other fields on tasks; the format of the request is to set the id to the new value. That is, `custom_fields:{custom_field_id:custom_field_value}`
 
+      Custom fields of type `text` are set by passing in `custom_field_id:string`
+      Custom fields of type `number` are set by passing in `custom_field_id:number`
+      Custom fields of type `enum` are set by passing in `custom_field_id:enum_value_id`
+    
   - name: Work with subtasks
     url: subtasks
     comment: |

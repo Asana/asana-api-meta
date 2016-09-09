@@ -151,19 +151,20 @@ Object.keys(languages).forEach(function(lang) {
       var templatePath = 'src/templates/' + lang;
       var resourceTemplateInfo = require('./' + templatePath).resource;
 
-      // Find the template info for resources
+      // Load the resource yaml into a variable
       var resourceInstance = resource.load(resourceName);
       var templateHelpers = helpers(lang);
       templateHelpers.resources = resourceNames;
+      // Load the resource file
       return gulp.src(templatePath + '/' + resourceTemplateInfo.template)
-          .pipe(
+          .pipe( //Pipe it through a templating path with the language-specific helpers
               template(resourceInstance, {
                 imports: templateHelpers,
                 variable: 'resource'
               }))
-          .pipe(
+          .pipe( //Pipe it through a file renaming step, i.e. resource.ejs becomes project.rb
               rename(resourceTemplateInfo.filename(resourceInstance, templateHelpers)))
-          .pipe(
+          .pipe( //Pipe it to the output destination
               gulp.dest(paths.dist(lang)));
     });
   });

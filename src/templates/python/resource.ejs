@@ -1,5 +1,5 @@
 <%
-var thisType = plural(cap(resource.name));
+var thisType = classify(resource.name)
 
 function paramNameInComment(param) {
   return param.required ? param.name : ('[' + param.name + ']');
@@ -37,7 +37,7 @@ class _<%= thisType %>:
       };
     }
     var params = paramsForAction(action);
-    var pathParamNames = params.pathParams.map(function(param) { return param.name; });
+    var pathParamNames = params.pathParams.map(function(param) { return snake(param.name); });
     var explicitParams = params.pathParams.concat(params.explicitNonPathParams).concat(extraParam ? [extraParam] : []);
     //var documentedParams = explicitParams.concat(params.optionParams);
   %>
