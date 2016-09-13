@@ -180,7 +180,7 @@ action_classes:
       Creating a subtask is the same as a creating an normal task, but instead of specifying a workspace you must specify a
       parent task. Each task can only have a single parent and you can use the `setParent` endpoint to add or remove a parent from an existing task.
 
-      Created subtasks are added to the end of their parent's list of subtasks.
+      Created subtasks are added to the beginning of their parent's list of subtasks.
 
       You can find all of the subtasks of a task via the `tasks/:ID/subtasks` endpoint.
 
