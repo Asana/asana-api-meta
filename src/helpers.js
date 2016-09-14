@@ -203,7 +203,7 @@ function classify(str) {
  * "{repo_loc}/asana-api-meta/src/templates/api_reference/partials/{task, for example}/pre_description.ejs"
  */
 function partialFilename() {
-  var partial_path_arry = _.flatten(Array.from(arguments));
+  var partial_path_arry = _.flatten(Array.prototype.slice.call(arguments));//Ideally: Array.from(arguments)); that's only implemented in newer JS impls
   var partial_path = partial_path_arry.join('/') + ".ejs";
   // path.join takes variable length arguments, so we pre-calculate a standard prefix and suffix
   var filename = path.join(__dirname, '/templates/api_reference/partials', partial_path);
