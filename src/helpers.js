@@ -215,7 +215,7 @@ function partialFilename() {
  */
 function partialExists() {
   try {
-    var partial_path_arry = _.flatten(Array.from(arguments));
+    var partial_path_arry = _.flatten(Array.prototype.slice.call(arguments));//Ideally: Array.from(arguments)); that's only implemented in newer JS impls
     fs.lstatSync(partialFilename(partial_path_arry));
     return true;
   } catch (e) {
@@ -236,7 +236,7 @@ function partialExists() {
  * can be found in partialFilename().
  */
 function partial() {
-  var partial_path_arry = _.flatten(Array.from(arguments));
+  var partial_path_arry = _.flatten(Array.prototype.slice.call(arguments));//Ideally: Array.from(arguments)); that's only implemented in newer JS impls
   var partial_context = {};
   // If the last element is not a string, we interpret it as a context for the partial.
   // This context is used to evaluate variables in that context.
