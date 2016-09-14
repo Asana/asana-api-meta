@@ -110,13 +110,38 @@ function examplesForResource(resource) {
   return examples[resource];
 }
 
+// This is for "action class" as in "action_classes" which is, in this context,
+// "class" as in css class. Basically, we can have a section of only text that
+// falls under a blue header that can be linked to.
+function curlExamplesForKeys(keys, resource_examples) {
+  var key_examples = _.filter(resource_examples, function(example) {
+    if (! example.key) return false;
+    var index = _.findIndex(keys, function(key){
+      return key === example.key
+    })
+    if(index != -1) {
+      return true;
+    }
+    return false
+  });
+  return buildCurlExamples(key_examples);
+}
+
+// Note: this is "action" as in "endpoint description"; `GET /tasks` for example.
 function curlExamplesForAction(action, resource_examples) {
   var action_examples = _.filter(resource_examples, function(example) {
+    //TODO: this is a hack, simply to exclude selection-by-key vs selection-by-action/endpoint
+    if (example.key) return false;
     var regex = action.path.replace(/%s/g, ".+");
     return example.method === action.method.toLowerCase() && example.endpoint.match(regex);
+
   });
+  return buildCurlExamples(action_examples);
+}
+
+function buildCurlExamples(examples) {
   var curlExamples = [];
-  _.forEach(action_examples, function(example) {
+  _.forEach(examples, function(example) {
     var request = 'curl';
     if (example.method === 'put') {
       request += ' --request PUT';
@@ -149,7 +174,7 @@ function curlExamplesForAction(action, resource_examples) {
       }
     });
     var ex = {
-      description: action_examples.length > 1 ? example.description : null,
+      description: examples.length > 1 ? example.description : null,
       request: request,
       url: url,
       dataForRequest: data,
@@ -161,33 +186,36 @@ function curlExamplesForAction(action, resource_examples) {
   return curlExamples;
 }
 
-// Recursive flattening of N-dimensional array, a la Ruby's array.flatten
-// Useful for passing nested arguments objects to a function lower in the
-// call stack that needs "everything not yet processed" as an array.
-function flatten(arr) {
-  return arr.reduce(function (flat, to_flatten) {
-    return flat.concat(Array.isArray(to_flatten) ? flatten(to_flatten) : to_flatten);
-  }, []);
+/**
+ * Modeled after Ruby's classify inflection. It turns, for example, 'custom field settings'
+ * to 'CustomFieldSettings'
+ */
+function classify(str) {
+  return inflect.titleize(inflect.pluralize(str)).replace(/\s/gi, '');
 }
 
-// Construct a partial name based on a series of path parameters
-// Path parameters are of the form:
-// [path, [...]]
-// The last argument (as in Ruby partials) will have a suffix appended.
-// Unlike Ruby, the filename need not start with an underscore.
+
+/** 
+ * Construct a partial name based on a series of path parameters
+ * The last argument (as in Ruby partials) will have a suffix appended.
+ * (Unlike Ruby, the partial name need not start with an underscore)
+ * Example:, the path [resource.name, "pre_description"] resolves to
+ * "{repo_loc}/asana-api-meta/src/templates/api_reference/partials/{task, for example}/pre_description.ejs"
+ */
 function partialFilename() {
-  var partial_path_arry = flatten(Array.from(arguments));
+  var partial_path_arry = _.flatten(Array.from(arguments));
   var partial_path = partial_path_arry.join('/') + ".ejs";
   // path.join takes variable length arguments, so we pre-calculate a standard prefix and suffix
   var filename = path.join(__dirname, '/templates/api_reference/partials', partial_path);
-  console.log(filename);
   return filename;
 }
 
-// Test if we can stat a partial, given the path parameters (as in partialFilename)
+/**
+ * Test if we can stat a partial, given the path parameters (as in partialFilename)
+ */
 function partialExists() {
   try {
-    var partial_path_arry = flatten(Array.from(arguments));
+    var partial_path_arry = _.flatten(Array.from(arguments));
     fs.lstatSync(partialFilename(partial_path_arry));
     return true;
   } catch (e) {
@@ -195,9 +223,20 @@ function partialExists() {
   }
 }
 
-// Evaluate a partial, given the path parameters (as in partialFilename)
+/** Evaluate a partial, given the path parameters (as in partialFilename)
+ * @param [partial_path_arry] {vararg(String, Array)}: [path, [...]] variable length path segments
+ * @param [partial_context] {Object} : context argument for partial's evaluation environment
+ *
+ * Let's break that function signature down:
+ * This function takes a variable number of strings or arrays of strings, followed by an optional
+ * context object. The context object, if present, sets the context for the partial, i.e. sets
+ * the variables in scope for the partial.
+ * The path is processed as in partialFilename(), that is, is resolved to the location that contains
+ * partials based on the arguments passed in partial_path_arry. More info on how these are processed
+ * can be found in partialFilename().
+ */
 function partial() {
-  var partial_path_arry = flatten(Array.from(arguments));
+  var partial_path_arry = _.flatten(Array.from(arguments));
   var partial_context = {};
   // If the last element is not a string, we interpret it as a context for the partial.
   // This context is used to evaluate variables in that context.
@@ -224,6 +263,8 @@ var common = {
   dash: inflect.dasherize,
   param: inflect.parameterize,
   human: inflect.humanize,
+  title: inflect.titleize,
+  classify: classify,
   paramsForAction: paramsForAction,
   examplesForResource: examplesForResource
 };
@@ -261,7 +302,8 @@ var langs = {
     partial: partial,
     partialFilename: partialFilename,
     genericPath: genericPath,
-    curlExamplesForAction: curlExamplesForAction
+    curlExamplesForAction: curlExamplesForAction,
+    curlExamplesForKeys: curlExamplesForKeys
   })
 };
 

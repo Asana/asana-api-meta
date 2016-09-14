@@ -10,7 +10,7 @@ describe('Resource', function() {
   describe('#names', function() {
     it('should return known resources in order', function() {
       assert.deepEqual(resource.names(), [
-        'attachment', 'event', 'project', 'story', 'tag', 'task',
+        'attachment', 'custom_field_settings', 'custom_fields', 'event', 'project', 'story', 'tag', 'task',
         'team', 'user', 'webhook', 'workspace'
       ]);
     });

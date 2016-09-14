@@ -1,5 +1,5 @@
 <%
-var thisType = plural(cap(resource.name));
+var thisType = classify(resource.name);
 
 function paramNameInComment(param) {
   return param.required ? param.name : ('[' + param.name + ']');
@@ -105,10 +105,10 @@ util.inherits(<%= thisType %>, Resource);
             'The response from the API'), 2) %>
  */
 <%= thisType + '.prototype.' + action.name %> = function(
-<% _.forEach(explicitParams, function(param, i) { %>    <%= param.name %><% if (i !== explicitParams.length - 1) { %>,
+<% _.forEach(explicitParams, function(param, i) { %>    <%= camel(snake(param.name), false) %><% if (i !== explicitParams.length - 1) { %>,
 <% } }); %>
 ) {
-  var path = util.format('<%= action.path %>'<% _.forEach(pathParams, function(param) { %>, <%= param.name %><% }); %>);
+  var path = util.format('<%= action.path %>'<% _.forEach(pathParams, function(param) { %>, <%= camel(snake(param.name), false) %><% }); %>);
   <% if (explicitNonPathParams.length > 0) { %>
   <%= requestOptionsParamName %> = _.extend({}, <%= requestOptionsParamName %> || {}, {<% _.forEach(explicitNonPathParams, function(npp, npp_index) { %>
     <%= npp.name %>: <%= npp.name %><%= npp_index !== explicitNonPathParams.length - 1 ? "," : "" %><% }); %>

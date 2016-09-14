@@ -26,6 +26,11 @@ templates:
       example_values:
         - "12345"
 
+  - template: &Param.Number
+    - type: Integer
+      example_values:
+        - "2"
+
   - template: &Param.IdArray
       type: Array
       example_values:
@@ -94,6 +99,44 @@ templates:
     - type: String
       example_values:
         - "'https://example.com/receive-webhook/7654'"
+
+  - template: &Param.CustomFieldId
+      type: Id
+      example_values:
+        - "124578"
+      comment: |
+        Globally unique identifier for the custom field.
+
+  - template: &Param.CustomFieldSettingsId
+    - type: Id
+      example_values:
+        - "258147"
+      comment: |
+        The id of the custom field setttings object which represents the joining of a custom field and a project. Note that this ID is not the same as the ID of the custom field itself.
+
+  - template: &Param.CustomFieldEnumValue
+    - type: String
+      example_values:
+          - "[ { id: 1646, name: 'Priority', type: 'enum', enum_value: { id: 126, name: 'P1' } ]"
+
+  - template: &Param.CustomFieldEnumOptions
+    - type: String
+      example_values:
+        - "[ { id: 126, name: 'P0', enabled: true, color: none }, {id: 198, name: 'P1', enabled: false, color: red} ]"
+
+  - template: &Param.CustomFieldName
+    - type: String
+    - comment: "The name of the custom field"
+      example_values:
+        - "'Priority'"
+
+  - template: &Param.CustomFieldType
+    - type: String
+    - comment: "The type of the custom field"
+      example_values:
+        - "'text'"
+        - "'enum'"
+        - "'number'"
 
   # Types of properties
 
@@ -211,6 +254,47 @@ templates:
       example_values:
         - "[ { id: 59746, name: 'Grade A' }, ... ]"
       access: Create-only
+
+  - template: &PropType.CustomField
+    - type: CustomField
+      example_values:
+        - "{ id: 1646, name: 'Priority', type: 'enum' }"
+
+  - template: &PropType.CustomFieldValuesArray
+    - type: Array
+      example_values:
+        - "[ { id: 1646, name: 'Priority', type: 'enum', enum_value: { id: 126, name: 'P1' } }, ...]"
+
+  - template: &PropType.CustomFieldSettingsCompactArray
+    - type: Array
+      example_values:
+        - "[ { id: 258147, custom_field: {id: 1646, name: 'Priority', type: 'enum'}, project: {id: 1331, name: 'Bugs'} }, ...]"
+
+  - template: &PropType.CustomFieldPrecision
+    - type: Integer 
+      example_values:
+        - "2"
+      comment: |
+        Only relevant for custom fields of type 'Number'. This field dictates the number of places after the decimal to round to, i.e. `0` is integer values, `1` rounds to the nearest tenth, and so on.
+
+  - template: &PropType.CustomFieldName
+    - type: String
+      example_values:
+        - "'Priority'"
+
+  - template: &PropType.CustomFieldType
+    - type: String
+      example_values:
+        - "'text'"
+        - "'enum'"
+        - "'number'"
+
+  - template: &PropType.CustomFieldEnumOptions
+    - type: String
+      example_values:
+      - "[ { id: 789, name: 'Low', enabled: 'true', color: 'blue' }, ... ]"
+      comment: |
+        Only relevant for custom fields of type 'Enum'. This array specifies the possible values which an `enum` custom field can adopt.
 
   - template: &PropType.Memberships
     - type: Array

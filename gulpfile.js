@@ -151,19 +151,20 @@ Object.keys(languages).forEach(function(lang) {
       var templatePath = 'src/templates/' + lang;
       var resourceTemplateInfo = require('./' + templatePath).resource;
 
-      // Find the template info for resources
+      // Load the resource yaml into a variable
       var resourceInstance = resource.load(resourceName);
       var templateHelpers = helpers(lang);
       templateHelpers.resources = resourceNames;
+      // Load the resource file
       return gulp.src(templatePath + '/' + resourceTemplateInfo.template)
-          .pipe(
+          .pipe( //Pipe it through a templating path with the language-specific helpers
               template(resourceInstance, {
                 imports: templateHelpers,
                 variable: 'resource'
               }))
-          .pipe(
+          .pipe( //Pipe it through a file renaming step, i.e. resource.ejs becomes project.rb
               rename(resourceTemplateInfo.filename(resourceInstance, templateHelpers)))
-          .pipe(
+          .pipe( //Pipe it to the output destination
               gulp.dest(paths.dist(lang)));
     });
   });
@@ -303,4 +304,25 @@ gulp.task('test', function(callback) {
       .pipe(mocha({
         reporter: process.env.TRAVIS ? 'spec' : 'nyan'
       }));
+    });
+
+
+/**
+ * Copy the documents for api-reference to a sibling static site installation.
+ * TODO: it appears that the convention might be to do all of those repos in
+ * subdirs (as opposed to sibling dirs), based on paths.repoOutputRelative
+ */
+
+gulp.task('local-copy-api-reference', ['build-api_reference'], function(callback) {
+  console.log("copying_api_reference");
+  fs.copySync(paths.dist('api_reference'), "../asanastatic/" + paths.repoOutputRelative('api_reference'));
+});
+
+/**
+ * Setup gulp to watch the metadata and depoly to a working copy
+ * of the static site. The only assumptions are that asana-api-meta
+ * and the static site repo are in the same directory.
+ */
+gulp.task('watch-documents', function(callback) {
+  gulp.watch("src/**/*.{js,yaml,ejs}", ['local-copy-api-reference']);
 });

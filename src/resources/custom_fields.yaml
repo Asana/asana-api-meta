@@ -1,0 +1,86 @@
+---
+# See `user.yaml` for more docs on these yaml files.
+!include ../includes.yaml
+name: custom_fields
+comment: |
+  
+  Custom Fields store the metadata that is used in order to add user-specified
+  information to tasks in Asana. Be sure to reference the [Custom
+  Fields](/developers/documentation/getting-started/custom-fields) developer
+  documentation for more information about how custom fields relate to various
+  resources in Asana.
+
+
+properties:
+# We borrow a bunch of the project templates here because they're literally
+# exactly the same
+
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the custom field.
+
+  - name: created_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this custom field was created.
+
+  - name: name
+    <<: *PropType.CustomFieldName
+    access: Read-only
+    comment: |
+      The name of the custom field.
+
+  - name: type
+    <<: *PropType.CustomFieldType
+    access: Read-only
+    comment: |
+      The type of the custom field. Must be one of the given values.
+
+  - name: enum_options
+    <<: *PropType.CustomFieldEnumOptions
+    access: Read-only
+
+  - name: precision
+    <<: *PropType.CustomFieldPrecision
+    access: Read-only
+      
+
+action_classes:
+  - name: Type-specific custom field information
+    url: type-specific
+    comment: |
+      Since custom fields can be defined for one of a number of types, and these types have different data and behaviors, there are fields that are relevant to a particular type. For instance, as noted above, `enum_options` is only relevant for the `enum` type and defines the set of choices that the enum could represent. The examples below show some of these type-specific custom field definitions.
+    example_keys: ["get-enum-custom-field-data", "get-text-custom-field-data", "get-number-custom-field-data"]
+  - name: Get a custom field
+    url: get-single
+  - name: Query for custom fields
+    url: query-metadata
+
+actions:
+
+  # Create, Retrieve, Update, Delete
+
+  - name: findById
+    class: get-single
+    method: GET
+    path: "/custom_fields/%s"
+    params:
+      - name: custom-field
+        <<: *Param.CustomFieldId
+        required: true
+    comment: |
+      Returns the complete definition of a custom field's metadata.
+
+  - name: findByWorkspace
+    class: query-metadata
+    method: GET
+    path: "/workspaces/%s/custom_fields"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace or organization to find custom field definitions in.
+    comment: |
+      Returns a list of the compact representation of all of the custom fields in a workspace.

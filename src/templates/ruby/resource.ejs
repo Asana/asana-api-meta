@@ -194,7 +194,7 @@ var mixinsToInclude = mixins[resource.name] || []
 module Asana
   module Resources
 <%= formatComment(resource.comment, 4) %>
-    class <%= cap(singularName) %> < Resource
+    class <%= single(classify(singularName)) %> < Resource
 <% _.forEach(mixinsToInclude, function(mixin) { %>
       include <%= mixin %>
 <% }) %>
