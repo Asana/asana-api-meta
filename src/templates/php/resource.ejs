@@ -39,7 +39,7 @@ class <%= plural(classify(resource.name)) + "Base" %>
       };
     }
     var params = paramsForAction(action);
-    var pathParamNames = params.pathParams.map(function(param) { return snake(param.name); });
+    var pathParamNames = params.pathParams.map(function(param) { return camel(snake(param.name), false); });
     var explicitParams = params.pathParams.concat(params.explicitNonPathParams).concat(extraParam ? [extraParam] : []);
     var documentedParams = explicitParams.concat(params.optionParams);
     var phpPathParamNames = pathParamNames.map(function(p) { return "$" + p; });

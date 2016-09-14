@@ -208,7 +208,7 @@ action_classes:
 
       **id**: the id of the selected entry.
       **name**: the display name of the selected entry.
-      **enabled**: whether the selection is modifiable. (See the documentation on [orphaned values](/developers/documentation/getting-started/custom-fields#orphaned-values) for more information).
+      **enabled**: whether the selection is modifiable. (See the documentation on [disabled values](/developers/documentation/getting-started/custom-fields#disabled-values) for more information).
   
   - name: Setting custom field values
     url: setting_custom_field_values
