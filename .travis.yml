@@ -2,10 +2,6 @@ language: node_js
 node_js:
 - '0.10'
 sudo: false
-branches:
-  only:
-    - /^v[0-9]+\.[0-9]+\.[0-9]+/
-    - master
 after_success:
   if [ ! -z "$TRAVIS_TAG" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     echo "Deploying, issuing pull requests to api-meta-incoming"
