@@ -7,6 +7,15 @@ branches:
     - /^v[0-9]+\.[0-9]+\.[0-9]+/
     - master
 after_success:
+  if ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && 
+      [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    echo "Deploying: issuing pull requests to api-meta-incoming"
+    - git config --global user.email "git@asana.com"
+    - git config --global user.name "Asana"
+    - gulp deploy
+  else
+    echo "Skipping deployment"
+  fi  
   - git config --global user.email "git@asana.com"
   - git config --global user.name "Asana"
   - gulp deploy
