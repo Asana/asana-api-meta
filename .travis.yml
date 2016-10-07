@@ -16,9 +16,6 @@ after_success:
   else
     echo "Skipping deployment"
   fi  
-  - git config --global user.email "git@asana.com"
-  - git config --global user.name "Asana"
-  - gulp deploy
 env:
   global:
     - GULP_DEBUG=1
