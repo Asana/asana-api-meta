@@ -7,9 +7,9 @@ after_success:
     echo "Deploying, issuing pull requests to api-meta-incoming";
     git config --global user.email "git@asana.com";
     git config --global user.name "Asana";
-    gulp deploy
+    gulp deploy;
   else
-    echo "Skipping deployment"
+    echo "Skipping deployment";
   fi  
 env:
   global:
