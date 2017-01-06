@@ -21,15 +21,13 @@ side_nav:
 <% _.forEach(resource.action_classes, function(action_class) {%><%= '  -'%>
     name: <%= action_class.name%>
     url: <%= action_class.url%>
-<%});%>
----
+<%});%>---
 
 ### <%= thisType%>
-
 <%=partial(resource.name, "pre_description", {resource: resource})%>
-<%= removeLineBreaks(resource.comment)%>
-<%if (resource.notes) {%><% _.forEach(resource.notes, function(note) {%>
-<%= removeLineBreaks(note)%>
+<%=removeLineBreaks(resource.comment)%>
+<%if (resource.notes){%><% _.forEach(resource.notes, function(note) {%>
+<%=removeLineBreaks(note)%>
 <%})};%>
 <%= thisType%> have the following fields:
 

@@ -245,6 +245,7 @@
         method: "post"
     -
       response:
+        status: 200
         data:
           id: 1001
           name: "Hello, world!"
@@ -267,6 +268,7 @@
       method: "get"
     -
       response:
+        status: 200
         data:
           id: 1001
           name: "Hello, world!"
@@ -285,6 +287,7 @@
       method: "get"
     -
       response:
+        status: 200
         data:
           id: 1001
           name: "Hello, world!"
@@ -304,6 +307,7 @@
   Workspaces and Organizations: 
     - 
       response: 
+        status: 200
         data: 
           - 
             id: 1337

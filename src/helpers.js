@@ -93,7 +93,7 @@ function removeLineBreaks(text, opt_paragraph_delim) {
   text = text.replace(/\n\n/gm, "CC");
   text = text.replace(/\r\n|\n|\r/gm, " ");
   text = text.replace(/XX/g, "\n");
-  return text.replace(/CC/g, paragraph_delim);
+  return text.replace(/CC/g, paragraph_delim).trim();
 }
 
 function genericPath(action, pathParams) {

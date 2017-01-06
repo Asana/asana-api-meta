@@ -3,21 +3,24 @@
 !include ../includes.yaml
 name: project
 comment: |
-  A _project_ represents a prioritized list of tasks in Asana. It exists in a
-  single workspace or organization and is accessible to a subset of users in
-  that workspace or organization, depending on its permissions.
+  A _project_ represents a prioritized list of tasks in Asana or a board with
+  columns of tasks represented as cards. It exists in a single workspace or
+  organization and is accessible to a subset of users in that workspace or
+  organization, depending on its permissions.
 
   Projects in organizations are shared with a single team. You cannot currently
   change the team of a project via the API. Non-organization workspaces do not
-  have teams and so you should not specify the team of project in a
-  regular workspace.
+  have teams and so you should not specify the team of project in a regular
+  workspace.
 
 notes:
   - |
-    Followers of a project are a subset of the members of that project. Followers of a project will receive all updates
-    including tasks created, added and removed from that project. Members of the project have access to and will receive
-    status updates of the project. Adding followers to a project will add them as members if they are not already,
-    removing followers from a project will not affect membership.
+    Followers of a project are a subset of the members of that project.
+    Followers of a project will receive all updates including tasks created,
+    added and removed from that project. Members of the project have access to
+    and will receive status updates of the project. Adding followers to a
+    project will add them as members if they are not already, removing
+    followers from a project will not affect membership.
 
 properties:
 
@@ -122,6 +125,12 @@ properties:
       The team that this project is shared with. This field only exists for
       projects in organizations.
 
+  - name: layout
+    <<: *PropType.Layout
+    access: Hidden unless specified
+    comment: |
+      The layout (board or list view) of the project.
+
 action_classes:
   - name: Create a project
     url: create
@@ -135,16 +144,18 @@ action_classes:
     url: query
   - name: Get project tasks
     url: get-tasks
-  - name: Get project sections
+  - name: Work with project sections
     url: sections
     comment: |
-      Sections are tasks whose names end with a colon character `:` . For instance
-      sections will be included in query results for tasks and be represented with
-      the same fields. The `memberships` property of a task contains the project/section
-      pairs a task belongs to when applicable.
+      Sections are tasks whose names end with a colon character `:` or columns
+      in a board layout. Due to their flexible relationship with tasks, sections
+      will be included in query results for tasks and be represented with the
+      same fields. The `memberships` property of a task contains the
+      project/section pairs a task belongs to when applicable.
 
-      See [Task, Project, and Section Associations](/developers/api-reference/tasks#projects)
-      for more techniques on managing sections.
+      See [Task, Project, and Section
+      Associations](/developers/api-reference/tasks#projects) for more
+      techniques on managing sections.
   - name: Modify custom field settings
     url: custom-field-settings
 
@@ -324,6 +335,24 @@ actions:
     collection: true
     comment: |
       Returns compact records for all sections in the specified project.
+
+  - name: createSection
+    class: sections
+    method: POST
+    path: "/projects/%s/sections"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to add the section to.
+      - name: name
+        <<: *Param.SectionName
+        required: true
+        comment: The name of the section to create.
+    collection: true
+    comment: |
+      Creates a new section on the given project.
+
 
   - name: tasks
     class: get-tasks

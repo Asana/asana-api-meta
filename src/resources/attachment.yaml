@@ -141,16 +141,16 @@ actions:
         Below is an example of what a well formed multipart/form-data encoded
         request might look like.
 
-            Authorization: Basic <BASE64_ENCODED_API_KEY> \
-            Content-Type: multipart/form-data; boundary=<UNIQUE_BOUNDARY> \
-            User-Agent: Java/1.7.0_76 \
-            Host: localhost \
-            Accept: */* \
-            Connection: keep-alive \
+            Authorization: Basic <BASE64_ENCODED_API_KEY>\
+            Content-Type: multipart/form-data; boundary=<UNIQUE_BOUNDARY>\
+            User-Agent: Java/1.7.0_76\
+            Host: localhost\
+            Accept: */*\
+            Connection: keep-alive\
             Content-Length: 141
 
-            --<UNIQUE_BOUNDARY> \
-            Content-Disposition: form-data; name="file"; filename="example.txt" \
+            --<UNIQUE_BOUNDARY>\
+            Content-Disposition: form-data; name="file"; filename="example.txt"\
             Content-Type: text/plain
 
             <RAW_FILE_DATA>
