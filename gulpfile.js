@@ -326,3 +326,5 @@ gulp.task('local-copy-api-reference', ['build-api_reference'], function(callback
 gulp.task('watch-documents', function(callback) {
   gulp.watch("src/**/*.{js,yaml,ejs}", ['local-copy-api-reference']);
 });
+
+gulp.task('default', ['build', 'local-copy-api-reference']);

@@ -11,7 +11,7 @@ familiarize yourself with the process as documented in the README.md found in th
 
 parent-title: API Reference
 title: <%= thisType %>
-description: "API reference for working with Asana <%= thisType %>"
+description: "Get documentation, references, and support for working with Asana <%= thisType %>"
 _template: dev-page
 _layout: default
 
@@ -21,7 +21,13 @@ side_nav:
 <% _.forEach(resource.action_classes, function(action_class) {%><%= '  -'%>
     name: <%= action_class.name%>
     url: <%= action_class.url%>
-<%});%>---
+<%});%>
+
+# Header
+logo_text: Developers
+
+header_search: true;
+---
 
 ### <%= thisType%>
 <%=partial(resource.name, "pre_description", {resource: resource})%>
@@ -53,7 +59,9 @@ side_nav:
 <%= partial("curl_example", {curl: curl, indent: indent})%>
 <% _.forEach(matchingActions, function(action) {
     var params = paramsForAction(action);%>
-    <%= action.method + '    ' + genericPath(action, params.pathParams)%>
+~~~ .nohighlight
+<%= action.method + '    ' + genericPath(action, params.pathParams)%>
+~~~
 
 <%= removeLineBreaks(action.comment)%>
 <%if (action.notes) {%><% _.forEach(action.notes, function(note) {%>

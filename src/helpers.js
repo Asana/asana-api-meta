@@ -132,8 +132,9 @@ function curlExamplesForAction(action, resource_examples) {
   var action_examples = _.filter(resource_examples, function(example) {
     //TODO: this is a hack, simply to exclude selection-by-key vs selection-by-action/endpoint
     if (example.key) return false;
-    var regex = action.path.replace(/%s/g, ".+");
-    return example.method === action.method.toLowerCase() && example.endpoint.match(regex);
+    var regex = "^" + action.path.replace(/%s/g, ".+") + "$";
+    match = example.method === action.method.toLowerCase() && example.endpoint.match(regex);
+    return match
 
   });
   return buildCurlExamples(action_examples);
@@ -155,11 +156,11 @@ function buildCurlExamples(examples) {
       _.forEach(example.request_data, function(value, param_name) {
         var line;
         if (Array.isArray(value)) {   // exception for array types because of curl weirdness
-          line = '-d "' + param_name + '[0]=' + value[0] + '"';
+          line = '--data-urlencode "' + param_name + '[0]=' + value[0] + '"';
         } else if (param_name === 'file') {    // exception for files
           line = '--form "' + param_name + "=" + value + '"';
         } else {
-          line = '-d "' + param_name + "=" + value + '"';
+          line = '--data-urlencode "' + param_name + "=" + value + '"';
         }
         data.push(line);
       })

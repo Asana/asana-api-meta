@@ -9,9 +9,10 @@ comment: |
 
 notes:
   - | 
-    Sections are intended to be a shared idiom in Asana's API for both list and
-    boards views of a project regardless of the project's layout. The
-    'memberships' property when [getting a
+    Sections are largely a shared idiom in Asana's API for both list and board
+    views of a project regardless of the project's layout.
+
+    The 'memberships' property when [getting a
     task](/developers/api-reference/tasks#get) will return the information for
     the section or the column under 'section' in the response.
 
@@ -72,7 +73,7 @@ actions:
         comment: The text to be displayed as the section name. This cannot be an empty string.
         required: true
     comment: |
-      Creates a new section in a project. This project can be either a list layout or a boards layout.
+      Creates a new section in a project.
 
       Returns the full record of the newly created section.
 
@@ -84,9 +85,9 @@ actions:
       - name: project
         <<: *Param.ProjectId
         required: true
-        comment: The project to find sections in
+        comment: The project to get sections from.
     comment: |
-      Returns the compact section records for all sections in a project.
+      Returns the compact records for all sections in the specified project.
 
   - name: findById
     class: get-single
@@ -129,14 +130,47 @@ actions:
       - name: section
         <<: *Param.SectionId
         required: true
-        comment: The sections to delete.
+        comment: The section to delete.
     comment: |
       A specific, existing section can be deleted by making a DELETE request
       on the URL for that section.
 
       Note that sections must be empty to be deleted.
 
-      The last section in a board view
+      The last remaining section in a board view cannot be deleted.
 
-      Returns an empty data record.
+      Returns an empty data block.
 
+  - name: insertInProject
+    class: reorder
+    method: POST
+    path: "/projects/%s/sections/insert"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project in which to reorder this section
+      - name: section
+        <<: *Param.SectionId
+        required: true
+        comment: The section to reorder
+      - name: before_section
+        <<: *Param.SectionId
+        required: false
+        example_values:
+          - "86420"
+        comment: Insert the given section immediately before the section specified by this parameter.
+      - name: after_section
+        <<: *Param.SectionId
+        required: false
+        example_values:
+          - "86420"
+        comment: Insert the given section immediately after the section specified by this parameter.
+    comment: |
+      Move sections relative to each other in a board view. One of
+      before_section or after_section is required (or else the request will
+      behave as a no-op).
+
+      At this point in time, moving sections is not supported in list views.
+
+      Returns an empty data block.

@@ -147,15 +147,21 @@ action_classes:
   - name: Work with project sections
     url: sections
     comment: |
-      Sections are tasks whose names end with a colon character `:` or columns
-      in a board layout. Due to their flexible relationship with tasks, sections
-      will be included in query results for tasks and be represented with the
-      same fields. The `memberships` property of a task contains the
-      project/section pairs a task belongs to when applicable.
+      Sections are list items that end with a colon character `:` or columns in
+      a board layout which divide the tasks in a project in some arbitrary way
+      determined by users' preferences. The `memberships` property of a task
+      contains the project/section pairs to which a task belongs when applicable.
 
-      See [Task, Project, and Section
-      Associations](/developers/api-reference/tasks#projects) for more
-      techniques on managing sections.
+      **Deprecation warning**: At this time, sections in a list-layout project
+      are manipulated as if they were tasks, i.e. reordering a section involves
+      moving the section (and all of its tasks if they are to remain in that
+      section) to a new location in a project.  (see [Task, Project, and
+      Section Associations](/developers/api-reference/tasks#projects) for more
+      information). This method of manipulating sections and their tasks will
+      soon be deprecated in favor of the methods described in the [Sections
+      resource](/developers/api-reference/sections) which are already
+      implemented for board-layout projects.
+
   - name: Modify custom field settings
     url: custom-field-settings
 
@@ -322,37 +328,6 @@ actions:
     collection: true
     comment: |
       Returns the compact project records for all projects in the team.
-
-  - name: sections
-    class: sections
-    method: GET
-    path: "/projects/%s/sections"
-    params:
-      - name: project
-        <<: *Param.ProjectId
-        required: true
-        comment: The project to get sections from.
-    collection: true
-    comment: |
-      Returns compact records for all sections in the specified project.
-
-  - name: createSection
-    class: sections
-    method: POST
-    path: "/projects/%s/sections"
-    params:
-      - name: project
-        <<: *Param.ProjectId
-        required: true
-        comment: The project to add the section to.
-      - name: name
-        <<: *Param.SectionName
-        required: true
-        comment: The name of the section to create.
-    collection: true
-    comment: |
-      Creates a new section on the given project.
-
 
   - name: tasks
     class: get-tasks

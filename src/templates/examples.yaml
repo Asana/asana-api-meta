@@ -667,20 +667,6 @@
         status: 200
         data: 
           - 
-            id: 2001
-            name: "High Priority:"
-          - 
-            id: 2002
-            name: "Low Priority:"
-          - "~..."
-      endpoint: "/projects/1331/sections"
-      description: "Get visible sections on a project."
-      method: "get"
-    - 
-      response: 
-        status: 200
-        data: 
-          - 
             id: 1331
             name: "Things to buy"
           - 
@@ -709,6 +695,75 @@
       endpoint: "/projects/1331/removeCustomFieldSetting"
       description: "Remove a custom field setting from a project"
       method: "post"
+
+  Sections:
+    - 
+      response: 
+        status: 200
+        data: 
+          - 
+            id: 2001
+            name: "High Priority:"
+          - 
+            id: 2002
+            name: "Low Priority:"
+          - "~..."
+      endpoint: "/projects/1331/sections"
+      description: "Get visible sections on a project"
+      method: "get"
+    -
+      response:
+        status: 200
+        data:
+          - 
+            id: 2001
+            name: "High Priority:"
+            created_at: "2017-01-17T22:06:39.249Z"
+            project:
+              id: 1331
+              name: "Things to buy"
+      request_data:
+        name: "High Prority:"
+      endpoint: "/projects/1331/sections"
+      description: "Create a new section on a project"
+      method: "post"
+    -
+      response:
+        status: 200
+        data:
+          - 
+            id: 2001
+            name: "High Priority, renamed:"
+            created_at: "2017-01-17T22:06:39.249Z"
+            project:
+              id: 1331
+              name: "Things to buy"
+      request_data:
+        name: "High Prority, renamed:"
+      endpoint: "/sections/2001"
+      description: "Rename a section"
+      method: "put"
+    -
+      response:
+        status: 200
+        data: {}
+      endpoint: "/sections/2001"
+      description: "Get the full record for a section"
+      method: "delete"
+    -
+      response:
+        status: 200
+        data: {}
+      request_data:
+        section: 2001
+        before_section: 2002
+      endpoint: "/projects/1331/sections/insert"
+      description: "Add or move a section in a project"
+      method: "post"
+      
+          
+            
+
 
 
   Users: 
