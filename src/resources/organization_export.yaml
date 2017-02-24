@@ -32,14 +32,14 @@ properties:
     type: String
     example_values:
       - "'https://asana-export.s3.amazonaws.com/export-4632784536274-20170127-43246.json.gz?AWSAccessKeyId=xxxxxxxx'"
-      - "''"
+      - "null"
     access: Read-only
     comment: |
       Download this URL to retreive the full export of the organization in JSON format. It will be
       compressed in a gzip (.gz) container.
     notes:
       - |
-        May be empty string "" if the export is still in progress or failed. If present, this URL
+        May be null if the export is still in progress or failed. If present, this URL
         may only be valid for 1 hour from the time of retrieval. You should avoid
         persisting this URL somewhere and just refresh it on demand to ensure you
         do not keep stale URLs.
