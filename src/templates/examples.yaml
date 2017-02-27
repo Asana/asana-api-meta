@@ -469,7 +469,6 @@
   Stories: 
     - 
       response: 
-        status: 200
         data: 
           - 
             text: "added to Things To Buy"
@@ -509,8 +508,7 @@
       description: "Show a specific story."
       method: "get"
     - 
-      response:
-        status: 200
+      response: 
         data: 
           target: 
             id: 1001
@@ -560,7 +558,6 @@
       description: "Get recent events"
       method: "get"
     - 
-      key: "get-event-on-project"
       response: 
         status: "412 Precondition Failed"
         message: "Sync token invalid or too old. If you are attemping to keep resources in sync, you must re-fetch the full dataset for this query now."

@@ -27,7 +27,7 @@ properties:
     type: String
     example_values:
       - "'Greg Sanchez'"
-    access: Read-only except when same user as requester
+    access: Read-only
     comment: |
       The user's name.
 
