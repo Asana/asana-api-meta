@@ -60,7 +60,7 @@ var languages = {
   },
   api_reference: {
     repo: 'Asana/asanastatic',
-    outputPath: '_content/developers/02-api-reference',
+    outputPath: '_content/developers/api-reference',
     // Keep the other markdown pages and metadata there
     preserveRepoFiles: true
   }
