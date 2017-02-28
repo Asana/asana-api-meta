@@ -396,6 +396,19 @@ actions:
     comment: |
       Returns the compact task records for all tasks with the given tag.
 
+  - name: findBySection
+    class: query
+    method: GET
+    path: "/sections/%s/tasks"
+    params:
+      - name: section
+        <<: *Param.SectionId
+        required: true
+        comment: The section in which to search for tasks.
+    collection: true
+    comment: |
+      <b>Board view only:</b> Returns the compact section records for all tasks within the given section.
+
   - name: findAll
     class: query
     method: GET
@@ -415,6 +428,12 @@ actions:
       - name: project
         <<: *Param.ProjectId
         comment: The project to filter tasks on.
+      - name: section
+        <<: *Param.SectionId
+        comment: The section to filter tasks on.
+        notes:
+          - |
+            Currently, this is only supported in board views.
       - name: workspace
         <<: *Param.WorkspaceId
         comment: The workspace or organization to filter tasks on.

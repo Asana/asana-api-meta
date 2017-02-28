@@ -127,7 +127,6 @@ properties:
 
   - name: layout
     <<: *PropType.Layout
-    access: Hidden unless specified
     comment: |
       The layout (board or list view) of the project.
 
@@ -148,19 +147,17 @@ action_classes:
     url: sections
     comment: |
       Sections are list items that end with a colon character `:` or columns in
-      a board layout which divide the tasks in a project in some arbitrary way
-      determined by users' preferences. The `memberships` property of a task
-      contains the project/section pairs to which a task belongs when applicable.
+      a board layout. The `memberships` property of a task contains the
+      project/section pairs to which a task belongs when applicable.
 
       **Deprecation warning**: At this time, sections in a list-layout project
       are manipulated as if they were tasks, i.e. reordering a section involves
       moving the section (and all of its tasks if they are to remain in that
       section) to a new location in a project.  (see [Task, Project, and
       Section Associations](/developers/api-reference/tasks#projects) for more
-      information). This method of manipulating sections and their tasks will
+      information). This method of manipulating sections as if they are tasks will
       soon be deprecated in favor of the methods described in the [Sections
-      resource](/developers/api-reference/sections) which are already
-      implemented for board-layout projects.
+      resource](/developers/api-reference/sections).
 
   - name: Modify custom field settings
     url: custom-field-settings
