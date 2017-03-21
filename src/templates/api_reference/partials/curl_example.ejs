@@ -3,9 +3,9 @@
 <%}%>    # Request
     <%= example.request%> \
     <%= example.url%><%if (example.dataForRequest.length > 0) {%> \<%}%>
-    <%_.forEach(example.dataForRequest, function(data, index) {
-      %><%= data%><%if (index < example.dataForRequest.length -1) {%> \<%}%>
-    <%});%>
+<%_.forEach(example.dataForRequest, function(data, index) {
+      %>    <%= data%><%if (index < example.dataForRequest.length -1) {%> \<%}%>
+<%});%>
     # Response
     <%= example.responseStatus%>
     <%= indent(example.response, '    ', true)%>

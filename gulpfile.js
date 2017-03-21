@@ -60,7 +60,7 @@ var languages = {
   },
   api_reference: {
     repo: 'Asana/asanastatic',
-    outputPath: '_content/developers/api-reference',
+    outputPath: '_content/developers/02-api-reference',
     // Keep the other markdown pages and metadata there
     preserveRepoFiles: true
   }
@@ -314,8 +314,8 @@ gulp.task('test', function(callback) {
  */
 
 gulp.task('local-copy-api-reference', ['build-api_reference'], function(callback) {
-  console.log("copying_api_reference");
-  fs.copySync(paths.dist('api_reference'), "../asanastatic/" + paths.repoOutputRelative('api_reference'));
+  fs.copySync(paths.dist('api_reference'), "../vagrant-php7/asanastatic/" + paths.repoOutputRelative('api_reference'));
+  callback()
 });
 
 /**
@@ -326,3 +326,5 @@ gulp.task('local-copy-api-reference', ['build-api_reference'], function(callback
 gulp.task('watch-documents', function(callback) {
   gulp.watch("src/**/*.{js,yaml,ejs}", ['local-copy-api-reference']);
 });
+
+gulp.task('default', ['build', 'local-copy-api-reference']);

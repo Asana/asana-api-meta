@@ -93,7 +93,7 @@ function removeLineBreaks(text, opt_paragraph_delim) {
   text = text.replace(/\n\n/gm, "CC");
   text = text.replace(/\r\n|\n|\r/gm, " ");
   text = text.replace(/XX/g, "\n");
-  return text.replace(/CC/g, paragraph_delim);
+  return text.replace(/CC/g, paragraph_delim).trim();
 }
 
 function genericPath(action, pathParams) {
@@ -132,8 +132,9 @@ function curlExamplesForAction(action, resource_examples) {
   var action_examples = _.filter(resource_examples, function(example) {
     //TODO: this is a hack, simply to exclude selection-by-key vs selection-by-action/endpoint
     if (example.key) return false;
-    var regex = action.path.replace(/%s/g, ".+");
-    return example.method === action.method.toLowerCase() && example.endpoint.match(regex);
+    var regex = "^" + action.path.replace(/%s/g, ".+").replace(/\//g, "\\/");
+    match = (example.method === action.method.toLowerCase() && example.endpoint.match(regex));
+    return match
 
   });
   return buildCurlExamples(action_examples);
@@ -155,11 +156,11 @@ function buildCurlExamples(examples) {
       _.forEach(example.request_data, function(value, param_name) {
         var line;
         if (Array.isArray(value)) {   // exception for array types because of curl weirdness
-          line = '-d "' + param_name + '[0]=' + value[0] + '"';
+          line = '--data-urlencode "' + param_name + '[0]=' + value[0] + '"';
         } else if (param_name === 'file') {    // exception for files
           line = '--form "' + param_name + "=" + value + '"';
         } else {
-          line = '-d "' + param_name + "=" + value + '"';
+          line = '--data-urlencode "' + param_name + "=" + value + '"';
         }
         data.push(line);
       })

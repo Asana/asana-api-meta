@@ -50,6 +50,13 @@ templates:
       comment: |
         Globally unique identifier for the tag.
 
+  - template: &Param.SectionId
+      type: Id
+      example_values:
+        - "97531"
+      comment: |
+        Globally unique identifier for the section.
+
   - template: &Param.TaskId
       type: Id
       example_values:
@@ -137,6 +144,12 @@ templates:
         - "'text'"
         - "'enum'"
         - "'number'"
+
+  - template: &Param.SectionName
+    - type: String
+    - comment: "The name of the section"
+      example_values:
+        - "'Next Actions'"
 
   # Types of properties
 
@@ -292,7 +305,7 @@ templates:
   - template: &PropType.CustomFieldEnumOptions
     - type: String
       example_values:
-      - "[ { id: 789, name: 'Low', enabled: 'true', color: 'blue' }, ... ]"
+        - "[ { id: 789, name: 'Low', enabled: 'true', color: 'blue' }, ... ]"
       comment: |
         Only relevant for custom fields of type 'Enum'. This array specifies the possible values which an `enum` custom field can adopt.
 
@@ -318,6 +331,11 @@ templates:
       example_values:
         - "'These are things we need to purchase.'"
 
+  - template: &PropType.SectionName
+    - type: String
+      example_values:
+        - "'Next Actions'"
+
   - template: &PropType.Team
     - type: Team
       example_values:
@@ -328,6 +346,12 @@ templates:
     - type: Struct
       example_values:
         - "{ 'color': green, 'text': 'All gravy!', 'author':{ ... } ... } "
+
+  - template: &PropType.Layout
+    - type: Enum
+      example_values:
+        - "'board'"
+        - "'list'"
 
   ## Story
   - template: &PropType.HtmlText

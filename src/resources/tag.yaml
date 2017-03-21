@@ -41,7 +41,7 @@ properties:
   - name: color
     <<: *PropType.PotColor
     comment: |
-      Color of the project. Must be either `null` or one of: `dark-pink`,
+      Color of the tag. Must be either `null` or one of: `dark-pink`,
       `dark-green`, `dark-blue`, `dark-red`, `dark-teal`, `dark-brown`,
       `dark-orange`, `dark-purple`, `dark-warm-gray`, `light-pink`, `light-green`,
       `light-blue`, `light-red`, `light-teal`, `light-yellow`, `light-orange`,

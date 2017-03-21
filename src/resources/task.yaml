@@ -198,7 +198,7 @@ action_classes:
   - name: Custom field value-specific data
     url: custom_field_specific_data
     comment: |
-      Custom fields will return differing properties based on the custom field's type. 
+      Custom fields will return differing properties based on the custom field's type.
 
       Custom fields of type `text` will return a `text_value` property containing the string of text for the field.
       Custom fields of type `number` will return a `number_value` property containing the number for the field.
@@ -396,6 +396,19 @@ actions:
     comment: |
       Returns the compact task records for all tasks with the given tag.
 
+  - name: findBySection
+    class: query
+    method: GET
+    path: "/sections/%s/tasks"
+    params:
+      - name: section
+        <<: *Param.SectionId
+        required: true
+        comment: The section in which to search for tasks.
+    collection: true
+    comment: |
+      <b>Board view only:</b> Returns the compact section records for all tasks within the given section.
+
   - name: findAll
     class: query
     method: GET
@@ -415,6 +428,12 @@ actions:
       - name: project
         <<: *Param.ProjectId
         comment: The project to filter tasks on.
+      - name: section
+        <<: *Param.SectionId
+        comment: The section to filter tasks on.
+        notes:
+          - |
+            Currently, this is only supported in board views.
       - name: workspace
         <<: *Param.WorkspaceId
         comment: The workspace or organization to filter tasks on.
@@ -525,14 +544,20 @@ actions:
           - "124816"
         comment: |
           A section in the project to insert the task into. The task will be
-          inserted at the top of the section.
+          inserted at the bottom of the section.
     comment: |
       Adds the task to the specified project, in the optional location
       specified. If no location arguments are given, the task will be added to
-      the beginning of the project.
+      the end of the project.
 
-      `addProject` can also be used to reorder a task within a project that
+      `addProject` can also be used to reorder a task within a project or section that
       already contains it.
+
+      At most one of `insert_before`, `insert_after`, or `section` should be
+      specified. Inserting into a section in an non-order-dependent way can be
+      done by specifying `section`, otherwise, to insert within a section in a
+      particular place, specify `insert_before` or `insert_after` and a task
+      within the section to anchor the position of this task.
 
       Returns an empty data block.
 

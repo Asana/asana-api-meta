@@ -1,0 +1,177 @@
+---
+# See `user.yaml` for more docs on these yaml files.
+!include ../includes.yaml
+name: section
+comment: | 
+  A _section_ is a subdivision of a project that groups tasks together. It can
+  either be a header above a list of tasks in a list view or a column in a
+  board view of a project.
+
+notes:
+  - | 
+    Sections are largely a shared idiom in Asana's API for both list and board
+    views of a project regardless of the project's layout.
+
+    The 'memberships' property when [getting a
+    task](/developers/api-reference/tasks#get) will return the information for
+    the section or the column under 'section' in the response.
+
+properties:
+
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the section.
+
+  - name: name
+    <<: *PropType.SectionName
+    comment: |
+      The name of the section (i.e. the text displayed as the section header).
+
+  - name: project
+    <<: *PropType.Project
+    access: Read-only
+    comment: |
+      The project which contains the section.
+
+  - name: created_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which the section was created.
+
+
+action_classes:
+  - name: Create a section
+    url: create
+  - name: Get sections in a project
+    url: find-project
+  - name: Get a single section
+    url: get-single
+  - name: Update a section
+    url: update
+  - name: Delete a section
+    url: delete
+  - name: Move a section in a project
+    url: reorder
+
+actions:
+
+  # Create, Retrieve, Update, Delete
+
+  - name: createInProject
+    class: create
+    method: POST
+    path: "/projects/%s/sections"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to create the section in
+      - name: name
+        <<: *Param.SectionName
+        comment: The text to be displayed as the section name. This cannot be an empty string.
+        required: true
+    comment: |
+      Creates a new section in a project.
+
+      Returns the full record of the newly created section.
+
+  - name: findByProject
+    class: find-project
+    method: GET
+    path: "/projects/%s/sections"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to get sections from.
+    comment: |
+      Returns the compact records for all sections in the specified project.
+
+  - name: findById
+    class: get-single
+    method: GET
+    path: "/sections/%s"
+    params:
+      - name: section
+        <<: *Param.SectionId
+        required: true
+        comment: The section to get.
+    comment: |
+      Returns the complete record for a single section.
+
+  - name: update
+    class: update
+    method: PUT
+    path: "/sections/%s"
+    params:
+      - name: section
+        <<: *Param.SectionId
+        required: true
+        comment: The section to update.
+    comment: |
+      A specific, existing section can be updated by making a PUT request on
+      the URL for that project. Only the fields provided in the `data` block
+      will be updated; any unspecified fields will remain unchanged. (note that
+      at this time, the only field that can be updated is the `name` field.)
+
+      When using this method, it is best to specify only those fields you wish
+      to change, or else you may overwrite changes made by another user since
+      you last retrieved the task.
+
+      Returns the complete updated section record.
+
+  - name: delete
+    class: delete
+    method: DELETE
+    path: "/sections/%s"
+    params:
+      - name: section
+        <<: *Param.SectionId
+        required: true
+        comment: The section to delete.
+    comment: |
+      A specific, existing section can be deleted by making a DELETE request
+      on the URL for that section.
+
+      Note that sections must be empty to be deleted.
+
+      The last remaining section in a board view cannot be deleted.
+
+      Returns an empty data block.
+
+  - name: insertInProject
+    class: reorder
+    method: POST
+    path: "/projects/%s/sections/insert"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project in which to reorder the given section
+      - name: section
+        <<: *Param.SectionId
+        required: true
+        comment: The section to reorder
+      - name: before_section
+        <<: *Param.SectionId
+        required: false
+        example_values:
+          - "86420"
+        comment: Insert the given section immediately before the section specified by this parameter.
+      - name: after_section
+        <<: *Param.SectionId
+        required: false
+        example_values:
+          - "86420"
+        comment: Insert the given section immediately after the section specified by this parameter.
+    comment: |
+      Move sections relative to each other in a board view. One of
+      `before_section` or `after_section` is required.
+
+      Sections cannot be moved between projects.
+
+      At this point in time, moving sections is not supported in list views, only board views.
+
+      Returns an empty data block.
