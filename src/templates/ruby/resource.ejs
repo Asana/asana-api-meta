@@ -80,7 +80,8 @@ function Action(action) {
     }
 
     // Endpoint path
-    this.path = _.reduce(this.idParams, function(acc, id) {
+    var tfmParams = _.filter(params, function(p) { return p.as_id || p.type == "Id" })
+    this.path = _.reduce(tfmParams, function(acc, id) {
         var localName = that.mainIdParam == id ? "id" : id.name
         return acc.replace("\%s", "#{" + localName + "}")
     }, action.path)

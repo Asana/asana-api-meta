@@ -78,6 +78,7 @@ actions:
       - name: user
         <<: *Param.User
         required: true
+        as_id: true
     comment: |
       Returns the full user record for the single user with the provided ID.
 
