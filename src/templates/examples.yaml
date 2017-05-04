@@ -821,6 +821,7 @@
             id: 134679
             created_at: "2016-07-11T14:29:23.249Z"
             name: "Owner"
+            description: "Person responsible for task"
             type: "text"
       endpoint: "/custom_fields/124578"
       description: "Get the metadata for a custom field of type 'text'"
@@ -834,6 +835,7 @@
             id: 938271
             created_at: "2016-07-11T14:29:23.249Z"
             name: "Price"
+            description: "In US Dollars"
             type: "number"
             precision: 2
       endpoint: "/custom_fields/124578"
@@ -848,6 +850,7 @@
             id: 124578
             created_at: "2016-07-11T14:29:23.249Z"
             name: "Priority"
+            description: "Development team priority"
             type: "enum"
             enum_options:
               -
