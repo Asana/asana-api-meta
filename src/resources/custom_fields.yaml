@@ -3,7 +3,7 @@
 !include ../includes.yaml
 name: custom_fields
 comment: |
-  
+
   Custom Fields store the metadata that is used in order to add user-specified
   information to tasks in Asana. Be sure to reference the [Custom
   Fields](/developers/documentation/getting-started/custom-fields) developer
@@ -45,7 +45,7 @@ properties:
   - name: precision
     <<: *PropType.CustomFieldPrecision
     access: Read-only
-      
+
 
 action_classes:
   - name: Type-specific custom field information
@@ -82,5 +82,6 @@ actions:
         <<: *Param.WorkspaceId
         required: true
         comment: The workspace or organization to find custom field definitions in.
+    collection: true
     comment: |
       Returns a list of the compact representation of all of the custom fields in a workspace.
