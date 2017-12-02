@@ -41,7 +41,7 @@ properties:
       - |
         May be null if the export is still in progress or failed. If present, this URL
         may only be valid for 1 hour from the time of retrieval. You should avoid
-        persisting this URL somewhere; rather refresh it on demand to ensure you
+        persisting this URL somewhere and rather refresh on demand to ensure you
         do not keep stale URLs.
 
   - name: state

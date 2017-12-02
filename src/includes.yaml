@@ -295,6 +295,11 @@ templates:
       example_values:
         - "'Priority'"
 
+  - template: &PropType.CustomFieldDescription
+    - type: String
+      example_values:
+        - "'Development team priority'"
+
   - template: &PropType.CustomFieldType
     - type: String
       example_values:
