@@ -32,6 +32,12 @@ properties:
     comment: |
       The name of the custom field.
 
+  - name: description
+    <<: *PropType.CustomFieldDescription
+    access: Read-only
+    comment: |
+      The description of the custom field.
+
   - name: type
     <<: *PropType.CustomFieldType
     access: Read-only
