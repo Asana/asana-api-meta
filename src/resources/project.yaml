@@ -89,7 +89,7 @@ properties:
     <<: *PropType.UserArray
     access: Read-only
     comment: |
-      Array of users following this project. Followers are a subset of members who receive all notifcations for a
+      Array of users following this project. Followers are a subset of members who receive all notifications for a
       project, the default notification setting when adding members to a project in-product.
 
   - name: custom_field_settings

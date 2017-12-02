@@ -20,7 +20,7 @@ _layout: default
 side_nav:
 <% _.forEach(resource.action_classes, function(action_class) {%><%= '  -'%>
     name: <%= action_class.name%>
-    url: <%= action_class.url%>
+    url_notrans: <%= action_class.url%>
 <%});%>
 
 # Header
@@ -50,15 +50,13 @@ header_search: true;
     return action.class == action_class.url;
   });
 %><a name="<%= action_class.url%>"></a>
-<%= '**[' + action_class.name.toUpperCase() + '](#' + action_class.url + ')**'
-%>
-<%if (action_class.comment) {%><%= '\n' + removeLineBreaks(action_class.comment)
-%>
+<%= '**[' + action_class.name.toUpperCase() + '](#' + action_class.url + ')**'%><%if (action_class.comment) {%><%= '\n' + removeLineBreaks(action_class.comment)%>
 <%}%>
 <%var curl = curlExamplesForKeys(action_class.example_keys, examples);%>
 <%= partial("curl_example", {curl: curl, indent: indent})%>
 <% _.forEach(matchingActions, function(action) {
     var params = paramsForAction(action);%>
+
 ~~~ .nohighlight
 <%= action.method + '    ' + genericPath(action, params.pathParams)%>
 ~~~
@@ -75,12 +73,7 @@ header_search: true;
 %>**Required:** <%}%><%= removeLineBreaks(param.comment)%><%if (param.notes) {
 %><br><br>**Note:** <% _.forEach(param.notes, function(note) {%><%= removeLineBreaks(note, "<br><br>")%><%})};%>|<%
 });}%>
-
 <%var curl = curlExamplesForAction(action, examples);%>
 <%= partial("curl_example", {curl: curl, indent: indent})%>
-
 <%if (action.footer) {%><%= removeLineBreaks(action.footer)%>
-
-<%}%>---
-<%});%>
-<%});%>
+<%}%><%});%><%});%>

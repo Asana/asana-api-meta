@@ -63,7 +63,7 @@ properties:
     notes:
       - |
         This is not guaranteed to be stable for a given type of story. For
-        example, text for a reassignment may not always say “assigned to …”.
+        example, text for a reassignment may not always say &ldquo;assigned to …&rdquo;.
         The API currently does not provide a structured way of inspecting the
         meaning of a story.
 
