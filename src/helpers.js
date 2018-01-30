@@ -96,6 +96,12 @@ function removeLineBreaks(text, opt_paragraph_delim) {
   return text.replace(/CC/g, paragraph_delim).trim();
 }
 
+// Strip a string of leading/trailing whitespace
+// unlike removeLineBreaks, this doesn't affect anything inside the text.
+function stripWhitespace(text) {
+  return text.replace(/^\s+/, '').replace(/\s+$/, '')
+}
+
 function genericPath(action, pathParams) {
   var path = action.path;
   _.forEach(pathParams, function(pathParam) {
@@ -245,9 +251,11 @@ function partial() {
   {
     partial_context = partial_path_arry.pop();
   }
+  // Generally, partial_path_array will be a single element like ["partialname"]. It has the flexibility to look for nested directories, though,
+  // by specifying directories in the array - so ["directory", "subdirectory", "partialname"] elements becomes directory/subdirectory/partialname.ejs
   if (partialExists(partial_path_arry)) {
     var template_content = fs.readFileSync(partialFilename(partial_path_arry), 'utf8');
-    return _.template(template_content, partial_context);
+    return stripWhitespace(_.template(template_content, _.merge(partial_context, langs.api_reference))); // Mixing in langs.api_reference includes the api_reference specific functions in this file.
   } else {
     return '';
   }
@@ -299,6 +307,7 @@ var langs = {
     typeName: typeNameTranslator("md"),
     indent: prefixLines,
     removeLineBreaks: removeLineBreaks,
+    stripWhitespace: stripWhitespace,
     partialExists: partialExists,
     partial: partial,
     partialFilename: partialFilename,
