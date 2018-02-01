@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '0.10'
+- '4'
 sudo: false
 after_success:
   if [ ! -z "$TRAVIS_TAG" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
@@ -10,7 +10,7 @@ after_success:
     gulp deploy;
   else
     echo "Skipping deployment";
-  fi  
+  fi
 env:
   global:
     - GULP_DEBUG=1
