@@ -283,7 +283,7 @@ gulp.task('bump-release', ['ensure-git-clean'], function() {
 gulp.task('ensure-git-clean', function() {
   git.status(function(err, out) {
     if (err) { throw err; }
-    if (!/working directory clean/.exec(out)) {
+    if (!/working tree clean/.exec(out)) {
       // Working directory must be clean for some operations.
       // For bumping the version, this prevents accidental commits of
       // unintended or partial changes.
