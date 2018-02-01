@@ -2,13 +2,13 @@
 # See `user.yaml` for more docs on these yaml files.
 !include ../includes.yaml
 name: section
-comment: | 
+comment: |
   A _section_ is a subdivision of a project that groups tasks together. It can
   either be a header above a list of tasks in a list view or a column in a
   board view of a project.
 
 notes:
-  - | 
+  - |
     Sections are largely a shared idiom in Asana's API for both list and board
     views of a project regardless of the project's layout.
 

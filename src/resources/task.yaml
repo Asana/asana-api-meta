@@ -203,13 +203,13 @@ action_classes:
       Custom fields of type `text` will return a `text_value` property containing the string of text for the field.
       Custom fields of type `number` will return a `number_value` property containing the number for the field.
       Custom fields of type `enum` will return an `enum_value` property containing an object that represents the selection of the enum value.
-      
+
       `enum_value` warrants special consideration: it represents a single entry from the `enum_options` array in the custom field metadata. It has these properties:
 
       **id**: the id of the selected entry.
       **name**: the display name of the selected entry.
       **enabled**: whether the selection is modifiable. (See the documentation on [disabled values](/developers/documentation/getting-started/custom-fields#disabled-values) for more information).
-  
+
   - name: Setting custom field values
     url: setting_custom_field_values
     comment: |
@@ -218,7 +218,7 @@ action_classes:
       Custom fields of type `text` are set by passing in `custom_field_id:string`
       Custom fields of type `number` are set by passing in `custom_field_id:number`
       Custom fields of type `enum` are set by passing in `custom_field_id:enum_value_id`
-    
+
   - name: Work with subtasks
     url: subtasks
     comment: |
