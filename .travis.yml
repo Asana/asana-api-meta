@@ -4,13 +4,13 @@ node_js:
 - '6'
 sudo: false
 after_success:
-  if [ ! -z "$TRAVIS_TAG" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  if [[ ! -z "$TRAVIS_TAG" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
     echo "Deploying, issuing pull requests to api-meta-incoming";
     git config --global user.email "git@asana.com";
     git config --global user.name "Asana";
     gulp deploy;
   else
-    echo "Skipping deployment";
+    echo "Skipping deployment (no tag or was a pull request)";
   fi
 env:
   global:
