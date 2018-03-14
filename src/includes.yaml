@@ -159,6 +159,18 @@ templates:
         - "1234"
       access: Read-only
 
+  - template: &PropType.Resource
+    - type: Resource
+      example_values:
+        - "{ id: 1234 }"
+      access: Read-only
+
+  - template: &PropType.ResourceArray
+    - type: Resource
+      example_values:
+        - "[ { id: 1234 }, ... ]"
+      access: Read-only
+
   - template: &PropType.Bool
     - type: Boolean
       example_values:
