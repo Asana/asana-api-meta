@@ -1,0 +1,16 @@
+<%
+ // Reminder: line breaks are very significant in Markdown tables.
+ // The whole line with pipe characters needs to render on one line. Feel free to add newlines
+ // for clarity, but just be aware that they should always be _inside_ a JS code block of < % \n\n % >
+ // (minus the spaces to avoid that from being parsed) like here in this comment.
+%>| <%= property.name%><a class="jump-anchor" id="field-<%=property.name%>"></a> | <%
+  _.forEach(property.example_values, function(value) {
+    %><code class="table-example"><%= value%></code> <%
+});
+  if (property.access) {
+    %>**<%= property.access%>.** <%
+}
+%><%= removeLineBreaks(property.comment)%><%
+  if (property.notes) {
+    %><br><br>**Note:** <% _.forEach(property.notes, function(note) {%><%= removeLineBreaks(note, "<br><br>")%><%})
+};%>|

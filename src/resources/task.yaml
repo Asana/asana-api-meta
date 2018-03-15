@@ -152,6 +152,13 @@ properties:
       cannot be modified using a PUT request but you can change it with the
       `setParent` endpoint. You can create subtasks by using the subtasks endpoint.
 
+  - name: start_on
+    <<: *PropType.Date
+    comment: |
+      Date on which this task is due, or null if the task has no start date. This
+      field takes a date with YYYY-MM-DD format.
+
+
   - name: workspace
     <<: *PropType.Workspace
     comment: |
