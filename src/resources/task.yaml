@@ -251,11 +251,19 @@ action_classes:
   - name: Work with dependencies
     url: dependencies
     comment: |
-      You can mark that a task depends on another task by using the `/tasks/task-id/addDependencies` and `/tasks/task-id/addDependents` endpoints. These associations can be removed with the `/tasks/task-id/removeDependencies` and `/tasks/task-id/removeDependents` endpoints.
+      You can mark that a task depends on another task by using the
+      `/tasks/task-id/addDependencies` and `/tasks/task-id/addDependents`
+      endpoints. These associations can be removed with the
+      `/tasks/task-id/removeDependencies` and `/tasks/task-id/removeDependents`
+      endpoints.
 
-      A task cannot depend on itself, and task 1 cannot be made to depend on task 2 if task 2 already depends on task 1.
+      A task cannot depend on itself, and a task cannot depend on another task
+      that already depends on it, e.g. task 1 cannot be made to depend on task
+      2 if task 2 already depends on task 1.
 
-      You can find all of the dependencies of a task via the `/tasks/task-id/dependencies` endpoint, and all of its dependents via the `/tasks/task-id/dependents` endpoint.
+      You can find all of the dependencies of a task via the
+      `/tasks/task-id/dependencies` endpoint, and all of its dependents via the
+      `/tasks/task-id/dependents` endpoint.
 
   - name: Task activity and comments
     url: stories
@@ -521,12 +529,13 @@ actions:
         <<: *Param.TaskId
         required: true
         comment: The task to add dependencies to.
-      - name: followers
+      - name: dependencies
         <<: *Param.IdArray
         required: true
         comment: An array of task IDs that this task should depend on.
     comment: |
-      Marks a set of tasks as dependencies of this task, if they are not already dependencies. A task can have at most 15 dependencies.
+      Marks a set of tasks as dependencies of this task, if they are not
+      already dependencies. *A task can have at most 15 dependencies.*
 
   - name: addDependents
     class: dependencies
@@ -536,13 +545,14 @@ actions:
       - name: task
         <<: *Param.TaskId
         required: true
-        comment: The task to add depedents to.
-      - name: followers
+        comment: The task to add dependents to.
+      - name: dependents
         <<: *Param.IdArray
         required: true
         comment: An array of task IDs that should depend on this task.
     comment: |
-      Marks a set of tasks as dependents of this task, if they are not already dependents. A task can have at most 30 dependents.
+      Marks a set of tasks as dependents of this task, if they are not already
+      dependents. *A task can have at most 30 dependents.*
 
   - name: removeDependencies
     class: dependencies
@@ -553,7 +563,7 @@ actions:
         <<: *Param.TaskId
         required: true
         comment: The task to remove dependencies from.
-      - name: followers
+      - name: dependencies
         <<: *Param.IdArray
         required: true
         comment: An array of task IDs to remove as dependencies.
@@ -569,7 +579,7 @@ actions:
         <<: *Param.TaskId
         required: true
         comment: The task to remove dependents from.
-      - name: followers
+      - name: dependents
         <<: *Param.IdArray
         required: true
         comment: An array of task IDs to remove as dependents.
