@@ -68,7 +68,7 @@ properties:
   - name: dependencies
     <<: *PropType.ResourceArray
     comment: |
-      Array of objects referencing tasks that this task depends on. The objects contain only the ID of the dependency.
+      Array of resources referencing tasks that this task depends on. The objects contain only the ID of the dependency.
 
   - name: dependents
     <<: *PropType.ResourceArray
