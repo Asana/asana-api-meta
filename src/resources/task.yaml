@@ -156,7 +156,9 @@ properties:
     <<: *PropType.Date
     comment: |
       Date on which this task is due, or null if the task has no start date. This
-      field takes a date with YYYY-MM-DD format.
+      field takes a date with YYYY-MM-DD format.<br><br>**Note:** `due_on` or
+      `due_at` must be present in the request when setting or unsetting the
+      `start_on` parameter.
 
 
   - name: workspace
