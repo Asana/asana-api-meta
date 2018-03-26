@@ -105,16 +105,16 @@ properties:
     comment: |
       Array of users following this task.
 
-  - name: hearted
+  - name: liked
     <<: *PropType.Bool
     comment: |
-      True if the task is hearted by the authorized user, false if not.
+      True if the task is liked by the authorized user, false if not.
 
-  - name: hearts
+  - name: likes
     <<: *PropType.UserArray
     access: Read-only
     comment: |
-      Array of users who have hearted this task.
+      Array of users who have liked this task.
 
   - name: modified_at
     <<: *PropType.DateTime
@@ -141,11 +141,11 @@ properties:
     comment: |
       More detailed, free-form textual information associated with the task.
 
-  - name: num_hearts
+  - name: num_likes
     <<: *PropType.Count
     access: Read-only
     comment: |
-      The number of users who have hearted this task.
+      The number of users who have liked this task.
 
   - name: projects
     <<: *PropType.ProjectArray

@@ -26,31 +26,31 @@ properties:
     comment: |
       The user who created the story.
 
-  - name: hearted
+  - name: liked
     <<: *PropType.Bool
     comment: |
-      True if the story is hearted by the authorized user, false if not.
+      True if the story is liked by the authorized user, false if not.
     notes:
       - |
-        This property only exists for stories that provide hearts.
+        This property only exists for stories that provide likes.
 
-  - name: hearts
+  - name: likes
     <<: *PropType.UserArray
     access: Read-only
     comment: |
-      Array of users who have hearted this story.
+      Array of users who have liked this story.
     notes:
       - |
-        This property only exists for stories that provide hearts.
+        This property only exists for stories that provide likes.
 
-  - name: num_hearts
+  - name: num_likes
     <<: *PropType.Count
     access: Read-only
     comment: |
-      The number of users who have hearted this story.
+      The number of users who have liked this story.
     notes:
       - |
-        This property only exists for stories that provide hearts.
+        This property only exists for stories that provide likes.
 
   - name: text
     type: String
