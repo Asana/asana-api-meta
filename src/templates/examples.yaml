@@ -565,7 +565,7 @@
         status: "412 Precondition Failed"
         message: "Sync token invalid or too old. If you are attempting to keep resources in sync, you must re-fetch the full dataset for this query now."
         sync: "edfc0896b370b7a479886d316131bf5c:0"
-      endpoint: "/project/3214312/events?sync=de4774f6915eae04714ca93bb2f5ee81:3"
+      endpoint: "/projects/3214312/events?sync=de4774f6915eae04714ca93bb2f5ee81:3"
       description: "Get recent events on a project"
       method: "get"
   Webhooks:
