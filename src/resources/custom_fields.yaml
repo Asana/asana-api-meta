@@ -74,7 +74,7 @@ action_classes:
 
       On creation of an enum option, `is_enabled` is always set to `true`, meaning the enum option is a selectable value for the custom field. Setting `is_enabled=false` is equivalent to "trashing" the enum option in the Asana web app within the "Edit Fields" dialog. The enum option will no longer be selectable but, if the enum option value was previously set within a task, the task will retain the value.
 
-      Enum options are an ordered list and by default new enum options are inserted at the end. Ordering in relation to existing enum options can be specified on creation by using `after_enum_option` or `before_enum_option` to reference existing an enum option. Only one of  `after_enum_option` and`before_enum_option` can be provided when creating a new enum option.
+      Enum options are an ordered list and by default new enum options are inserted at the end. Ordering in relation to existing enum options can be specified on creation by using `insert_before` or `insert_after` to reference existing an enum option. Only one of `insert_before` and `insert_after` can be provided when creating a new enum option.
 
       An enum options list can be reordered with the `POST /custom_fields/:custom_field/enum_options/insert` endpoint.
   - name: Add a new enum option
@@ -188,10 +188,10 @@ actions:
         required: true
       - name: color
         <<: *Param.CustomFieldEnumOptionColor
-      - name: before_enum_option
+      - name: insert_before
         <<: *Param.Id
         comment: An existing enum option within this custom field behind which the new enum option should be inserted. Cannot be provided together with after_enum_option.
-      - name: before_enum_option
+      - name: insert_after
         <<: *Param.Id
         comment: An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
 
