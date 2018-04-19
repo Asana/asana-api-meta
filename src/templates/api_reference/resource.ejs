@@ -40,8 +40,8 @@ var thisType = title(plural(resource.name));
 %><a class="jump-anchor" id="<%= action_class.url%>"></a>
 <%= '**[' + action_class.name.toUpperCase() + '](#' + action_class.url + ')**'%><%if (action_class.comment) {%><%= '\n' + removeLineBreaks(action_class.comment)%>
 <%}%>
-<%var curl = curlExamplesForKeys(action_class.example_keys, examples);%>
-<%= partial("curl_example", {curl: curl, indent: indent})%>
+<%var curl_for_keys = curlExamplesForKeys(action_class.example_keys, examples);%>
+
 <% _.forEach(matchingActions, function(action) {
     var params = paramsForAction(action);%>
 
@@ -64,4 +64,5 @@ var thisType = title(plural(resource.name));
 <%var curl = curlExamplesForAction(action, examples);%>
 <%= partial("curl_example", {curl: curl, indent: indent})%>
 <%if (action.footer) {%><%= removeLineBreaks(action.footer)%>
-<%}%><%});%><%});%>
+<%}%><%});%><%= partial("curl_example", {curl: curl_for_keys, indent: indent})%>
+<%});%>

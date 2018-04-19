@@ -88,161 +88,157 @@
       description: "Show tasks assigned to me in a workspace or organization."
       method: "get"
     -
-      -
-        response:
-          status: 201
-          data:
-            created_at: "2012-02-22T02:06:58.158Z"
-            name: "Tell Luke"
-            parent:
-              id: 2272
-              name: "Tell kids I am their father."
-            completed_at: null
-            notes: "He's going to be upset."
-            modified_at: "2012-02-22T02:06:58.158Z"
-            assignee_status: "inbox"
-            assignee:
+      response:
+        status: 201
+        data:
+          created_at: "2012-02-22T02:06:58.158Z"
+          name: "Tell Luke"
+          parent:
+            id: 2272
+            name: "Tell kids I am their father."
+          completed_at: null
+          notes: "He's going to be upset."
+          modified_at: "2012-02-22T02:06:58.158Z"
+          assignee_status: "inbox"
+          assignee:
+            id: 1235
+            name: "Darth Vader"
+          completed: false
+          followers:
+            -
+              id: 5678
+              name: "Emperor Palpatine"
+          workspace:
+            id: 14916
+            name: "Star Wars"
+          due_on: null
+          id: 1001
+          projects: []
+      request_data:
+        assignee: 1235
+        notes: "He's going to be upset."
+        followers:
+          - 5678
+        name: "Tell Luke"
+      endpoint: "/tasks/2272/subtasks"
+      description: "Create a subtask."
+      method: "post"
+    -
+      response:
+        data:
+          -
+            id: 5005
+            name: "Steal Underwear"
+          -
+            id: 6709
+            name: "???"
+          -
+            id: 9812
+            name: "Profit"
+      endpoint: "/tasks/7331/subtasks"
+      description: "Show all of a task's subtasks."
+      method: "get"
+    -
+      response:
+        status: 200
+        data:
+          "...": "..."
+          id: 2272
+          parent:
+            -
+              id: 1331
+              name: "Tell kids I am their father"
+          name: "Tell Luke"
+      request_data:
+        parent: 1331
+      endpoint: "/tasks/2272/setParent"
+      description: "Set the parent for an existing task."
+      method: "post"
+    -
+      response:
+        data:
+          -
+            id: 1331
+            name: "Things To Buy"
+          -
+            id: 14641
+            name: "Cat Stuff"
+      endpoint: "/tasks/1001/projects"
+      description: "Show list of projects on a task."
+      method: "get"
+    -
+      response:
+        data: {}
+      request_data:
+        project: 14641
+      endpoint: "/tasks/1001/addProject"
+      description: "Add project to a task."
+      method: "post"
+    -
+      response:
+        data: {}
+      request_data:
+        project: 14641
+      endpoint: "/tasks/1001/removeProject"
+      description: "Remove project from a task."
+      method: "post"
+    -
+      response:
+        data:
+          -
+            id: 1331
+            name: "orange"
+          -
+            id: 1771
+            name: "fluffy"
+      endpoint: "/tasks/1001/tags"
+      description: "Show list of tags on a task."
+      method: "get"
+    -
+      response:
+        data: {}
+      request_data:
+        tag: 1771
+      endpoint: "/tasks/1001/addTag"
+      description: "Add tag to a task."
+      method: "post"
+    -
+      response:
+        data: {}
+      request_data:
+        tag: 1771
+      endpoint: "/tasks/1001/removeTag"
+      description: "Remove tag from a task."
+      method: "post"
+    -
+      response:
+        status: 200
+        data:
+          followers:
+            -
               id: 1235
               name: "Darth Vader"
-            completed: false
-            followers:
-              -
-                id: 5678
-                name: "Emperor Palpatine"
-            workspace:
-              id: 14916
-              name: "Star Wars"
-            due_on: null
-            id: 1001
-            projects: []
-        request_data:
-          assignee: 1235
-          notes: "He's going to be upset."
-          followers:
-            - 5678
-          name: "Tell Luke"
-        endpoint: "/tasks/2272/subtasks"
-        description: "Create a subtask."
-        method: "post"
-      -
-        response:
-          data:
-            -
-              id: 5005
-              name: "Steal Underwear"
-            -
-              id: 6709
-              name: "???"
-            -
-              id: 9812
-              name: "Profit"
-        endpoint: "/tasks/7331/subtasks"
-        description: "Show all of a task's subtasks."
-        method: "get"
-      -
-        response:
-          status: 200
-          data:
-            "...": "..."
-            id: 2272
-            parent:
-              -
-                id: 1331
-                name: "Tell kids I am their father"
-            name: "Tell Luke"
-        request_data:
-          parent: 1331
-        endpoint: "/tasks/2272/setParent"
-        description: "Set the parent for an existing task."
-        method: "post"
+          id: 1001
+          "...": "..."
+      request_data:
+        followers:
+          - 1235
+      endpoint: "/tasks/1001/addFollowers"
+      description: "Add followers to a task."
+      method: "post"
     -
-      -
-        response:
-          data:
-            -
-              id: 1331
-              name: "Things To Buy"
-            -
-              id: 14641
-              name: "Cat Stuff"
-        endpoint: "/tasks/1001/projects"
-        description: "Show list of projects on a task."
-        method: "get"
-      -
-        response:
-          data: {}
-        request_data:
-          project: 14641
-        endpoint: "/tasks/1001/addProject"
-        description: "Add project to a task."
-        method: "post"
-      -
-        response:
-          data: {}
-        request_data:
-          project: 14641
-        endpoint: "/tasks/1001/removeProject"
-        description: "Remove project from a task."
-        method: "post"
-    -
-      -
-        response:
-          data:
-            -
-              id: 1331
-              name: "orange"
-            -
-              id: 1771
-              name: "fluffy"
-        endpoint: "/tasks/1001/tags"
-        description: "Show list of tags on a task."
-        method: "get"
-      -
-        response:
-          data: {}
-        request_data:
-          tag: 1771
-        endpoint: "/tasks/1001/addTag"
-        description: "Add tag to a task."
-        method: "post"
-      -
-        response:
-          data: {}
-        request_data:
-          tag: 1771
-        endpoint: "/tasks/1001/removeTag"
-        description: "Remove tag from a task."
-        method: "post"
-    -
-      -
-        response:
-          status: 200
-          data:
-            followers:
-              -
-                id: 1235
-                name: "Darth Vader"
-            id: 1001
-            "...": "..."
-        request_data:
-          followers:
-            - 1235
-        endpoint: "/tasks/1001/addFollowers"
-        description: "Add followers to a task."
-        method: "post"
-      -
-        response:
-          status: 200
-          data:
-            followers: []
-            id: 1001
-            "...": "..."
-        request_data:
-          followers:
-            - 1235
-        endpoint: "/tasks/1001/removeFollowers"
-        description: "Remove followers from a task."
-        method: "post"
+      response:
+        status: 200
+        data:
+          followers: []
+          id: 1001
+          "...": "..."
+      request_data:
+        followers:
+          - 1235
+      endpoint: "/tasks/1001/removeFollowers"
+      description: "Remove followers from a task."
+      method: "post"
     -
       response:
         status: 200
@@ -698,7 +694,6 @@
       endpoint: "/projects/1331/removeCustomFieldSetting"
       description: "Remove a custom field setting from a project"
       method: "post"
-
   Sections:
     -
       response:
@@ -763,12 +758,6 @@
       endpoint: "/projects/1331/sections/insert"
       description: "Add or move a section in a project"
       method: "post"
-
-
-
-
-
-
   Users:
     -
       response:
@@ -819,7 +808,6 @@
         data:
           -
             id: 134679
-            created_at: "2016-07-11T14:29:23.249Z"
             name: "Owner"
             description: "Person responsible for task"
             type: "text"
@@ -827,13 +815,30 @@
       description: "Get the metadata for a custom field of type 'text'"
       method: "get"
     -
+      key: "create-text-custom-field"
+      response:
+        status: 201
+        data:
+          -
+            id: 134679
+            name: "Owner"
+            description: "Person responsible for task"
+            type: "text"
+      request_data:
+        name: "Owner"
+        type: "text"
+        description: "Person responsible for task"
+        workspace: 14916
+      endpoint: "/custom_fields"
+      description: "Create a custom field of type 'text'"
+      method: "post"
+    -
       key: "get-number-custom-field-data"
       response:
         status: 200
         data:
           -
             id: 938271
-            created_at: "2016-07-11T14:29:23.249Z"
             name: "Price"
             description: "In US Dollars"
             type: "number"
@@ -842,13 +847,32 @@
       description: "Get the metadata for a custom field of type 'number'"
       method: "get"
     -
+      key: "create-number-custom-field"
+      response:
+        status: 201
+        data:
+          -
+            id: 938271
+            name: "Price"
+            description: "In US Dollars"
+            type: "number"
+            precision: 2
+      request_data:
+        name: "Price"
+        description: "In US Dollars"
+        type: "number"
+        precision: 2
+        workspace: 14916
+      endpoint: "/custom_fields"
+      description: "Create a custom field of type 'number'"
+      method: "post"
+    -
       key: "get-enum-custom-field-data"
       response:
         status: 200
         data:
           -
             id: 124578
-            created_at: "2016-07-11T14:29:23.249Z"
             name: "Priority"
             description: "Development team priority"
             type: "enum"
@@ -871,6 +895,46 @@
       endpoint: "/custom_fields/124578"
       description: "Get the metadata for a custom field when that field is of type 'enum'."
       method: "get"
+    -
+      key: "create-enum-custom-field"
+      response:
+        status: 201
+        data:
+          -
+            id: 124578
+            name: "Priority"
+            description: "Development team priority"
+            type: "enum"
+            enum_options:
+              -
+                id: 789
+                name: "Low"
+                enabled: true
+                color: "blue"
+              -
+                id: 790
+                name: "Medium"
+                enabled: true
+                color: "yellow"
+              -
+                id: 791
+                name: "High"
+                enabled: true
+                color: "red"
+      request_data:
+        name: "Priority"
+        type: "enum"
+        description: "Development team priority"
+        workspace: 14916
+        enum_options[0][\"name\"]: "Low"
+        enum_options[0][\"color\"]: "blue"
+        enum_options[1][\"name\"]: "Medium"
+        enum_options[1][\"color\"]: "yellow"
+        enum_options[2][\"name\"]: "High"
+        enum_options[2][\"color\"]: "red"
+      endpoint: "/custom_fields"
+      description: "Create a custom field of type 'enum'"
+      method: "post"
     -
       response:
         status: 200
