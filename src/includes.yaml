@@ -128,22 +128,56 @@ templates:
 
   - template: &Param.CustomFieldEnumOptions
     - type: String
+    - comment: The discrete values the custom field can assume. Required if the custom field is of type 'enum'.
       example_values:
-        - "[ { id: 126, name: 'P0', enabled: true, color: none }, {id: 198, name: 'P1', enabled: false, color: red} ]"
+        - "[ { name: 'Low', color: 'blue' }, { name: 'Medium', color: 'yellow' }, { name: 'High', color: 'red' } ]"
 
   - template: &Param.CustomFieldName
     - type: String
-    - comment: "The name of the custom field"
+    - comment: The name of the custom field.
       example_values:
         - "'Priority'"
 
+  - template: &Param.CustomFieldPrecision
+    - type: Integer
+    - comment: The number of decimal places for the numerical values. Required if the custom field is of type 'number'.
+      example_values:
+        - "2"
+
+  - template: &Param.CustomFieldDescription
+    - type: String
+    - comment: The description of the custom field.
+      example_values:
+        - "'Development team priority'"
+
   - template: &Param.CustomFieldType
     - type: String
-    - comment: "The type of the custom field"
+    - comment: The type of the custom field.
       example_values:
         - "'text'"
         - "'enum'"
         - "'number'"
+
+  - template: &Param.CustomFieldEnumOptionId
+      type: Id
+      example_values:
+        - "97285"
+      comment: |
+        Globally unique identifier for the enum option.
+
+  - template: &Param.CustomFieldEnumOptionName
+    - type: String
+    - comment: The name of the enum option.
+      example_values:
+        - "'High'"
+        - "'Low'"
+
+  - template: &Param.CustomFieldEnumOptionColor
+    - type: String
+    - comment: The color of the enum option. Defaults to 'none'.
+      example_values:
+        - "'red'"
+        - "'blue'"
 
   - template: &Param.SectionName
     - type: String
@@ -300,7 +334,7 @@ templates:
       example_values:
         - "2"
       comment: |
-        Only relevant for custom fields of type 'Number'. This field dictates the number of places after the decimal to round to, i.e. `0` is integer values, `1` rounds to the nearest tenth, and so on.
+        Only relevant for custom fields of type 'Number'. This field dictates the number of places after the decimal to round to, i.e. 0 is integer values, 1 rounds to the nearest tenth, and so on. Must be between 0 and 6, inclusive.
 
   - template: &PropType.CustomFieldName
     - type: String
@@ -323,8 +357,6 @@ templates:
     - type: String
       example_values:
         - "[ { id: 789, name: 'Low', enabled: 'true', color: 'blue' }, ... ]"
-      comment: |
-        Only relevant for custom fields of type 'Enum'. This array specifies the possible values which an `enum` custom field can adopt.
 
   - template: &PropType.Memberships
     - type: Array
