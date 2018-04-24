@@ -43,6 +43,13 @@ templates:
       comment: |
         Globally unique identifier for the project.
 
+  - template: &Param.ProjectMembershipId
+      type: Id
+      example_values:
+        - "34729"
+      comment: |
+        Globally unique identifier for the project membership.
+
   - template: &Param.TagId
       type: Id
       example_values:
@@ -95,6 +102,7 @@ templates:
         - "14916"
       comment: |
         Globally unique identifier for the team.
+
   - template: &Param.StoryId
       type: Id
       example_values:
@@ -401,6 +409,12 @@ templates:
       example_values:
         - "'board'"
         - "'list'"
+
+  - template: &PropType.WriteAccess
+    - type: Enum
+      example_values:
+        - "'full_write'"
+        - "'comment_only'"
 
   ## Story
   - template: &PropType.HtmlText
