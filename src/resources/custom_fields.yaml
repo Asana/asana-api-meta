@@ -70,11 +70,11 @@ action_classes:
 
       You can add  enum options to a custom field by using the `POST /custom_fields/custom_field-id/enum_options` endpoint.
 
-      **It is not possible to remove or delete an enum option.** Instead, enum options can be disabled by updating the `is_enabled` field to `false ` with the `PUT /enum_options/enum_option-id` endpoint. Other attributes can be updated similarly.
+      **It is not possible to remove or delete an enum option.** Instead, enum options can be disabled by updating the `enabled` field to `false ` with the `PUT /enum_options/enum_option-id` endpoint. Other attributes can be updated similarly.
 
-      On creation of an enum option, `is_enabled` is always set to `true`, meaning the enum option is a selectable value for the custom field. Setting `is_enabled=false` is equivalent to "trashing" the enum option in the Asana web app within the "Edit Fields" dialog. The enum option will no longer be selectable but, if the enum option value was previously set within a task, the task will retain the value.
+      On creation of an enum option, `enabled` is always set to `true`, meaning the enum option is a selectable value for the custom field. Setting `enabled=false` is equivalent to "trashing" the enum option in the Asana web app within the "Edit Fields" dialog. The enum option will no longer be selectable but, if the enum option value was previously set within a task, the task will retain the value.
 
-      Enum options are an ordered list and by default new enum options are inserted at the end. Ordering in relation to existing enum options can be specified on creation by using `insert_before` or `insert_after` to reference existing an enum option. Only one of `insert_before` and `insert_after` can be provided when creating a new enum option.
+      Enum options are an ordered list and by default new enum options are inserted at the end. Ordering in relation to existing enum options can be specified on creation by using `insert_before` or `insert_after` to reference an existing enum option. Only one of `insert_before` and `insert_after` can be provided when creating a new enum option.
 
       An enum options list can be reordered with the `POST /custom_fields/:custom_field/enum_options/insert` endpoint.
   - name: Add a new enum option
@@ -196,7 +196,7 @@ actions:
         comment: An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
 
     comment: |
-      Creates an enum option and adds it to this custom field’s list of enum options. A custom field can have at most 50 enum options. By default new enum options are inserted at the end of a custom field’s list.
+      Creates an enum option and adds it to this custom field’s list of enum options. A custom field can have at most 50 enum options (including disabled options). By default new enum options are inserted at the end of a custom field’s list.
 
       Returns the full record of the newly created enum option.
 
@@ -213,7 +213,7 @@ actions:
         required: true
       - name: color
         <<: *Param.CustomFieldEnumOptionColor
-      - name: is_enabled
+      - name: enabled
         <<: *PropType.Bool
         comment: Whether or not the enum option is a selectable value for the custom field.
 
@@ -238,12 +238,10 @@ actions:
       - name: before_enum_option
         <<: *Param.Id
         comment: An existing enum option within this custom field behind which the new enum option should be inserted. Cannot be provided together with after_enum_option.
-      - name: before_enum_option
+      - name: after_enum_option
         <<: *Param.Id
         comment: An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
 
     comment: |
-      Creates an enum option and adds it to this custom field’s list of enum options. A custom field can have at most 50 enum options. By default new enum options are inserted at the end of a custom field’s list.
-
-      Returns the full record of the newly created enum option.
+      Moves a particular enum option to be either before or after another specified enum option in the custom field.
 
