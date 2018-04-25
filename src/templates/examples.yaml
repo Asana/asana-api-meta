@@ -694,6 +694,37 @@
       endpoint: "/projects/1331/removeCustomFieldSetting"
       description: "Remove a custom field setting from a project"
       method: "post"
+  Project Memberships:
+    -
+      response:
+        status: 200
+        data:
+          -
+            id: 1012
+            user:
+              id: 1234
+              name: "Tim Bizarro"
+          -
+            id: 1019
+            user:
+              id: 5678
+              name: "Greg Sanchez"
+          - "~..."
+      endpoint: "/projects/1331/project_memberships"
+      description: "Show memberships for a specific project."
+      method: "get"
+    -
+      response:
+        status: 200
+        data:
+          id: 1012
+          user:
+            id: 1234
+            name: "Tim Bizarro"
+          write_access: "full_write"
+      endpoint: "/project_memberships/1012"
+      description: "Show a specific project membership."
+      method: "get"
   Sections:
     -
       response:
