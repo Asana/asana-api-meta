@@ -98,6 +98,8 @@ action_classes:
     url: get-single
   - name: Commenting on an object
     url: post-comment
+  - name: Update a comment
+    url: update
 
 actions:
 
@@ -129,3 +131,20 @@ actions:
   - name: createOnTask
     class: post-comment
     <<: *Action.CommentOnTask
+
+  - name: update
+    class: update
+    method: PUT
+    path: "/stories/%s"
+    params:
+      - name: story
+        <<: *Param.StoryId
+        required: true
+      - name: text
+        type: String
+        example_values:
+          - "'This is a comment.'"
+        required: true
+        comment: The plain text with which to update the comment.
+    comment: |
+      Updates the text and returns the full record for the updated story.
