@@ -420,7 +420,7 @@ templates:
   - template: &PropType.HtmlText
     - type: String
       example_values:
-        - "'Get whatever <a href='https://app.asana.com/0/1123/1234'> Sashimi </a> has.'"
+        - "'Get whatever &lt;a href='https://app.asana.com/0/1123/1234'&gt;Sashimi&lt;/a&gt; has.'"
       access: Read-only
 
   - template: &PropType.StorySource

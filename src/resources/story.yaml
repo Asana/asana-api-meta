@@ -81,6 +81,20 @@ properties:
     comment: |
       The object this story is associated with. Currently may only be a task.
 
+  - name: is_pinned
+    <<: *PropType.Bool
+    comment: |
+      Whether the story is pinned on the target.
+    notes:
+      - This field is only present on comment and attachment stories.
+
+  - name: is_edited
+    <<: *PropType.Bool
+    comment: |
+      Whether the text of the story has been edited after creation.
+    notes:
+      - This field is only present on comment stories.
+
   - name: source
     <<: *PropType.StorySource
     comment: |
@@ -98,6 +112,8 @@ action_classes:
     url: get-single
   - name: Commenting on an object
     url: post-comment
+  - name: Update a story
+    url: update
 
 actions:
 
@@ -129,3 +145,30 @@ actions:
   - name: createOnTask
     class: post-comment
     <<: *Action.CommentOnTask
+
+  - name: update
+    class: update
+    method: PUT
+    path: "/stories/%s"
+    params:
+      - name: story
+        <<: *Param.StoryId
+        required: true
+      - name: text
+        type: String
+        example_values:
+          - "'This is a comment.'"
+        comment: |
+          The plain text with which to update the comment.
+      - name: html_text
+        type: String
+        example_values:
+          - "'Get whatever &lt;a href='https://app.asana.com/0/1123/1234'&gt;Sashimi&lt;/a&gt; has.'"
+        comment: The rich text with which to update the comment.
+      - name: is_pinned
+        <<: *Param.Bool
+        comment: Whether the story should be pinned no the resource.
+    comment: |
+      Updates the story and returns the full record for the updated story.
+      Only comment stories can have their text updated, and only comment stories and
+      attachment stories can be pinned. Only one of `text` and `html_text` can be specified.
