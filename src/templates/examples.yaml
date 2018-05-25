@@ -500,6 +500,8 @@
             name: "Mittens"
           source: "web"
           type: "comment"
+          is_edited: false
+          is_pinned: false
           id: 2001
       endpoint: "/stories/2001"
       description: "Show a specific story."
@@ -518,6 +520,8 @@
             name: "Greg Sanchez"
           source: "api"
           type: "comment"
+          is_edited: false
+          is_pinned: false
           id: 2001
       request_data:
         text: "This is a very nice comment."
@@ -538,6 +542,8 @@
             name: "Greg Sanchez"
           source: "api"
           type: "comment"
+          is_edited: true
+          is_pinned: false
           id: 2001
       request_data:
         text: "This is some updated text."
