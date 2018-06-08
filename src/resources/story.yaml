@@ -167,7 +167,7 @@ actions:
         comment: The rich text with which to update the comment.
       - name: is_pinned
         <<: *Param.Bool
-        comment: Whether the story should be pinned no the resource.
+        comment: Whether the story should be pinned on the resource.
     comment: |
       Updates the story and returns the full record for the updated story.
       Only comment stories can have their text updated, and only comment stories and
