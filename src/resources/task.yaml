@@ -800,9 +800,27 @@ actions:
         required: true
         explicit: true
         comment: The new parent of the task, or `null` for no parent.
+      - name: insert_after
+        <<: *Param.TaskId
+        example_values:
+          - "124816"
+          - "null"
+        comment: |
+          A subtask of the parent to insert the task after, or `null` to
+          insert at the beginning of the list.
+      - name: insert_before
+        <<: *Param.TaskId
+        example_values:
+          - "124816"
+          - "null"
+        comment: |
+          A subtask of the parent to insert the task before, or `null` to
+          insert at the end of the list.
     comment: |
       Changes the parent of a task. Each task may only be a subtask of a single
-      parent, or no parent task at all. Returns an empty data block.
+      parent, or no parent task at all. Returns an empty data block. When using `insert_before` and `insert_after`,
+      at most one of those two options can be specified, and they must already be subtasks
+      of the parent.
 
   # Stories
 
