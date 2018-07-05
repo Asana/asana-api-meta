@@ -751,6 +751,61 @@
       endpoint: "/project_memberships/1012"
       description: "Show a specific project membership."
       method: "get"
+  Project Statuses:
+    -
+      response:
+        status: 200
+        data:
+          -
+            id: 18492
+            title: "Status Update - Jun 15"
+          -
+            id: 13597
+            title: "Status Update - May 30"
+          - "~..."
+      endpoint: "/projects/1012/project_statuses"
+      description: "Show all status updates for a specific project."
+      method: "get"
+    -
+      response:
+        status: 200
+        data:
+          id: 18492
+          title: "Status Update - Jun 15"
+          text: "The project is on track to ship next month!"
+          color: "green"
+          created_by:
+            id: 1234
+            name: "Tim Bizarro"
+          created_at: "2018-06-15T18:40:50.902Z"
+      endpoint: "/project_statuses/18492"
+      description: "Show a specific project status update."
+      method: "get"
+    -
+      response:
+        status: 200
+        data: {}
+      endpoint: "/project_statuses/18492"
+      description: "Delete a specific project status update."
+      method: "delete"
+    -
+      response:
+        status: 201
+        data:
+          id: 18492
+          title: "Status Update - Jun 15"
+          text: "The project is on track to ship next month!"
+          color: "green"
+          created_by:
+            id: 1234
+            name: "Tim Bizarro"
+          created_at: "2018-06-15T18:40:50.902Z"
+      request_data:
+        text: "The project is on track to ship next month!"
+        color: "green"
+      endpoint: "/projects/1012/project_statuses"
+      description: "Create a new status update for a project."
+      method: "post"
   Sections:
     -
       response:
@@ -803,7 +858,7 @@
         status: 200
         data: {}
       endpoint: "/sections/2001"
-      description: "Get the full record for a section"
+      description: "Delete a section"
       method: "delete"
     -
       response:

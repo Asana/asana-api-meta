@@ -50,6 +50,21 @@ templates:
       comment: |
         Globally unique identifier for the project membership.
 
+  - template: &Param.ProjectStatusUpdateId
+      type: Id
+      example_values:
+        - "13597"
+      comment: |
+        Globally unique identifier for the project status update.
+
+  - template: &Param.ProjectStatusColor
+    - type: String
+    - comment: The color of the project status update.
+      example_values:
+        - "'green'"
+        - "'yellow'"
+        - "'red'"
+
   - template: &Param.TagId
       type: Id
       example_values:
@@ -402,7 +417,7 @@ templates:
   - template: &PropType.Status
     - type: Struct
       example_values:
-        - "{ 'color': green, 'text': 'All gravy!', 'author':{ ... } ... } "
+        - "{ 'color': 'green', 'title': 'Status Update - Jun 15', ... } "
 
   - template: &PropType.Layout
     - type: Enum
