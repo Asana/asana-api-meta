@@ -42,9 +42,10 @@ properties:
 
   - name: current_status
     <<: *PropType.Status
+    access: Read-only
     comment: |
-      A description of the project's status containing a color (must be either
-      `null` or one of: `green`, `yellow`, `red`) and a short description.
+      The most recently created status update for the project, or `null` if no update exists. See also the
+      documentation for [project status updates](/developers/api-reference/project_statuses).
 
   - name: due_date
     <<: *PropType.Date

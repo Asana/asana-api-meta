@@ -1,0 +1,137 @@
+---
+# See `user.yaml` for more docs on these yaml files.
+!include ../includes.yaml
+name: project_status
+comment: |
+  A _project status_ is an update on the progress of a particular project, and is sent out to all project
+  followers when created. These updates include both text describing the update and a color code intended to
+  represent the overall state of the project: "green" for projects that are on track, "yellow" for projects
+  at risk, and "red" for projects that are behind.
+
+  Project statuses can be created and deleted, but not modified.
+
+properties:
+
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the project status update.
+
+  - name: title
+    type: String
+    access: Read-only
+    comment: |
+      The title of the project status update.
+    example_values:
+      - "'Status Update - Jun 15'"
+
+  - name: text
+    type: String
+    access: Read-only
+    comment: |
+      The text content of the status update.
+    example_values:
+      - "'The project is moving forward according to plan...'"
+
+  - name: color
+    type: Enum
+    access: Read-only
+    comment: |
+      The color associated with the status update.
+    example_values:
+      - "'green'"
+      - "'yellow'"
+      - "'red'"
+
+  - name: created_by
+    <<: *PropType.User
+    access: Read-only
+    comment: |
+      The creator of the status update.
+    example_values:
+      - "{ id: 12345, name: 'Tim Bizarro' }"
+
+  - name: created_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which the status update was created.
+
+action_classes:
+  - name: Create a status update
+    url: create
+  - name: Get status updates for a project
+    url: query
+  - name: Get a status update
+    url: get-single
+  - name: Delete a status update
+    url: delete
+
+actions:
+
+  # Create, Retrieve, Update, Delete
+
+  - name: create
+    class: create
+    method: POST
+    path: "/projects/%s/project_statuses"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project on which to create a status update.
+      - name: text
+        type: String
+        required: true
+        comment: |
+          The text of the project status update.
+        example_values:
+          - "The project is on track to ship next month!"
+      - name: color
+        <<: *Param.ProjectStatusColor
+        required: true
+        comment: |
+          The color to associate with the status update. Must be one of `"red"`, `"yellow"`, or `"green"`.
+    comment: |
+      Creates a new status update on the project.
+
+      Returns the full record of the newly created project status update.
+
+  - name: findByProject
+    class: query
+    method: GET
+    path: "/projects/%s/project_statuses"
+    params:
+      - name: project
+        <<: *Param.ProjectId
+        required: true
+        comment: The project to find status updates for.
+    collection: true
+    comment: |
+      Returns the compact project status update records for all updates on the project.
+
+  - name: findById
+    class: get-single
+    method: GET
+    path: "/project_statuses/%s"
+    params:
+      - name: project-status
+        <<: *Param.ProjectStatusUpdateId
+        required: true
+        comment: The project status update to get.
+    comment: |
+      Returns the complete record for a single status update.
+
+  - name: delete
+    class: delete
+    method: DELETE
+    path: "/project_statuses/%s"
+    params:
+      - name: project-status
+        <<: *Param.ProjectStatusUpdateId
+        required: true
+        comment: The project status update to delete.
+    comment: |
+      Deletes a specific, existing project status update.
+
+      Returns an empty data record.
