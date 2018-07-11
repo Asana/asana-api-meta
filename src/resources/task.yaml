@@ -206,6 +206,8 @@ action_classes:
     url: delete
   - name: Query for tasks
     url: query
+  - name: Search for tasks in a workspace
+    url: search
   - name: Custom field values
     url: custom-field-values
     comment: |
@@ -493,6 +495,21 @@ actions:
             just because another object it is associated with (e.g. a subtask)
             is modified. Actions that count as modifying the task include
             assigning, renaming, completing, and adding stories.
+
+  # Search
+
+  - name: search
+    class: search
+    method: GET
+    path: "/workspaces/%s/tasks/search"
+    collection: true
+    comment: |
+      The search endpoint allows you to build complex queries to find and fetch exactly the data you need from Asana. For a more comprehensive description of all the query parameters and limitations of this endpoint, see our [long-form documentation](/developers/documentation/getting-started/search-api) for this feature.
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace or organization in which to search for tasks.
 
   # Dependencies
 

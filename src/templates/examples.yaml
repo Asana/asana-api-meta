@@ -300,6 +300,25 @@
       description: "Custom field value for a `number` field"
       endpoint: "/tasks/1001"
       method: "get"
+    -
+      response:
+        status: 200
+        data:
+          -
+            id: 2001
+            name: "Dog treats"
+          -
+            id: 2002
+            name: "Dog bed"
+          - "~..."
+      request_data:
+        completed: false
+        text: "dog"
+        assignee.any: "me,gsanchez@example.com"
+        due_on.before: "2018-07-15"
+      endpoint: "/workspaces/1337/tasks/search"
+      description: "Search for tasks in a workspace."
+      method: "get"
   Workspaces and Organizations:
     -
       response:
