@@ -569,6 +569,13 @@
       endpoint: "/stories/2001"
       description: "Comment on a task."
       method: "put"
+    -
+      response:
+        status: 200
+        data: {}
+      endpoint: "/stories/2001"
+      description: "Delete a story."
+      method: "delete"
   Events:
     -
       response:

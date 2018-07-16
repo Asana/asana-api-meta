@@ -114,6 +114,8 @@ action_classes:
     url: post-comment
   - name: Update a story
     url: update
+  - name: Delete a story
+    url: delete
 
 actions:
 
@@ -172,3 +174,14 @@ actions:
       Updates the story and returns the full record for the updated story.
       Only comment stories can have their text updated, and only comment stories and
       attachment stories can be pinned. Only one of `text` and `html_text` can be specified.
+
+  - name: delete
+    class: delete
+    method: DELETE
+    path: "/stories/%s"
+    params:
+      - name: story
+        <<: *Param.StoryId
+        required: true
+    comment: |
+      Deletes a story. A user can only delete stories they have created. Returns an empty data record.
