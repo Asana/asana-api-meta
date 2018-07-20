@@ -115,7 +115,7 @@ actions:
     comment: |
       Creates a new custom field in a workspace. Every custom field is required to be created in a specific workspace, and this workspace cannot be changed once set.
 
-      A custom field’s `name` must be unique within a workspace and not conflict with names of existing task properties such as 'Due Date' or 'Assignee'. A custom field’s `type` must be one of  'text', 'enum', or 'number'.
+      A custom field's `name` must be unique within a workspace and not conflict with names of existing task properties such as 'Due Date' or 'Assignee'. A custom field's `type` must be one of  'text', 'enum', or 'number'.
 
       Returns the full record of the newly created custom field.
 
@@ -124,7 +124,7 @@ actions:
     method: GET
     path: "/custom_fields/%s"
     params:
-      - name: custom-field
+      - name: custom_field
         <<: *Param.CustomFieldId
         required: true
     comment: |
@@ -148,7 +148,7 @@ actions:
     method: PUT
     path: "/custom_fields/%s"
     params:
-      - name: custom-field
+      - name: custom_field
         <<: *Param.CustomFieldId
         required: true
     comment: |
@@ -156,9 +156,9 @@ actions:
 
       When using this method, it is best to specify only those fields you wish to change, or else you may overwrite changes made by another user since you last retrieved the custom field.
 
-      A custom field’s `type` cannot be updated.
+      A custom field's `type` cannot be updated.
 
-      An enum custom field’s `enum_options` cannot be updated with this endpoint. Instead see “Work With Enum Options” for information on how to update `enum_options`.
+      An enum custom field's `enum_options` cannot be updated with this endpoint. Instead see "Work With Enum Options" for information on how to update `enum_options`.
 
       Returns the complete updated custom field record.
 
@@ -167,7 +167,7 @@ actions:
     method: DELETE
     path: "/custom_fields/%s"
     params:
-      - name: custom-field
+      - name: custom_field
         <<: *Param.CustomFieldId
         required: true
     comment: |
@@ -180,7 +180,7 @@ actions:
     method: POST
     path: "/custom_fields/%s/enum_options"
     params:
-      - name: custom-field
+      - name: custom_field
         <<: *Param.CustomFieldId
         required: true
       - name: name
@@ -196,7 +196,7 @@ actions:
         comment: An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
 
     comment: |
-      Creates an enum option and adds it to this custom field’s list of enum options. A custom field can have at most 50 enum options (including disabled options). By default new enum options are inserted at the end of a custom field’s list.
+      Creates an enum option and adds it to this custom field's list of enum options. A custom field can have at most 50 enum options (including disabled options). By default new enum options are inserted at the end of a custom field's list.
 
       Returns the full record of the newly created enum option.
 
@@ -205,7 +205,7 @@ actions:
     method: PUT
     path: "/enum_options/%s"
     params:
-      - name: enum-option
+      - name: enum_option
         <<: *Param.CustomFieldEnumOptionId
         required: true
       - name: name
@@ -227,7 +227,7 @@ actions:
     method: POST
     path: "/custom_fields/%s/enum_options/insert"
     params:
-      - name: custom-field
+      - name: custom_field
         <<: *Param.CustomFieldId
         required: true
       - name: enum_option
