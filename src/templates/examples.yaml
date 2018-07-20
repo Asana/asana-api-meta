@@ -359,10 +359,9 @@
       response:
         status: 200
         data:
-          notes: "These are things we want to purchase."
-          ~: "..."
           id: 1331
           name: "Things to Buy"
+          ~: "..."
       endpoint: "/tags/1331"
       description: "Show a specific tag."
       method: "get"

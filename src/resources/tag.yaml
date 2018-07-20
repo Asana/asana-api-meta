@@ -47,11 +47,6 @@ properties:
       `light-blue`, `light-red`, `light-teal`, `light-yellow`, `light-orange`,
       `light-purple`, `light-warm-gray`.
 
-  - name: notes
-    <<: *PropType.PotNotes
-    comment: |
-      More detailed, free-form textual information associated with the tag.
-
   - name: workspace
     <<: *PropType.Workspace
     comment: |
