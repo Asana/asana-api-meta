@@ -175,7 +175,7 @@ actions:
 
       Returns an empty data record.
 
-  - name: addOption
+  - name: addEnumOption
     class: add-option
     method: POST
     path: "/custom_fields/%s/enum_options"
@@ -200,7 +200,7 @@ actions:
 
       Returns the full record of the newly created enum option.
 
-  - name: updateOption
+  - name: updateEnumOption
     class: update-option
     method: PUT
     path: "/enum_options/%s"
@@ -222,7 +222,7 @@ actions:
 
       Returns the full record of the updated enum option.
 
-  - name: reorderOption
+  - name: reorderEnumOption
     class: reorder-options
     method: POST
     path: "/custom_fields/%s/enum_options/insert"
