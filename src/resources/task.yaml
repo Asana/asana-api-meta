@@ -496,6 +496,21 @@ actions:
             is modified. Actions that count as modifying the task include
             assigning, renaming, completing, and adding stories.
 
+
+  - name: getTasksWithTag
+    class: get-tasks
+    method: GET
+    path: "/tags/%s/tasks"
+    params:
+      - name: tag
+        <<: *Param.TagId
+        required: true
+        comment: The tag to fetch tasks from.
+    collection: true
+    comment: |
+      Returns the compact task records for all tasks with the given tag.
+      Tasks can have more than one tag at a time.
+
   # Search
 
   - name: search
