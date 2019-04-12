@@ -7,14 +7,39 @@ comment: |
   as creating or assigning tasks, or moving tasks between projects. _Comments_
   are also a form of user-generated story.
 
-  Stories are a form of history in the system, and as such they are read-only.
-  Once generated, it is not possible to modify a story.
 properties:
 
   - name: id
     <<: *PropType.Id
     comment: |
       Globally unique ID of the story.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the story.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `story`.
+    example_values:
+      - '"story"'
+    values:
+      - name: story
+        comment: A story resource type.
+
+  - name: resource_subtype
+    <<: *PropType.ResourceSubtype
+    access: Read-only
+    comment: |
+      The type of story. This provides fine-grained information about what triggered the story's creation. There are many story subtypes, so inspect the data returned from Asana's API to find the value for your use case.
+    example_values:
+      - '"comment_added"'
+      - '"description_changed"'
+      - '"liked"'
+      - '...'
 
   - name: created_at
     <<: *PropType.DateTime
@@ -63,18 +88,15 @@ properties:
     notes:
       - |
         This is not guaranteed to be stable for a given type of story. For
-        example, text for a reassignment may not always say &ldquo;assigned to …&rdquo;.
-        The API currently does not provide a structured way of inspecting the
-        meaning of a story.
+        example, text for a reassignment may **not** always say &ldquo;assigned to …&rdquo;
+        as the text for a story can both be edited and change based on the language settings
+        of the user making the request.
+        Use the `resource_subtype` property to discover the action that created the story.
 
   - name: html_text
     <<: *PropType.HtmlText
     comment: |
-      HTML formatted text for a comment. This will not include the name of the creator.
-    notes:
-      - |
-        This field is only returned if explicitly requested using the `opt_fields`
-        query parameter.
+      HTML formatted text for a comment.
 
   - name: target
     <<: *PropType.Task
@@ -98,12 +120,13 @@ properties:
   - name: source
     <<: *PropType.StorySource
     comment: |
-      The component of the Asana product the user used to trigger the story.
+      The component of the Asana product the user used to create the story.
 
   - name: type
     <<: *PropType.StoryType
     comment: |
-      The type of story this is.
+      **Deprecated: new integrations should prefer the `resource_subtype` field.**
+      The type of this story. For more fine-grained inspection of story types, see the [`resource_subtype`](#field-resource_subtype) property.
 
 action_classes:
   - name: Get stories on object
@@ -128,7 +151,7 @@ actions:
     collection: true
     params:
       - name: task
-        <<: *Param.TaskId
+        <<: *Param.TaskGid
         required: true
     comment: |
       Returns the compact records for all stories on the task.
@@ -139,7 +162,7 @@ actions:
     path: "/stories/%s"
     params:
       - name: story
-        <<: *Param.StoryId
+        <<: *Param.StoryGid
         required: true
     comment: |
       Returns the full record for a single story.
@@ -154,7 +177,7 @@ actions:
     path: "/stories/%s"
     params:
       - name: story
-        <<: *Param.StoryId
+        <<: *Param.StoryGid
         required: true
       - name: text
         type: String
@@ -181,7 +204,7 @@ actions:
     path: "/stories/%s"
     params:
       - name: story
-        <<: *Param.StoryId
+        <<: *Param.StoryGid
         required: true
     comment: |
       Deletes a story. A user can only delete stories they have created. Returns an empty data record.

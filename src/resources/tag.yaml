@@ -19,6 +19,22 @@ properties:
     <<: *PropType.Id
     comment: |
       Globally unique ID of the tag.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the tag.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `tag`.
+    example_values:
+      - '"tag"'
+    values:
+      - name: tag
+        comment: A tag resource type.
 
   - name: created_at
     <<: *PropType.DateTime
@@ -76,7 +92,7 @@ actions:
     path: "/tags"
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         required: true
         comment: The workspace or organization to create the tag in.
     comment: |
@@ -95,7 +111,7 @@ actions:
     path: "/workspaces/%s/tags"
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         required: true
         comment: The workspace or organization to create the tag in.
     comment: |
@@ -114,7 +130,7 @@ actions:
     path: "/tags/%s"
     params:
       - name: tag
-        <<: *Param.TagId
+        <<: *Param.TagGid
         required: true
         comment: The tag to get.
     comment: |
@@ -126,7 +142,7 @@ actions:
     path: "/tags/%s"
     params:
       - name: tag
-        <<: *Param.TagId
+        <<: *Param.TagGid
         required: true
         comment: The tag to update.
     comment: |
@@ -145,7 +161,7 @@ actions:
     path: "/tags/%s"
     params:
       - name: tag
-        <<: *Param.TagId
+        <<: *Param.TagGid
         required: true
         comment: The tag to delete.
     comment: |
@@ -164,10 +180,10 @@ actions:
       Use one or more of the parameters provided to filter the tags returned.
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         comment: The workspace or organization to filter tags on.
       - name: team
-        <<: *Param.TeamId
+        <<: *Param.TeamGid
         comment: The team to filter tags on.
       - name: archived
         <<: *Param.Bool
@@ -181,7 +197,7 @@ actions:
     path: "/workspaces/%s/tags"
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         required: true
         comment: The workspace or organization to find tags in.
     collection: true

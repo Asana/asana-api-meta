@@ -14,6 +14,22 @@ properties:
     <<: *PropType.Id
     comment: |
       Globally unique ID of the project membership.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the project membership.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `project_membership`.
+    example_values:
+      - '"project_membership"'
+    values:
+      - name: project_membership
+        comment: A project membership resource type.
 
   - name: user
     <<: *PropType.User
@@ -43,13 +59,13 @@ action_classes:
 
 actions:
 
-  - name: getMany
+  - name: findByProject
     class: get-many
     method: GET
     path: "/projects/%s/project_memberships"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project for which to fetch memberships.
       - name: user
@@ -60,13 +76,13 @@ actions:
       Returns the compact project membership records for the project.
 
 
-  - name: getSingle
+  - name: findById
     class: get-single
     method: GET
     path: "/project_memberships/%s"
     params:
-      - name: project
-        <<: *Param.ProjectMembershipId
+      - name: project_membership
+        <<: *Param.ProjectMembershipGid
         required: true
     comment: |
       Returns the project membership record.

@@ -11,6 +11,22 @@ properties:
     <<: *PropType.Id
     comment: |
       Globally unique ID of the attachment.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the attachment.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `attachment`.
+    example_values:
+      - '"attachment"'
+    values:
+      - name: attachment
+        comment: An attachment resource type.
 
   - name: created_at
     <<: *PropType.DateTime
@@ -83,7 +99,7 @@ actions:
     path: "/attachments/%s"
     params:
       - name: attachment
-        <<: *Param.AttachmentId
+        <<: *Param.AttachmentGid
         required: true
     comment: |
       Returns the full record for a single attachment.
@@ -95,7 +111,7 @@ actions:
     collection: true
     params:
       - name: task
-        <<: *Param.TaskId
+        <<: *Param.TaskGid
         required: true
     comment: |
       Returns the compact records for all attachments on the task.
@@ -107,7 +123,7 @@ actions:
     no_code: true  # Uploading attachments must be hand-coded
     params:
       - name: task
-        <<: *Param.TaskId
+        <<: *Param.TaskGid
         required: true
       - name: file
         type: File

@@ -24,16 +24,34 @@ notes:
 
 properties:
 
-  - name: name
-    <<: *PropType.PotName
-    comment: |
-      Name of the project. This is generally a short sentence fragment that fits
-      on a line in the UI for maximum readability. However, it can be longer.
+
 
   - name: id
     <<: *PropType.Id
     comment: |
       Globally unique ID of the project.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the project.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `project`. To distinguish between board and list projects see the `layout` property.
+    example_values:
+      - '"project"'
+    values:
+      - name: project
+        comment: A project resource type.
+
+  - name: name
+    <<: *PropType.PotName
+    comment: |
+      Name of the project. This is generally a short sentence fragment that fits
+      on a line in the UI for maximum readability. However, it can be longer.
 
   - name: owner
     <<: *PropType.User
@@ -98,11 +116,16 @@ properties:
       Array of users following this project. Followers are a subset of members who receive all notifications for a
       project, the default notification setting when adding members to a project in-product.
 
+  - name: custom_fields
+    <<: *PropType.CustomFieldValuesArray
+    comment: |
+      Array of custom field values set on the project for a custom field applied to a parent portfolio. Take care to avoid confusing these custom field values with the custom field settings in the [custom_field_settings](#field-custom_field_settings) property. Please note that the `gid` returned on each custom field value is identical to the `gid` of the custom field, which allows referencing the custom field through the [/custom_fields/{custom_field_gid}](/developers/api-reference/custom_fields#get-single) endpoint.
+
   - name: custom_field_settings
     <<: *PropType.CustomFieldSettingsCompactArray
     access: Read-only
     comment: |
-      Array of Custom Field Settings (in compact form).
+      Array of custom field settings in compact form. These represent the association of custom fields with this project. Take care to avoid confusing these custom field settings with the custom field values in the [custom_fields](#field-custom_fields) property.
 
   - name: color
     <<: *PropType.PotColor
@@ -117,6 +140,11 @@ properties:
     <<: *PropType.PotNotes
     comment: |
       More detailed, free-form textual information associated with the project.
+
+  - name: html_notes
+    <<: *PropType.HtmlText
+    comment: |
+      The notes of the project with formatting as HTML.
 
   - name: workspace
     <<: *PropType.Workspace
@@ -152,9 +180,8 @@ action_classes:
   - name: Work with project sections
     url: sections
     comment: |
-      Sections are list items that end with a colon character `:` or columns in
-      a board layout. The `memberships` property of a task contains the
-      project/section pairs to which a task belongs when applicable.
+      Sections are collections of tasks within a project. The `memberships` property
+      of a task contains the project/section pairs to which a task belongs when applicable.
 
       **Deprecation warning**: At this time, sections in a list-layout project
       are manipulated as if they were tasks, i.e. reordering a section involves
@@ -164,7 +191,8 @@ action_classes:
       information). This method of manipulating sections as if they are tasks will
       soon be deprecated in favor of the methods described in the [Sections
       resource](/developers/api-reference/sections).
-
+  - name: Work with project memberships
+    url: members
   - name: Modify custom field settings
     url: custom-field-settings
 
@@ -178,11 +206,11 @@ actions:
     path: "/projects"
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         required: true
         comment: The workspace or organization to create the project in.
       - name: team
-        <<: *Param.TeamId
+        <<: *Param.TeamGid
         comment: |
           If creating in an organization, the specific team to create the
           project in.
@@ -205,7 +233,7 @@ actions:
     path: "/workspaces/%s/projects"
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         required: true
         comment: The workspace or organization to create the project in.
     comment: |
@@ -220,7 +248,7 @@ actions:
     path: "/teams/%s/projects"
     params:
       - name: team
-        <<: *Param.TeamId
+        <<: *Param.TeamGid
         required: true
         comment: The team to create the project in.
     comment: |
@@ -234,7 +262,7 @@ actions:
     path: "/projects/%s"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to get.
     comment: |
@@ -246,7 +274,7 @@ actions:
     path: "/projects/%s"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to update.
     comment: |
@@ -266,7 +294,7 @@ actions:
     path: "/projects/%s"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to delete.
     comment: |
@@ -285,10 +313,10 @@ actions:
       Use one or more of the parameters provided to filter the projects returned.
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         comment: The workspace or organization to filter projects on.
       - name: team
-        <<: *Param.TeamId
+        <<: *Param.TeamGid
         comment: The team to filter projects on.
       - name: archived
         <<: *Param.Bool
@@ -302,7 +330,7 @@ actions:
     path: "/workspaces/%s/projects"
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         required: true
         comment: The workspace or organization to find projects in.
       - name: archived
@@ -320,7 +348,7 @@ actions:
     path: "/teams/%s/projects"
     params:
       - name: team
-        <<: *Param.TeamId
+        <<: *Param.TeamGid
         required: true
         comment: The team to find projects in.
       - name: archived
@@ -338,7 +366,7 @@ actions:
     path: "/projects/%s/tasks"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project in which to search for tasks.
     collection: true
@@ -352,11 +380,11 @@ actions:
     path: "/projects/%s/addFollowers"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to add followers to.
       - name: followers
-        <<: *Param.IdArray
+        <<: *Param.GidArray
         required: true
         comment: An array of followers to add to the project.
     comment: |
@@ -370,11 +398,11 @@ actions:
     path: "/projects/%s/removeFollowers"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to remove followers from.
       - name: followers
-        <<: *Param.IdArray
+        <<: *Param.GidArray
         required: true
         comment: An array of followers to remove from the project.
     comment: |
@@ -387,13 +415,13 @@ actions:
     path: "/projects/%s/addMembers"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to add members to.
       - name: members
-        <<: *Param.IdArray
+        <<: *Param.GidArray
         required: true
-        comment: An array of members to add to the project.
+        comment: An array of user ids.
     comment: |
         Adds the specified list of users as members of the project. Returns the updated project record.
 
@@ -403,13 +431,13 @@ actions:
     path: "/projects/%s/removeMembers"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to remove members from.
       - name: members
-        <<: *Param.IdArray
+        <<: *Param.GidArray
         required: true
-        comment: An array of members to remove from the project.
+        comment: An array of user ids.
     comment: |
         Removes the specified list of members from the project. Returns the updated project record.
 
@@ -421,11 +449,11 @@ actions:
       Create a new custom field setting on the project.
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to associate the custom field with
       - name: custom_field
-        <<: *Param.CustomFieldId
+        <<: *Param.CustomFieldGid
         required: true
         comment: The id of the custom field to associate with this project.
       - name: is_important
@@ -433,12 +461,12 @@ actions:
         comment: |
           Whether this field should be considered important to this project.
       - name: insert_before
-        <<: *Param.CustomFieldSettingsId
+        <<: *Param.CustomFieldSettingsGid
         comment: |
           An id of a Custom Field Settings on this project, before which the new Custom Field Settings will be added.
           `insert_before` and `insert_after` parameters cannot both be specified.
       - name: insert_after
-        <<: *Param.CustomFieldSettingsId
+        <<: *Param.CustomFieldSettingsGid
         comment: |
           An id of a Custom Field Settings on this project, after which the new Custom Field Settings will be added.
           `insert_before` and `insert_after` parameters cannot both be specified.
@@ -451,9 +479,9 @@ actions:
       Remove a custom field setting on the project.
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to associate the custom field with
       - name: custom_field
-        <<: *Param.CustomFieldId
+        <<: *Param.CustomFieldGid
         comment: The id of the custom field to remove from this project.

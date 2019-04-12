@@ -30,8 +30,9 @@ var thisType = title(plural(resource.name));
 |-------|-------------|
 <% _.forEach(resource.properties, function(property) {
   %><%=partial("field_table_row", {property: property})%>
-<%});%>
-
+<%});%><% if (resource.extra_general_information)
+{%><%=resource.extra_general_information.text%><%}
+%>
 <%var examples = examplesForResource(thisType);
   _.forEach(resource.action_classes, function(action_class) {
   var matchingActions = resource.actions.filter(function(action) {
@@ -56,7 +57,7 @@ var thisType = title(plural(resource.name));
 %><%if (action.params) {%>
 | Parameter | Description |
 |---|---|<% _.forEach(action.params, function(param) {%>
-| <%= param.name%> | <%_.forEach(param.example_values, function(value) {
+| <%if (_.find(params.pathParams, function(obj){return obj == param})){%><%= idIfyParamName(param.name) %><%} else {%><%= param.name %><%}%> | <%_.forEach(param.example_values, function(value) {
 %><code class="table-example"><%= value%></code> <%});%><%if (param.required) {
 %>**Required:** <%}%><%= removeLineBreaks(param.comment)%><%if (param.notes) {
 %><br><br>**Note:** <% _.forEach(param.notes, function(note) {%><%= removeLineBreaks(note, "<br><br>")%><%})};%>|<%

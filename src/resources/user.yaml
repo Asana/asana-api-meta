@@ -22,6 +22,22 @@ properties:
     <<: *PropType.Id
     comment: |
       Globally unique ID of the user.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the user.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `user`.
+    example_values:
+      - '"user"'
+    values:
+      - name: user
+        comment: A user resource type.
 
   - name: name
     type: String

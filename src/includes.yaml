@@ -26,6 +26,11 @@ templates:
       example_values:
         - "12345"
 
+  - template: &Param.Gid
+      type: Gid
+      example_values:
+        - '"12345"'
+
   - template: &Param.Number
     - type: Integer
       example_values:
@@ -36,12 +41,44 @@ templates:
       example_values:
         - "[133713, 184253]"
 
+  - template: &Param.GidArray
+      type: Array
+      example_values:
+        - '["133713", "184253"]'
+
+  - template: &Param.PortfolioGid
+      type: Gid
+      example_values:
+        - '"36985"'
+      comment: |
+        Globally unique identifier for the portfolio.
+
+  - template: &Param.PortfolioName
+      type: String
+      example_values:
+        - '"Product launch"'
+
+  - template: &Param.PortfolioColor
+      type: String
+      example_values:
+        - '"dark-red"'
+        - '"light-blue"'
+        - '"none"'
+
   - template: &Param.ProjectId
       type: Id
       example_values:
         - "13579"
       comment: |
         Globally unique identifier for the project.
+
+  - template: &Param.ProjectGid
+      type: Gid
+      example_values:
+        - '"13579"'
+      comment: |
+        Globally unique identifier for the project.
+
 
   - template: &Param.ProjectMembershipId
       type: Id
@@ -50,10 +87,24 @@ templates:
       comment: |
         Globally unique identifier for the project membership.
 
+  - template: &Param.ProjectMembershipGid
+      type: Gid
+      example_values:
+        - '"34729"'
+      comment: |
+        Globally unique identifier for the project membership.
+
   - template: &Param.ProjectStatusUpdateId
       type: Id
       example_values:
         - "13597"
+      comment: |
+        Globally unique identifier for the project status update.
+  
+  - template: &Param.ProjectStatusUpdateGid
+      type: Gid
+      example_values:
+        - '"13597"'
       comment: |
         Globally unique identifier for the project status update.
 
@@ -72,10 +123,24 @@ templates:
       comment: |
         Globally unique identifier for the tag.
 
+  - template: &Param.TagGid
+      type: Gid
+      example_values:
+        - '"11235"'
+      comment: |
+        Globally unique identifier for the tag.
+
   - template: &Param.SectionId
       type: Id
       example_values:
         - "97531"
+      comment: |
+        Globally unique identifier for the section.
+
+  - template: &Param.SectionGid
+      type: Gid
+      example_values:
+        - '"97531"'
       comment: |
         Globally unique identifier for the section.
 
@@ -86,21 +151,42 @@ templates:
       comment: |
         Globally unique identifier for the task.
 
+  - template: &Param.TaskGid
+      type: Gid
+      example_values:
+        - '"124816"'
+      comment: |
+        Globally unique identifier for the task.
+
   - template: &Param.User
       type: String
       example_values:
-        - "14641"
-        - "me"
-        - "sashimi@asana.com"
+        - '"14641"'
+        - '"me"'
+        - '"sashimi@asana.com"'
       comment: |
         An identifier for the user. Can be one of an email address,
         the globally unique identifier for the user, or the keyword `me`
         to indicate the current user making the request.
 
+  - template: &Param.UserTaskListGid
+      type: Gid
+      example_values:
+        - '"16284"'
+      comment: |
+        Globally unique identifier for the user task list.
+
   - template: &Param.WorkspaceId
       type: Id
       example_values:
-        - "1331"
+        - '"1331"'
+      comment: |
+        Globally unique identifier for the workspace or organization.
+
+  - template: &Param.WorkspaceGid
+      type: Gid
+      example_values:
+        - '"1331"'
       comment: |
         Globally unique identifier for the workspace or organization.
 
@@ -111,6 +197,13 @@ templates:
       comment: |
         Globally unique identifier for the attachment.
 
+  - template: &Param.AttachmentGid
+      type: Gid
+      example_values:
+        - '"12357"'
+      comment: |
+        Globally unique identifier for the attachment.
+
   - template: &Param.TeamId
       type: Id
       example_values:
@@ -118,10 +211,24 @@ templates:
       comment: |
         Globally unique identifier for the team.
 
+  - template: &Param.TeamGid
+      type: Gid
+      example_values:
+        - '"14916"'
+      comment: |
+        Globally unique identifier for the team.
+
   - template: &Param.StoryId
       type: Id
       example_values:
         - "182764"
+      comment: |
+        Globally unique identifier for the story.
+
+  - template: &Param.StoryGid
+      type: Gid
+      example_values:
+        - '"182764"'
       comment: |
         Globally unique identifier for the story.
 
@@ -137,6 +244,13 @@ templates:
       comment: |
         Globally unique identifier for the custom field.
 
+  - template: &Param.CustomFieldGid
+      type: Gid
+      example_values:
+        - '"124578"'
+      comment: |
+        Globally unique identifier for the custom field.
+
   - template: &Param.CustomFieldSettingsId
     - type: Id
       example_values:
@@ -144,10 +258,17 @@ templates:
       comment: |
         The id of the custom field setttings object which represents the joining of a custom field and a project. Note that this ID is not the same as the ID of the custom field itself.
 
+  - template: &Param.CustomFieldSettingsGid
+    - type: Gid
+      example_values:
+        - '"258147"'
+      comment: |
+        The id of the custom field setttings object which represents the joining of a custom field and a project. Note that this ID is not the same as the ID of the custom field itself.
+
   - template: &Param.CustomFieldEnumValue
     - type: String
       example_values:
-          - "[ { id: 1646, name: 'Priority', type: 'enum', enum_value: { id: 126, name: 'P1' } ]"
+        - "[ { id: 1646, gid: \"1646\", name: 'Priority', type: 'enum', enum_value: { id: 126, gid: \"1646\", name: 'P1' } ]"
 
   - template: &Param.CustomFieldEnumOptions
     - type: String
@@ -175,16 +296,23 @@ templates:
 
   - template: &Param.CustomFieldType
     - type: String
-    - comment: The type of the custom field.
+    - comment: The type of the custom field. Must be one of the given values.
       example_values:
-        - "'text'"
-        - "'enum'"
-        - "'number'"
+        - '"text"'
+        - '"enum"'
+        - '"number"'
 
   - template: &Param.CustomFieldEnumOptionId
       type: Id
       example_values:
         - "97285"
+      comment: |
+        Globally unique identifier for the enum option.
+
+  - template: &Param.CustomFieldEnumOptionGid
+      type: Gid
+      example_values:
+        - '"97285"'
       comment: |
         Globally unique identifier for the enum option.
 
@@ -215,17 +343,23 @@ templates:
       example_values:
         - "1234"
       access: Read-only
+  
+  - template: &PropType.Gid
+    - type: Gid
+      example_values:
+        - '"1234"'
+      access: Read-only
 
   - template: &PropType.Resource
     - type: Resource
       example_values:
-        - "{ id: 1234 }"
+        - '{ id: 1234, gid: "1234" }'
       access: Read-only
 
   - template: &PropType.ResourceArray
     - type: Resource
       example_values:
-        - "[ { id: 1234 }, ... ]"
+        - '[ { id: 1234, gid: "1234" }, ... ]'
       access: Read-only
 
   - template: &PropType.Bool
@@ -241,13 +375,13 @@ templates:
   - template: &PropType.User
     - type: User
       example_values:
-        - "{ id: 12345, name: 'Tim Bizarro' }"
+        - "{ id: 12345, gid: \"12345\", resource_type: \"user\", name: 'Tim Bizarro' }"
         - "null"
 
   - template: &PropType.UserArray
     - type: Array
       example_values:
-        - "[ { id: 1123, name: 'Mittens' }, ... ]"
+        - "[ { id: 1123, gid: \"1123\", resource_type: \"user\", name: 'Mittens' }, ... ]"
 
   - template: &PropType.DateTime
     - type: String
@@ -262,7 +396,7 @@ templates:
   - template: &PropType.Workspace
     - type: Workspace
       example_values:
-        - "{ id: 14916, name: 'My Workspace' }"
+        - "{ id: 14916, gid: \"14916\", name: 'My Workspace' }"
       access: Create-only
 
   - template: &PropType.Task
@@ -301,14 +435,17 @@ templates:
   - template: &PropType.WorkspaceArray
     - type: Array
       example_values:
-        - "[ { id: 14916, name: 'My Workspace' }, ... ]"
+        - "[ { id: 14916, gid:\"14916\" name: 'My Workspace' }, ... ]"
       access: Read-only
 
   ## Task
   - template: &PropType.AssigneeStatus
     - type: Enum
       example_values:
-        - "'upcoming'"
+        - '"inbox"'
+        - '"today"'
+        - '"upcoming"'
+        - '"later"'
       values:
         - name: inbox
           comment: In the inbox.
@@ -328,29 +465,42 @@ templates:
   - template: &PropType.ProjectArray
     - type: Array
       example_values:
-        - "[ { id: 1331, name: 'Stuff to Buy' }, ... ]"
+        - "[ { id: 1331, gid: \"1331\", name: 'Stuff to Buy' }, ... ]"
       access: Create-only
 
   - template: &PropType.ObjectArray
     - type: Array
       example_values:
-        - "[ { id: 59746, name: 'Grade A' }, ... ]"
+        - "[ { id: 59746, gid:\"59746\", name: 'Grade A' }, ... ]"
       access: Create-only
 
+      # The custom field metadata that exists in a workspace
   - template: &PropType.CustomField
     - type: CustomField
       example_values:
-        - "{ id: 1646, name: 'Priority', type: 'enum' }"
+        - "{ id: 1646, gid: \"1646\", name: 'Priority', type: 'enum' }"
 
+      # The custom field values on a task (for custom fields on a project), a project (for custom fields in a portfolio), or a portfolio (for custom fields on a parent portfolio)
   - template: &PropType.CustomFieldValuesArray
     - type: Array
       example_values:
-        - "[ { id: 1646, name: 'Priority', type: 'enum', enum_value: { id: 126, name: 'P1' } }, ...]"
+        - "[ { id: 1646, gid: \"1646\", name: 'Priority', type: 'enum', enum_value: { id: 126, gid: \"126\", name: 'P1' } }, ...]"
 
   - template: &PropType.CustomFieldSettingsCompactArray
     - type: Array
       example_values:
-        - "[ { id: 258147, custom_field: {id: 1646, name: 'Priority', type: 'enum'}, project: {id: 1331, name: 'Bugs'} }, ...]"
+        - "[ { id: 258147, gid: \"258147\", custom_field: {id: 1646, gid: \"1646\", name: 'Priority', type: 'enum'}, project: {id: 13309, gid: \"13309\", name: 'Bugs'} }, ...]"
+
+  - template: &PropType.PortfolioCustomFieldSettingsCompactArray
+    - type: Array
+      example_values:
+        - '[ { id: 258147, gid: "258147", custom_field: {id: 1646, gid: "1646", name: "Priority", type: "enum"}, parent: {id: 36985, gid: "36985", name: "Product launch"} }, ...]'
+
+  - template: &PropType.CustomFieldSettingsParent
+    - type: String
+      example_values:
+        - '{id: 29485, gid: "29485", name: "Marketing steps", resource_type: "project"}'
+        - '{id: 36985, gid: "36985", name: "Product launch", resource_type: "portfolio"}'
 
   - template: &PropType.CustomFieldPrecision
     - type: Integer 
@@ -379,13 +529,31 @@ templates:
   - template: &PropType.CustomFieldEnumOptions
     - type: String
       example_values:
-        - "[ { id: 789, name: 'Low', enabled: 'true', color: 'blue' }, ... ]"
+        - "[ { id: 789, gid: \"789\", name: 'Low', enabled: 'true', color: 'blue' }, ... ]"
 
   - template: &PropType.Memberships
     - type: Array
       example_values:
-        - "[ { project: { id: 1331, name: 'Bugs' }, section: { id: 1123, name: 'P1:' } }, ... ]"
+        - "[ { project: { id: 1331, gid: \"1331\", name: 'Bugs' }, section: { id: 1123, gid: \"1123\", name: 'P1:' } }, ... ]"
       access: Create-only
+
+  ## Portfolio
+  - template: &PropType.PortfolioName
+    - type: String
+      example_values:
+        - '"Product launch"'
+
+  - template: &PropType.PortfolioColor
+    - type: String
+      example_values:
+        - '"dark-red"'
+        - '"light-blue"'
+        - '"none"'
+
+  - template: &PropType.PortfolioOwner
+    - type: Struct
+      example_values:
+        - "{ id: 12345, gid: \"12345\", resource_type: \"user\", name: 'Tim Bizarro' }"
 
   ## Project/Tag
   - template: &PropType.PotName
@@ -411,7 +579,7 @@ templates:
   - template: &PropType.Team
     - type: Team
       example_values:
-        - "{ id: 692353, name: 'organization.com Marketing' }"
+        - "{ id: 692353, gid: \"692353\", name: 'organization.com Marketing' }"
       access: Create-only
 
   - template: &PropType.Status
@@ -431,12 +599,14 @@ templates:
         - "'full_write'"
         - "'comment_only'"
 
-  ## Story
+  ## Task descriptions, story bodies, project descriptions, project status update bodies, team descriptions
+  ## Also eventually conversations
   - template: &PropType.HtmlText
     - type: String
       example_values:
-        - "'Get whatever &lt;a href='https://app.asana.com/0/1123/1234'&gt;Sashimi&lt;/a&gt; has.'"
-      access: Read-only
+        - "'&lt;body&gt;Get whatever &lt;a href='https://app.asana.com/0/1123/list'&gt;Sashimi&lt;/a&gt; has.&lt;/body&gt;'"
+      notes:
+        - "**This field is under active migration—please see our [blog post](/developers/news/new-rich-text) for more information.**"
 
   - template: &PropType.StorySource
     - type: Enum
@@ -459,11 +629,20 @@ templates:
     - type: Enum
       example_values:
         - "'comment'"
+        - "'system'"
       values:
         - name: comment
           comment: A comment from a user. The text will be the message portion of the comment.
         - name: system
           comment:  A system-generated story based on a user action. The text will be a description of the action.
+      access: Read-only
+
+  - template: &PropType.ResourceType
+    - type: Enum
+      access: Read-only
+
+  - template: &PropType.ResourceSubtype
+    - type: Enum
       access: Read-only
 
   ## Events

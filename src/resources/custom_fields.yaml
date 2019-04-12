@@ -10,6 +10,11 @@ comment: |
   documentation for more information about how custom fields relate to various
   resources in Asana.
 
+  Users in Asana can [lock custom
+  fields](/guide/help/premium/custom-fields#gl-lock-fields), which will make
+  them read-only when accessed by other users. Attempting to edit a locked
+  custom field will return HTTP error code `403 Forbidden`.
+
 
 properties:
 # We borrow a bunch of the project templates here because they're literally
@@ -19,6 +24,39 @@ properties:
     <<: *PropType.Id
     comment: |
       Globally unique ID of the custom field.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the custom field.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `custom_field`.
+    example_values:
+      - '"custom_field"'
+    values:
+      - name: custom_field
+        comment: A custom field resource type.
+
+  - name: resource_subtype
+    <<: *PropType.ResourceSubtype
+    access: Create-only
+    comment: |
+      The type of custom field. Must be one of the given values.
+    example_values:
+      - '"text"'
+      - '"number"'
+      - '"enum"'
+    values:
+      - name: text
+        comment: A custom field of subtype `text`. Text custom fields store strings of text in Asana and have very few restrictions on content.
+      - name: number
+        comment: A custom field of subtype `number`. Number custom fields must contain only valid numbers and are constrained to a predefined precision.
+      - name: enum
+        comment: A custom field of subtype `enum`. Enum custom fields are constrained to one of a set of predefined values.
 
   - name: name
     <<: *PropType.CustomFieldName
@@ -34,6 +72,7 @@ properties:
     <<: *PropType.CustomFieldType
     access: Create-only
     comment: |
+      **Deprecated: new integrations should prefer the `resource_subtype` field.**
       The type of the custom field. Must be one of the given values.
 
   - name: enum_options
@@ -95,12 +134,15 @@ actions:
     path: "/custom_fields"
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         required: true
         comment: The workspace to create a custom field in.
-      - name: type
+      - name: resource_subtype
         <<: *Param.CustomFieldType
         required: true
+      - name: type
+        <<: *Param.CustomFieldType
+        comment: "**Deprecated: New integrations should prefer the `resource_subtype` parameter.**"
       - name: name
         <<: *Param.CustomFieldName
         required: true
@@ -125,7 +167,7 @@ actions:
     path: "/custom_fields/%s"
     params:
       - name: custom_field
-        <<: *Param.CustomFieldId
+        <<: *Param.CustomFieldGid
         required: true
     comment: |
       Returns the complete definition of a custom field's metadata.
@@ -136,7 +178,7 @@ actions:
     path: "/workspaces/%s/custom_fields"
     params:
       - name: workspace
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         required: true
         comment: The workspace or organization to find custom field definitions in.
     collection: true
@@ -149,16 +191,16 @@ actions:
     path: "/custom_fields/%s"
     params:
       - name: custom_field
-        <<: *Param.CustomFieldId
+        <<: *Param.CustomFieldGid
         required: true
     comment: |
       A specific, existing custom field can be updated by making a PUT request on the URL for that custom field. Only the fields provided in the `data` block will be updated; any unspecified fields will remain unchanged
 
       When using this method, it is best to specify only those fields you wish to change, or else you may overwrite changes made by another user since you last retrieved the custom field.
 
-      A custom field's `type` cannot be updated.
-
       An enum custom field's `enum_options` cannot be updated with this endpoint. Instead see "Work With Enum Options" for information on how to update `enum_options`.
+
+      Locked custom fields can only be updated by the user who locked the field.
 
       Returns the complete updated custom field record.
 
@@ -168,20 +210,22 @@ actions:
     path: "/custom_fields/%s"
     params:
       - name: custom_field
-        <<: *Param.CustomFieldId
+        <<: *Param.CustomFieldGid
         required: true
     comment: |
       A specific, existing custom field can be deleted by making a DELETE request on the URL for that custom field.
 
+      Locked custom fields can only be deleted by the user who locked the field.
+
       Returns an empty data record.
 
-  - name: addEnumOption
+  - name: createEnumOption
     class: add-option
     method: POST
     path: "/custom_fields/%s/enum_options"
     params:
       - name: custom_field
-        <<: *Param.CustomFieldId
+        <<: *Param.CustomFieldGid
         required: true
       - name: name
         <<: *Param.CustomFieldEnumOptionName
@@ -189,14 +233,16 @@ actions:
       - name: color
         <<: *Param.CustomFieldEnumOptionColor
       - name: insert_before
-        <<: *Param.Id
+        <<: *Param.Gid
         comment: An existing enum option within this custom field before which the new enum option should be inserted. Cannot be provided together with after_enum_option.
       - name: insert_after
-        <<: *Param.Id
+        <<: *Param.Gid
         comment: An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
 
     comment: |
       Creates an enum option and adds it to this custom field's list of enum options. A custom field can have at most 50 enum options (including disabled options). By default new enum options are inserted at the end of a custom field's list.
+
+      Locked custom fields can only have enum options added by the user who locked the field.
 
       Returns the full record of the newly created enum option.
 
@@ -206,7 +252,7 @@ actions:
     path: "/enum_options/%s"
     params:
       - name: enum_option
-        <<: *Param.CustomFieldEnumOptionId
+        <<: *Param.CustomFieldEnumOptionGid
         required: true
       - name: name
         <<: *Param.CustomFieldEnumOptionName
@@ -220,18 +266,20 @@ actions:
     comment: |
       Updates an existing enum option. Enum custom fields require at least one enabled enum option.
 
+      Locked custom fields can only be updated by the user who locked the field.
+
       Returns the full record of the updated enum option.
 
-  - name: reorderEnumOption
+  - name: insertEnumOption
     class: reorder-options
     method: POST
     path: "/custom_fields/%s/enum_options/insert"
     params:
       - name: custom_field
-        <<: *Param.CustomFieldId
+        <<: *Param.CustomFieldGid
         required: true
       - name: enum_option
-        <<: *Param.CustomFieldEnumOptionId
+        <<: *Param.CustomFieldEnumOptionGid
         required: true
         comment: The ID of the enum option to relocate.
       - name: name
@@ -240,12 +288,14 @@ actions:
       - name: color
         <<: *Param.CustomFieldEnumOptionColor
       - name: before_enum_option
-        <<: *Param.Id
+        <<: *Param.Gid
         comment: An existing enum option within this custom field before which the new enum option should be inserted. Cannot be provided together with after_enum_option.
       - name: after_enum_option
-        <<: *Param.Id
+        <<: *Param.Gid
         comment: An existing enum option within this custom field after which the new enum option should be inserted. Cannot be provided together with before_enum_option.
 
     comment: |
       Moves a particular enum option to be either before or after another specified enum option in the custom field.
+
+      Locked custom fields can only be reordered by the user who locked the field.
 

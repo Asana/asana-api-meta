@@ -10,6 +10,22 @@ properties:
     <<: *PropType.Id
     comment: |
       Globally unique ID of the team.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+  
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the team.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `team`.
+    example_values:
+      - '"team"'
+    values:
+      - name: team
+        comment: A team resource type.
 
   - name: name
     type: String
@@ -17,6 +33,20 @@ properties:
       - "'Engineering'"
     comment: |
       The name of the team.
+
+  - name: description
+    type: String
+    example_values:
+      - "'All developers should be members of this team.'"
+    comment: |
+      The description of the team.
+
+  - name: html_description
+    <<: *PropType.HtmlText
+    example_values:
+      - "'&lt;body&gt;&lt;em&gt;All&lt;/em&gt; developers should be members of this team.&lt;/body&gt;'"
+    comment: |
+      The description of the team with formatting as HTML.
 
 action_classes:
   - name: Get teams in organization
