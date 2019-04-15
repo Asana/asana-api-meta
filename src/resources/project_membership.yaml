@@ -43,7 +43,7 @@ properties:
     <<: *PropType.Project
     access: Read-only
     comment: |
-      The project the user is a member of.
+      [Opt In](https://asana.com/developers/documentation/getting-started/input-output-options). The project the user is a member of.
 
   - name: write_access
     <<: *PropType.WriteAccess

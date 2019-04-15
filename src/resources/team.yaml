@@ -11,7 +11,7 @@ properties:
     comment: |
       Globally unique ID of the team.
       **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
-  
+
   - name: gid
     <<: *PropType.Gid
     comment: |
@@ -39,14 +39,17 @@ properties:
     example_values:
       - "'All developers should be members of this team.'"
     comment: |
-      The description of the team.
+      [Opt In](/developers/documentation/getting-started/input-output-options). The description of the team.
 
   - name: html_description
     <<: *PropType.HtmlText
     example_values:
       - "'&lt;body&gt;&lt;em&gt;All&lt;/em&gt; developers should be members of this team.&lt;/body&gt;'"
     comment: |
-      The description of the team with formatting as HTML.
+      [Opt In](/developers/documentation/getting-started/input-output-options). The description of the team with formatting as HTML.
+
+  - name: organization
+      <<: *PropType.Workspace
 
 action_classes:
   - name: Get teams in organization
