@@ -621,7 +621,7 @@ actions:
         required: true
         comment: The workspace or organization in which to search for tasks.
       - name: resource_subtype
-        <<: *PropType.ResourceSubtype
+        <<: *Param.ResourceSubtype
         required: false
         comment: |
           Filters results by the task's resource_subtype.

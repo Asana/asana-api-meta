@@ -109,12 +109,16 @@ templates:
         Globally unique identifier for the project status update.
 
   - template: &Param.ProjectStatusColor
-    - type: String
-    - comment: The color of the project status update.
+      type: String
+      comment: The color of the project status update.
       example_values:
         - "'green'"
         - "'yellow'"
         - "'red'"
+
+  - template: &Param.ResourceSubtype
+      type: Enum
+      comment: The resource subtype of the object.
 
   - template: &Param.TagId
       type: Id
