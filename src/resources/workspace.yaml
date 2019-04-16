@@ -112,13 +112,15 @@ actions:
         <<: *Param.WorkspaceId
         required: true
         comment: The workspace to fetch objects from.
-      - name: type
+      - name: resource_type
         type: Enum
         example_values:
           - user
         values:
           - name: custom_field
             comment: A custom field.
+          - name: portfolio
+            comment: A portfolio.
           - name: project
             comment: A project.
           - name: tag
@@ -133,6 +135,26 @@ actions:
           one of the following: custom_field, project, tag, task, and user.
           Note that unlike in the names of endpoints, the types listed here are
           in singular form (e.g. `task`). Using multiple types is not yet supported.
+      - name: type
+        type: Enum
+        example_values:
+          - user
+        values:
+          - name: custom_field
+            comment: A custom field.
+          - name: portfolio
+            comment: A portfolio.
+          - name: project
+            comment: A project.
+          - name: tag
+            comment: A tag.
+          - name: task
+            comment: A task.
+          - name: user
+            comment: A user.
+        required: false
+        comment: |
+          **Deprecated: new integrations should prefer the resource_type field.**
       - name: query
         type: String
         example_values:

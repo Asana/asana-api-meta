@@ -97,6 +97,35 @@ actions:
     comment: |
       Returns the full user record for the single user with the provided ID.
 
+  - name: getUserFavorites
+    class: get-all
+    method: GET
+    path: "/users/%s/favorites"
+    params:
+      - name: resource_type
+        type: Enum
+        example_values:
+          - user
+        values:
+          - name: portfolio
+            comment: A portfolio.
+          - name: project
+            comment: A project.
+          - name: tag
+            comment: A tag.
+          - name: task
+            comment: A task.
+          - name: user
+            comment: A user.
+        required: true
+        comment: The resource type of favorites to be returned.
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace in which to get favorites.
+    comment: |
+      Returns the full user record for the single user with the provided ID.
+
   - name: findByWorkspace
     class: get-all
     method: GET
