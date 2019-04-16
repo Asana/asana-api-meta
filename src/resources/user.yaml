@@ -124,7 +124,8 @@ actions:
         required: true
         comment: The workspace in which to get favorites.
     comment: |
-      Returns the full user record for the single user with the provided ID.
+      Returns all of a user's favorites in the given workspace, of the given type.
+      Results are given in order (The same order as Asana's sidebar).
 
   - name: findByWorkspace
     class: get-all
