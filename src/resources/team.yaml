@@ -53,6 +53,11 @@ properties:
     comment: |
       The organization the team belongs to.
 
+  - name: subscription_plan
+    <<: *PropType.SubscriptionPlan
+    comment: |
+      [Opt In](/developers/documentation/getting-started/input-output-options). The subscription plan of this team.
+
 action_classes:
   - name: Get teams in organization
     url: get

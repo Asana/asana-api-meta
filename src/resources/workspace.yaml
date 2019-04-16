@@ -52,6 +52,11 @@ properties:
     comment: |
       Whether the workspace is an _organization_.
 
+  - name: subscription_plan
+    <<: *PropType.SubscriptionPlan
+    comment: |
+      [Opt In](/developers/documentation/getting-started/input-output-options). The subscription plan of this organization.
+
 action_classes:
   - name: Get available workspaces
     url: get

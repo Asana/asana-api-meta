@@ -574,6 +574,14 @@ templates:
       example_values:
         - "'Next Actions'"
 
+  - template: &PropType.SubscriptionPlan
+      - type: String
+        example_values:
+          - "'free'"
+          - "'premium'"
+          - "'business'"
+          - "'enterprise'"
+
   - template: &PropType.Team
     - type: Team
       example_values:
