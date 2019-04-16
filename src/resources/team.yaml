@@ -49,7 +49,9 @@ properties:
       [Opt In](/developers/documentation/getting-started/input-output-options). The description of the team with formatting as HTML.
 
   - name: organization
-      <<: *PropType.Workspace
+    <<: *PropType.Workspace
+    comment: |
+      The organization the team belongs to.
 
 action_classes:
   - name: Get teams in organization
