@@ -314,7 +314,7 @@ gulp.task('test', function(callback) {
  */
 
 gulp.task('local-copy-api-reference', ['build-api_reference'], function(callback) {
-  fs.copySync(paths.dist('api_reference'), "../vagrant-php7/asanastatic/" + paths.repoOutputRelative('api_reference'));
+  fs.copySync(paths.dist('api_reference'), "../../vagrant-php7/asanastatic/" + paths.repoOutputRelative('api_reference'));
   callback()
 });
 

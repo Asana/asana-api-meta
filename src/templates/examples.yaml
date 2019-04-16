@@ -13,20 +13,30 @@
           assignee_status: "inbox"
           assignee:
             id: 1235
+            gid: "1235"
+            resource_type: "user"
             name: "Tim Bizarro"
           completed: false
           followers:
             -
               id: 5678
+              gid: "5678"
+              resource_type: "user"
               name: "Greg Sanchez"
           workspace:
             id: 14916
+            gid: "14916"
+            resource_type: "workspace"
             name: "My Favorite Workspace"
           due_on: null
           id: 1001
+          gid: "1001"
+          resource_type: "task"
           projects:
             -
               id: 14641
+              gid: "14641"
+              resource_type: "project"
               name: "Cat Stuff"
       request_data:
         assignee: 1235
@@ -44,6 +54,8 @@
         data:
           assignee:
             id: 1234
+            gid: "1234"
+            resource_type: "user"
             name: "Tim Bizarro"
           created_at: "2012-02-22T02:06:58.158Z"
           "...": "..."
@@ -56,8 +68,12 @@
         data:
           assignee:
             id: 1234
+            gid: "1234"
+            resource_type: "user"
             name: "Tim Bizarro"
           id: 1001
+          gid: "1001"
+          resource_type: "task"
           "...": "..."
       request_data:
         assignee: "me"
@@ -78,12 +94,14 @@
         data:
           -
             id: 1248
+            gid: "1248"
+            resource_type: "task"
             name: "Buy catnip"
           -
             id: 24816
+            gid: "24816"
+            resource_type: "task"
             name: "Reflect on role of kittens in society"
-          -
-            ~: "..."
       endpoint: "/tasks?workspace=14916&assignee=me"
       description: "Show tasks assigned to me in a workspace or organization."
       method: "get"
@@ -95,6 +113,8 @@
           name: "Tell Luke"
           parent:
             id: 2272
+            gid: "2272"
+            resource_type: "task"
             name: "Tell kids I am their father."
           completed_at: null
           notes: "He's going to be upset."
@@ -102,17 +122,25 @@
           assignee_status: "inbox"
           assignee:
             id: 1235
+            gid: "1235"
+            resource_type: "user"
             name: "Darth Vader"
           completed: false
           followers:
             -
               id: 5678
+              gid: "5678"
+              resource_type: "user"
               name: "Emperor Palpatine"
           workspace:
             id: 14916
+            gid: "14916"
+            resource_type: "workspace"
             name: "Star Wars"
           due_on: null
           id: 1001
+          gid: "1001"
+          resource_type: "task"
           projects: []
       request_data:
         assignee: 1235
@@ -128,12 +156,18 @@
         data:
           -
             id: 5005
+            gid: "5005"
+            resource_type: "task"
             name: "Steal Underwear"
           -
             id: 6709
+            gid: "6709"
+            resource_type: "task"
             name: "???"
           -
             id: 9812
+            gid: "9812"
+            resource_type: "task"
             name: "Profit"
       endpoint: "/tasks/7331/subtasks"
       description: "Show all of a task's subtasks."
@@ -144,9 +178,13 @@
         data:
           "...": "..."
           id: 2272
+          gid: "2272"
+          resource_type: "task"
           parent:
             -
               id: 1331
+              gid: "1331"
+              resource_type: "task"
               name: "Tell kids I am their father"
           name: "Tell Luke"
       request_data:
@@ -159,9 +197,13 @@
         data:
           -
             id: 1331
+            gid: "1331"
+            resource_type: "project"
             name: "Things To Buy"
           -
             id: 14641
+            gid: "14641"
+            resource_type: "project"
             name: "Cat Stuff"
       endpoint: "/tasks/1001/projects"
       description: "Show list of projects on a task."
@@ -187,9 +229,13 @@
         data:
           -
             id: 1331
+            gid: "1331"
+            resource_type: "tag"
             name: "orange"
           -
             id: 1771
+            gid: "1771"
+            resource_type: "tag"
             name: "fluffy"
       endpoint: "/tasks/1001/tags"
       description: "Show list of tags on a task."
@@ -217,8 +263,12 @@
           followers:
             -
               id: 1235
+              gid: "1235"
+              resource_type: "user"
               name: "Darth Vader"
           id: 1001
+          gid: "1001"
+          resource_type: "task"
           "...": "..."
       request_data:
         followers:
@@ -232,6 +282,8 @@
         data:
           followers: []
           id: 1001
+          gid: "1001"
+          resource_type: "task"
           "...": "..."
       request_data:
         followers:
@@ -244,16 +296,23 @@
         status: 200
         data:
           id: 1001
+          gid: "1001"
+          resource_type: "task"
           name: "Hello, world!"
           completed: false
           '...': "..."
           custom_fields:
             -
               id: 124578
+              gid: "124578"
+              resource_type: "custom_field"
+              resource_subtype: "enum"
               name: "Priority"
               type: "enum"
               enum_value:
                 id: 789
+                gid: "789"
+                resource_type: "enum_option"
                 name: 'Low'
                 enabled: true
                 color: 'blue'
@@ -267,12 +326,17 @@
         status: 200
         data:
           id: 1001
+          gid: "1001"
+          resource_type: "task"
           name: "Hello, world!"
           completed: false
           '...': "..."
           custom_fields:
             -
               id: 134679
+              gid: "134679"
+              resource_type: "custom_field"
+              resource_subtype: "text"
               name: "Owner"
               type: "text"
               text_value: "Greg Sanchez"
@@ -286,12 +350,17 @@
         status: 200
         data:
           id: 1001
+          gid: "1001"
+          resource_type: "task"
           name: "Hello, world!"
           completed: false
           '...': "..."
           custom_fields:
             -
               id: 134679
+              gid: "134679"
+              resource_type: "custom_field"
+              resource_subtype: "number"
               name: "Price"
               type: "number"
               number_value: "1.56"
@@ -306,9 +375,13 @@
         data:
           -
             id: 2001
+            gid: "2001"
+            resource_type: "task"
             name: "Dog treats"
           -
             id: 2002
+            gid: "2002"
+            resource_type: "task"
             name: "Dog bed"
           - "~..."
       request_data:
@@ -326,6 +399,8 @@
         data:
           -
             id: 1337
+            gid: "1337"
+            resource_type: "workspace"
             name: "My Favorite Workspace"
           - "~..."
       endpoint: "/workspaces"
@@ -335,6 +410,8 @@
       response:
         data:
           id: 1337
+          gid: "1337"
+          resource_type: "workspace"
           name: "Everyone's Favorite Workspace"
       request_data:
         name: "Everyone's Favorite Workspace"
@@ -348,6 +425,8 @@
         data:
           ~: "..."
           id: 1771
+          gid: "1771"
+          resource_type: "tag"
           name: "fluffy"
       request_data:
         name: "fluffy"
@@ -360,6 +439,8 @@
         status: 200
         data:
           id: 1331
+          gid: "1331"
+          resource_type: "tag"
           name: "Things to Buy"
           ~: "..."
       endpoint: "/tags/1331"
@@ -371,6 +452,8 @@
         data:
           ~: "..."
           id: 1331
+          gid: "1331"
+          resource_type: "tag"
           name: "Things to Sell"
       request_data:
         name: "Things to Sell"
@@ -383,9 +466,13 @@
         data:
           -
             id: 2001
+            gid: "2001"
+            resource_type: "task"
             name: "Catnip"
           -
             id: 2002
+            gid: "2002"
+            resource_type: "task"
             name: "Kitty litter"
           - "~..."
       endpoint: "/tags/1331/tasks"
@@ -397,9 +484,13 @@
         data:
           -
             id: 1331
+            gid: "1331"
+            resource_type: "tag"
             name: "Things to buy"
           -
             id: 14641
+            gid: "14641"
+            resource_type: "tag"
             name: "Cat Stuff"
           - "~..."
       endpoint: "/workspaces/14916/tags"
@@ -411,14 +502,18 @@
         status: 200
         data:
           name: "Screenshot.png"
+          resource_type: "attachment"
           parent:
             id: 1337
+            gid: "1337"
+            resource_type: "task"
             name: "My Task"
           view_url: "https://www.dropbox.com/s/1234567890abcdef/Screenshot.png"
-          created_at: ""
+          created_at: "2018-10-12T03:34:50Z"
           download_url: "https://www.dropbox.com/s/1234567890abcdef/Screenshot.png?dl=1"
           host: "dropbox"
           id: 5678
+          gid: "5678"
       endpoint: "/attachments/5678"
       description: "Show a single attachment."
       method: "get"
@@ -428,13 +523,17 @@
         data:
           -
             id: 5678
+            gid: "5678"
+            resource_type: "attachment"
             name: "Background.png"
           -
             id: 9012
+            gid: "9012"
+            resource_type: "attachment"
             name: "New Design Draft.pdf"
           - "~..."
       endpoint: "/tasks/1234/attachments"
-      description: "Get filenames and IDs of all attachments on a task."
+      description: "Get filenames and GIDs of all attachments on a task."
       method: "get"
     -
       request_data:
@@ -453,6 +552,8 @@
         status: 200
         data:
           id: 5678
+          gid: "5678"
+          resource_type: "attachment"
           name: "file.txt"
   Teams:
     -
@@ -460,9 +561,13 @@
         data:
           -
             id: 5832
+            gid: "5832"
+            resource_type: "team"
             name: "Atlanta Braves"
           -
             id: 15923
+            gid: "15923"
+            resource_type: "team"
             name: "New York Yankees"
           - "~..."
       endpoint: "/organizations/13523"
@@ -475,6 +580,8 @@
           -
             ~: "..."
             id: 999
+            gid: "999"
+            resource_type: "user"
             name: "Greg Sanchez"
           - "~..."
       endpoint: "/workspaces/1337/typeahead?type=user&query=Greg"
@@ -486,20 +593,30 @@
         status: 200
         data:
           -
+            id: 2001
+            gid: "2001"
+            resource_type: "story"
+            resource_subtype: "added_to_project"
             text: "added to Things To Buy"
             created_at: "2011-12-21T23:23:01.259Z"
             type: "system"
-            id: 2001
             created_by:
               id: 5678
+              gid: "5678"
+              resource_type: "user"
               name: "Greg Sanchez"
           -
+            id: 2002
+            gid: "2002"
+            resource_type: "story"
+            resource_subtype: "comment_added"
             text: "Again? Wow, we really go through this stuff fast."
             created_at: "2012-01-02T21:32:40.112Z"
             type: "comment"
-            id: 2002
             created_by:
               id: 1234
+              gid: "1234"
+              resource_type: "user"
               name: "Tim Bizarro"
       endpoint: "/tasks/1001/stories"
       description: "Show all stories on a task."
@@ -508,19 +625,26 @@
       response:
         status: 200
         data:
+          id: 2001
+          gid: "2001"
+          resource_type: "story"
+          resource_subtype: "comment_added"
           target:
             id: 1234
+            gid: "1234"
+            resource_type: "task"
             name: "Buy catnip"
           text: "Yes, please!"
           created_at: "2012-02-22T02:06:58.147Z"
           created_by:
             id: 1123
+            gid: "1123"
+            resource_type: "user"
             name: "Mittens"
           source: "web"
           type: "comment"
           is_edited: false
           is_pinned: false
-          id: 2001
       endpoint: "/stories/2001"
       description: "Show a specific story."
       method: "get"
@@ -528,19 +652,26 @@
       response:
         status: 200
         data:
+          id: 2001
+          gid: "2001"
+          resource_type: "story"
+          resource_subtype: "comment_added"
           target:
             id: 1001
+            gid: "1001"
+            resource_type: "task"
             name: "Buy catnip"
           text: "This is a very nice comment."
           created_at: "2011-12-21T23:23:01.259Z"
           created_by:
             id: 5678
+            gid: "5678"
+            resource_type: "user"
             name: "Greg Sanchez"
           source: "api"
           type: "comment"
           is_edited: false
           is_pinned: false
-          id: 2001
       request_data:
         text: "This is a very nice comment."
       endpoint: "/tasks/1001/stories"
@@ -550,19 +681,25 @@
       response:
         status: 200
         data:
+          id: 2001
+          gid: "2001"
+          resource_type: "story"
           target:
             id: 1001
+            gid: "1001"
+            resource_type: "task"
             name: "Buy catnip"
           text: "This is some updated text."
           created_at: "2011-12-21T23:23:01.259Z"
           created_by:
             id: 5678
+            gid: "5678"
+            resource_type: "user"
             name: "Greg Sanchez"
           source: "api"
           type: "comment"
           is_edited: true
           is_pinned: false
-          id: 2001
       request_data:
         text: "This is some updated text."
       endpoint: "/stories/2001"
@@ -583,22 +720,32 @@
           -
             resource:
               id: 1337
+              gid: "1337"
               name: "My Task"
+              resource_type: "task"
+              resource_subtype: "default_task"
             parent: null
             created_at: "2013-08-21T18:20:37.972Z"
             user:
               id: 1123
+              gid: "1123"
               name: "Tom Bizarro"
+              resource_type: "user"
             action: "changed"
             type: "task"
           -
             resource:
               id: 1338
+              gid: "1338"
+              resource_type: "task"
+              resource_subtype: "default_task"
               name: "My Other Task"
             parent: null
             created_at: "2013-08-21T18:22:45.421Z"
             user:
               id: 1428
+              gid: "1428"
+              resource_type: "user"
               name: "Greg Sanchez"
             action: "changed"
             type: "task"
@@ -622,8 +769,12 @@
         data:
           -
             id: 43214
+            gid: "43214"
+            resource_type: "webhook"
             resource:
               id: 1245
+              gid: "1245"
+              resource_type: "project"
               name: "Bugs"
             target: "https://example.com/receive-webhook/7654"
             active: true
@@ -635,8 +786,12 @@
         status: 200
         data:
           id: 43214
+          gid: "43214"
+          resource_type: "webhook"
           resource:
             id: 1245
+            gid: "1245"
+            resource_type: "project"
             name: "Bugs"
           target: "https://example.com/receive-webhook/7654"
           active: true
@@ -658,6 +813,8 @@
           notes: "These are things we want to purchase."
           ~: "..."
           id: 1331
+          gid: "1331"
+          resource_type: "project"
           name: "Things to Buy"
       request_data:
         notes: "These are things we want to purchase."
@@ -673,6 +830,8 @@
           notes: "These are things we want to purchase."
           ~: "..."
           id: 1331
+          gid: "1331"
+          resource_type: "project"
           name: "Things to Buy"
       endpoint: "/projects/1331"
       description: "Show a specific project."
@@ -684,6 +843,8 @@
           notes: "These are things we NEED to purchase."
           ~: "..."
           id: 1331
+          gid: "1331"
+          resource_type: "project"
           name: "Things to Buy"
       request_data:
         notes: "These are things we NEED to purchase."
@@ -704,9 +865,13 @@
         data:
           -
             id: 2001
+            gid: "2001"
+            resource_type: "task"
             name: "Catnip"
           -
             id: 2002
+            gid: "2002"
+            resource_type: "task"
             name: "Kitty litter"
           - "~..."
       endpoint: "/projects/1331/tasks"
@@ -718,9 +883,13 @@
         data:
           -
             id: 1331
+            gid: "1331"
+            resource_type: "project"
             name: "Things to buy"
           -
             id: 14641
+            gid: "14641"
+            resource_type: "project"
             name: "Cat Stuff"
           - "~..."
       endpoint: "/workspaces/14916/projects"
@@ -752,13 +921,21 @@
         data:
           -
             id: 1012
+            gid: "1012"
+            resource_type: "project_membership"
             user:
               id: 1234
+              gid: "1234"
+              resource_type: "user"
               name: "Tim Bizarro"
           -
             id: 1019
+            gid: "1019"
+            resource_type: "project_membership"
             user:
               id: 5678
+              gid: "5678"
+              resource_type: "user"
               name: "Greg Sanchez"
           - "~..."
       endpoint: "/projects/1331/project_memberships"
@@ -769,8 +946,12 @@
         status: 200
         data:
           id: 1012
+          gid: "1012"
+          resource_type: "project_membership"
           user:
             id: 1234
+            gid: "1234"
+            resource_type: "user"
             name: "Tim Bizarro"
           write_access: "full_write"
       endpoint: "/project_memberships/1012"
@@ -783,9 +964,13 @@
         data:
           -
             id: 18492
+            gid: "18492"
+            resource_type: "project_status"
             title: "Status Update - Jun 15"
           -
             id: 13597
+            gid: "13597"
+            resource_type: "project_status"
             title: "Status Update - May 30"
           - "~..."
       endpoint: "/projects/1012/project_statuses"
@@ -796,11 +981,15 @@
         status: 200
         data:
           id: 18492
+          gid: "18492"
+          resource_type: "project_status"
           title: "Status Update - Jun 15"
           text: "The project is on track to ship next month!"
           color: "green"
           created_by:
             id: 1234
+            gid: "1234"
+            resource_type: "user"
             name: "Tim Bizarro"
           created_at: "2018-06-15T18:40:50.902Z"
       endpoint: "/project_statuses/18492"
@@ -818,11 +1007,15 @@
         status: 201
         data:
           id: 18492
+          gid: "18492"
+          resource_type: "project_status"
           title: "Status Update - Jun 15"
           text: "The project is on track to ship next month!"
           color: "green"
           created_by:
             id: 1234
+            gid: "1234"
+            resource_type: "user"
             name: "Tim Bizarro"
           created_at: "2018-06-15T18:40:50.902Z"
       request_data:
@@ -838,9 +1031,13 @@
         data:
           -
             id: 2001
+            gid: "2001"
+            resource_type: "section"
             name: "High Priority:"
           -
             id: 2002
+            gid: "2002"
+            resource_type: "section"
             name: "Low Priority:"
           - "~..."
       endpoint: "/projects/1331/sections"
@@ -852,10 +1049,14 @@
         data:
           -
             id: 2001
+            gid: "2001"
+            resource_type: "section"
             name: "High Priority:"
             created_at: "2017-01-17T22:06:39.249Z"
             project:
               id: 1331
+              gid: "1331"
+              resource_type: "project"
               name: "Things to buy"
       request_data:
         name: "High Priority:"
@@ -868,10 +1069,14 @@
         data:
           -
             id: 2001
+            gid: "2001"
+            resource_type: "section"
             name: "High Priority, renamed:"
             created_at: "2017-01-17T22:06:39.249Z"
             project:
               id: 1331
+              gid: "1331"
+              resource_type: "project"
               name: "Things to buy"
       request_data:
         name: "High Priority, renamed:"
@@ -903,9 +1108,13 @@
           workspaces:
             -
               id: 1337
+              gid: "1337"
+              resource_type: "workspace"
               name: "My Favorite Workspace"
             - "~..."
           id: 5678
+          gid: "5678"
+          resource_type: "user"
           name: "Greg Sanchez"
           email: "gsanchez@example.com"
       endpoint: "/users/5678"
@@ -917,10 +1126,14 @@
         data:
           -
             id: 1234
+            gid: "1234"
+            resource_type: "user"
             name: "Tim Bizarro"
             email: "tbizarro@example.com"
           -
             id: 5678
+            gid: "5678"
+            resource_type: "user"
             name: "Greg Sanchez"
             email: "gsanchez@example.com"
           - "~..."
@@ -933,6 +1146,8 @@
         data:
           -
             id: 5678
+            gid: "5678"
+            resource_type: "user"
             name: "Greg Sanchez"
       endpoint: "/workspaces/1337/users"
       description: "Show all users in a single workspace or organization."
@@ -945,7 +1160,10 @@
         data:
           -
             id: 134679
+            gid: "134679"
             name: "Owner"
+            resource_type: "custom_field"
+            resource_subtype: "text"
             description: "Person responsible for task"
             type: "text"
       endpoint: "/custom_fields/124578"
@@ -958,12 +1176,15 @@
         data:
           -
             id: 134679
+            gid: "134679"
+            resource_type: "custom_field"
+            resource_subtype: "text"
+            type: "text"
             name: "Owner"
             description: "Person responsible for task"
-            type: "text"
       request_data:
         name: "Owner"
-        type: "text"
+        resource_subtype: "text"
         description: "Person responsible for task"
         workspace: 14916
       endpoint: "/custom_fields"
@@ -976,6 +1197,9 @@
         data:
           -
             id: 938271
+            gid: "938271"
+            resource_type: "custom_field"
+            resource_subtype: "number"
             name: "Price"
             description: "In US Dollars"
             type: "number"
@@ -990,14 +1214,17 @@
         data:
           -
             id: 938271
+            gid: "938271"
+            resource_type: "custom_field"
+            resource_subtype: "number"
+            type: "number"
             name: "Price"
             description: "In US Dollars"
-            type: "number"
             precision: 2
       request_data:
         name: "Price"
         description: "In US Dollars"
-        type: "number"
+        resource_subtype: "number"
         precision: 2
         workspace: 14916
       endpoint: "/custom_fields"
@@ -1010,25 +1237,33 @@
         data:
           -
             id: 124578
+            gid: "124578"
+            resource_type: "custom_field"
+            resource_subtype: "enum"
             name: "Priority"
             description: "Development team priority"
-            type: "enum"
             enum_options:
               -
                 id: 789
+                gid: "789"
                 name: 'Low'
                 enabled: true
                 color: 'blue'
+                resource_type: "enum_option"
               -
                 id: 208
+                gid: "208"
                 name: 'Medium'
                 enabled: false
                 color: 'yellow'
+                resource_type: "enum_option"
               -
                 id: 439
+                gid: "439"
                 name: 'High'
                 enabled: true
                 color: 'red'
+                resource_type: "enum_option"
       endpoint: "/custom_fields/124578"
       description: "Get the metadata for a custom field when that field is of type 'enum'."
       method: "get"
@@ -1039,28 +1274,38 @@
         data:
           -
             id: 124578
+            gid: "124578"
             name: "Priority"
             description: "Development team priority"
+            resource_type: "custom_field"
+            resource_subtype: "enum"
             type: "enum"
             enum_options:
               -
                 id: 789
+                gid: "789"
                 name: "Low"
                 enabled: true
                 color: "blue"
+                resource_type: "enum_option"
               -
                 id: 790
+                gid: "790"
                 name: "Medium"
                 enabled: true
                 color: "yellow"
+                resource_type: "enum_option"
               -
                 id: 791
+                gid: "791"
                 name: "High"
                 enabled: true
                 color: "red"
+                resource_type: "enum_option"
       request_data:
         name: "Priority"
-        type: "enum"
+        resource_type: "custom_field"
+        resource_subtype: "enum"
         description: "Development team priority"
         workspace: 14916
         enum_options[0].name: "Low"
@@ -1078,10 +1323,16 @@
         data:
           -
             id: 124578
+            gid: "124578"
+            resource_type: "custom_field"
+            resource_subtype: "enum"
             name: "Priority"
             type: "enum"
           -
             id: 134679
+            gid: "134679"
+            resource_type: "custom_field"
+            resource_subtype: "enum"
             name: "Owner"
             type: "text"
           - "~..."
@@ -1096,18 +1347,23 @@
         data:
           -
             id: 258147
-            created_at: "2016-07-11T14:29:23.249Z"
-            is_important: true
+            gid: "258147"
+            resource_type: "custom_field_setting"
             custom_field:
-              -
                 id: 124578
+                gid: "124578"
+                resource_type: "custom_field"
+                resource_subtype: "enum"
                 name: "Priority"
                 type: "enum"
-            project:
-              -
+            is_important: false
+            parent:
                 id: 1331
+                gid: "1331"
+                resource_type: "project"
                 name: "Things to buy"
-      endpoint: "/custom_field_settings/258147"
+          - "~..."
+      endpoint: "/projects/1331/custom_field_settings"
       description: "Get the custom field settings object that specifies information about the relationship between a custom field and a project"
       method: "get"
     -
@@ -1116,27 +1372,69 @@
         data:
           -
             id: 258147
+            gid: "258147"
+            resource_type: "custom_field_setting"
             custom_field:
-              -
                 id: 124578
+                gid: "124578"
+                resource_type: "custom_field"
+                resource_subtype: "enum"
                 name: "Priority"
                 type: "enum"
-            project:
-              -
-                id: 1331
-                name: "Things to buy"
-          -
-            id: 369852
-            custom_field:
-              -
-                id: 235689
-                name: "Cost"
-                type: "enum"
-            project:
-              -
-                id: 1331
-                name: "Things to buy"
+            is_important: true
+            parent:
+                id: 36985
+                gid: "36985"
+                resource_type: "portfolio"
+                name: "Product launch"
           - "~..."
-      endpoint: "/projects/1331/custom_field_settings"
-      description: "Get the custom field settings object that specifies information about the relationship between a custom field and a project"
+      endpoint: "/portfolios/36985/custom_field_settings"
+      description: "Get the custom field settings object that specifies information about the relationship between a custom field and a portfolio"
+      method: "get"
+
+
+  User Task Lists:
+    -
+      response:
+        status: 200
+        data:
+          -
+            id: 16284
+            gid: "16284"
+            resource_type: "user_task_list"
+            name: "My Tasks"
+            owner:
+              id: 12345
+              gid: "12345"
+              name: "Tim Bizzaro"
+              resource_type: "user"
+            workspace:
+              id: 1337
+              gid: "1337"
+              resource_type: "workspace"
+              name: "My Favorite Workspace"
+      endpoint: "/user_task_lists/16284"
+      description: "Get a user task list by its id"
+      method: "get"
+    -
+      response:
+        status: 200
+        data:
+          -
+            id: 16284
+            gid: "16284"
+            resource_type: "user_task_list"
+            name: "My Tasks"
+            owner:
+              id: 12345
+              gid: "12345"
+              name: "Tim Bizzaro"
+              resource_type: "user"
+            workspace:
+              id: 1337
+              gid: "1337"
+              resource_type: "workspace"
+              name: "My Favorite Workspace"
+      endpoint: "/users/12345/user_task_list?workspace=1337"
+      description: "Get a user task list by its owner"
       method: "get"

@@ -16,6 +16,22 @@ properties:
     <<: *PropType.Id
     comment: |
       Globally unique ID of the project status update.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the project status update.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `project_status`.
+    example_values:
+      - '"project_status"'
+    values:
+      - name: project_status
+        comment: A project status resource type.
 
   - name: title
     type: String
@@ -32,6 +48,14 @@ properties:
       The text content of the status update.
     example_values:
       - "'The project is moving forward according to plan...'"
+
+  - name: html_text
+    <<: *PropType.HtmlText
+    access: Read-only
+    comment: |
+      The text content of the status update with formatting as HTML.
+    example_values:
+      - "'&lt;body&gt;The project &lt;strong&gt;is&lt;/strong&gt; moving forward according to plan...&lt;/body&gt;'"
 
   - name: color
     type: Enum
@@ -71,13 +95,13 @@ actions:
 
   # Create, Retrieve, Update, Delete
 
-  - name: create
+  - name: createInProject
     class: create
     method: POST
     path: "/projects/%s/project_statuses"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project on which to create a status update.
       - name: text
@@ -103,7 +127,7 @@ actions:
     path: "/projects/%s/project_statuses"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to find status updates for.
     collection: true
@@ -116,7 +140,7 @@ actions:
     path: "/project_statuses/%s"
     params:
       - name: project-status
-        <<: *Param.ProjectStatusUpdateId
+        <<: *Param.ProjectStatusUpdateGid
         required: true
         comment: The project status update to get.
     comment: |
@@ -128,7 +152,7 @@ actions:
     path: "/project_statuses/%s"
     params:
       - name: project-status
-        <<: *Param.ProjectStatusUpdateId
+        <<: *Param.ProjectStatusUpdateGid
         required: true
         comment: The project status update to delete.
     comment: |

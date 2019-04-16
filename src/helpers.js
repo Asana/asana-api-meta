@@ -102,10 +102,14 @@ function stripWhitespace(text) {
   return text.replace(/^\s+/, '').replace(/\s+$/, '')
 }
 
+function idIfyParamName(name) {
+  return name + "_gid";
+}
+
 function genericPath(action, pathParams) {
   var path = action.path;
   _.forEach(pathParams, function(pathParam) {
-    path = path.replace(/%./, pathParam.name + "-id");
+    path = path.replace(/%./, "{" + idIfyParamName(pathParam.name) + "}");
   });
   return path;
 }
@@ -311,6 +315,7 @@ var langs = {
     partialExists: partialExists,
     partial: partial,
     partialFilename: partialFilename,
+    idIfyParamName: idIfyParamName,
     genericPath: genericPath,
     curlExamplesForAction: curlExamplesForAction,
     curlExamplesForKeys: curlExamplesForKeys

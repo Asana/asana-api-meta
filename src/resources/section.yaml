@@ -22,7 +22,20 @@ properties:
     <<: *PropType.Id
     comment: |
       Globally unique ID of the section.
-
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the section.
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `section`.
+    example_values:
+      - '"section"'
+    values:
+      - name: section
+        comment: A section resource type.
   - name: name
     <<: *PropType.SectionName
     comment: |
@@ -65,7 +78,7 @@ actions:
     path: "/projects/%s/sections"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to create the section in
       - name: name
@@ -83,9 +96,10 @@ actions:
     path: "/projects/%s/sections"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project to get sections from.
+    collection: true
     comment: |
       Returns the compact records for all sections in the specified project.
 
@@ -95,7 +109,7 @@ actions:
     path: "/sections/%s"
     params:
       - name: section
-        <<: *Param.SectionId
+        <<: *Param.SectionGid
         required: true
         comment: The section to get.
     comment: |
@@ -107,7 +121,7 @@ actions:
     path: "/sections/%s"
     params:
       - name: section
-        <<: *Param.SectionId
+        <<: *Param.SectionGid
         required: true
         comment: The section to update.
     comment: |
@@ -128,7 +142,7 @@ actions:
     path: "/sections/%s"
     params:
       - name: section
-        <<: *Param.SectionId
+        <<: *Param.SectionGid
         required: true
         comment: The section to delete.
     comment: |
@@ -141,27 +155,49 @@ actions:
 
       Returns an empty data block.
 
+  - name: addTask
+    class: reorder
+    method: POST
+    path: "/sections/%s/addTask"
+    params:
+      - name: task
+        <<: *Param.TaskGid
+        required: true
+        comment: The task to add to this section
+      - name: insert_before
+        <<: *Param.Gid
+        comment: Insert the given task immediately before the task specified by this parameter. Cannot be provided together with `insert_after`.
+      - name: insert_after
+        <<: *Param.Gid
+        comment: Insert the given task immediately after the task specified by this parameter. Cannot be provided together with `insert_before`.
+    comment: |
+      Add a task to a specific, existing section. This will remove the task from other sections of the project.
+
+      The task will be inserted at the top of a section unless an `insert_before` or `insert_after` parameter is declared.
+
+      This does not work for separators (tasks with the `resource_subtype` of section).
+
   - name: insertInProject
     class: reorder
     method: POST
     path: "/projects/%s/sections/insert"
     params:
       - name: project
-        <<: *Param.ProjectId
+        <<: *Param.ProjectGid
         required: true
         comment: The project in which to reorder the given section
       - name: section
-        <<: *Param.SectionId
+        <<: *Param.SectionGid
         required: true
         comment: The section to reorder
       - name: before_section
-        <<: *Param.SectionId
+        <<: *Param.SectionGid
         required: false
         example_values:
           - "86420"
         comment: Insert the given section immediately before the section specified by this parameter.
       - name: after_section
-        <<: *Param.SectionId
+        <<: *Param.SectionGid
         required: false
         example_values:
           - "86420"

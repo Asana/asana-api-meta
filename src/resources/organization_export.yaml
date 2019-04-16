@@ -21,6 +21,12 @@ properties:
     <<: *PropType.Id
     comment: |
       Globally unique ID of the Organization export.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the Organization export.
 
   - name: created_at
     <<: *PropType.DateTime
@@ -76,7 +82,7 @@ actions:
     path: "/organization_exports/%s"
     params:
       - name: organization_export
-        <<: *Param.Id
+        <<: *Param.Gid
         required: true
         comment: |
           Globally unique identifier for the Organization export.
@@ -89,7 +95,7 @@ actions:
     path: "/organization_exports"
     params:
       - name: organization
-        <<: *Param.WorkspaceId
+        <<: *Param.WorkspaceGid
         required: true
     comment: |
       This method creates a request to export an Organization. Asana will complete the export at some

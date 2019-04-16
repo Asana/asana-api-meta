@@ -101,7 +101,7 @@ actions:
     no_code: true
     params:
       - name: resource
-        <<: *Param.Id
+        <<: *Param.Gid
         required: true
         explicit: true
         comment: |

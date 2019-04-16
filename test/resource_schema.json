@@ -50,6 +50,15 @@
         }
       }
     },
+    "extra_general_information": {
+      "type": "object",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string" }
+        }
+      }
+    },
     "action_classes": {
       "type": "array",
       "items": {

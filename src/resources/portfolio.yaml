@@ -1,0 +1,302 @@
+---
+# See `user.yaml` for more docs on these yaml files.
+!include ../includes.yaml
+name: portfolio
+comment: |
+  A _portfolio_ gives a high-level overview of the status of multiple
+  initiatives in Asana.  Portfolios provide a dashboard overview of the state
+  of multiple projects, including a progress report and the most recent
+  [project status](/developers/api-reference/project_statuses) update.
+
+notes:
+  - |
+
+properties:
+
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the portfolio.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the portfolio.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `portfolio`. 
+    example_values:
+      - '"portfolio"'
+    values:
+      - name: portfolio
+        comment: A portfolio resource type.
+
+  - name: name
+    <<: *PropType.PortfolioName
+    comment: |
+      Name of the portfolio.
+
+  - name: owner
+    <<: *PropType.PortfolioOwner
+    access: Read-only
+    comment: |
+      The current owner of the portfolio. Cannot be null.
+
+  - name: created_at
+    <<: *PropType.DateTime
+    access: Read-only
+    comment: |
+      The time at which this portfolio was created.
+     
+  - name: custom_field_settings
+    <<: *PropType.PortfolioCustomFieldSettingsCompactArray
+    access: Read-only
+    comment: |
+      Array of custom field settings applied to the portfolio.
+
+  - name: color
+    <<: *PropType.PortfolioColor
+    comment: |
+      Must be either `none` or one of: `dark-pink`, `dark-green`, `dark-blue`,
+      `dark-red`, `dark-teal`, `dark-brown`, `dark-orange`, `dark-purple`,
+      `dark-warm-gray`, `light-pink`, `light-green`, `light-blue`, `light-red`,
+      `light-teal`, `light-yellow`, `light-orange`, `light-purple`,
+      `light-warm-gray`.
+
+  - name: workspace
+    <<: *PropType.Workspace
+    comment: |
+      The workspace or organization that the portfolio belongs to.
+
+
+action_classes:
+  - name: Create a portfolio
+    url: create
+  - name: Get a portfolio
+    url: get-single
+  - name: Update a portfolio
+    url: update
+  - name: Delete a portfolio
+    url: delete
+  - name: Query for portfolios
+    url: query
+  - name: Items in a portfolio
+    url: items
+  - name: Custom fields on a portfolio
+    url: custom-field-settings
+
+actions:
+
+  # Create, Retrieve, Update, Delete
+
+  - name: create
+    class: create
+    method: POST
+    path: "/portfolios"
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceGid
+        required: true
+        comment: The workspace or organization in which to create the portfolio.
+      - name: name
+        required: true
+        <<: *Param.PortfolioName
+        comment: The name of the newly-created portfolio
+      - name: color
+        required: false
+        <<: *Param.PortfolioColor
+        comment: An optional color for the portfolio
+    comment: |
+      Creates a new portfolio in the given workspace with the supplied name.
+
+      Note that portfolios created in the Asana UI may have some state
+      (like the "Priority" custom field) which is automatically added to the
+      portfolio when it is created. Portfolios created via our API will **not**
+      be created with the same initial state to allow integrations to create
+      their own starting state on a portfolio.
+
+  - name: findById
+    class: get-single
+    method: GET
+    path: "/portfolios/%s"
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio to get.
+    comment: |
+      Returns the complete record for a single portfolio.
+
+  - name: update
+    class: update
+    method: PUT
+    path: "/portfolios/%s"
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio to update.
+    comment: |
+      An existing portfolio can be updated by making a PUT request on the
+      URL for that portfolio. Only the fields provided in the `data` block will be
+      updated; any unspecified fields will remain unchanged.
+
+      Returns the complete updated portfolio record.
+
+  - name: delete
+    class: delete
+    method: DELETE
+    path: "/portfolios/%s"
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio to delete.
+    comment: |
+      An existing portfolio can be deleted by making a DELETE request
+      on the URL for that portfolio.
+
+      Returns an empty data record.
+
+  - name: findAll
+    class: query
+    method: GET
+    path: "/portfolios"
+    collection: true
+    comment: |
+      Returns a list of the portfolios in compact representation that are owned
+      by the current API user.
+    params:
+      - name: workspace
+        <<: *Param.WorkspaceGid
+        required: true
+        comment: The workspace or organization to filter portfolios on.
+      - name: owner
+        <<: *Param.User
+        required: true
+        comment: |
+          The user who owns the portfolio. Currently, API users can only get a
+          list of portfolios that they themselves own.
+
+  - name: getItems
+    class: items
+    method: GET
+    path: "/portfolios/%s/items"
+    comment: |
+      Get a list of the items (projects) in compact form in a portfolio.
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio from which to get the list of items.
+
+  - name: addItem
+    class: items
+    method: POST
+    path: "/portfolios/%s/addItem"
+    comment: |
+      Add an item (project) to a portfolio.
+
+      Returns an empty data block.
+
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio to which to add an item.
+      - name: item
+        <<: *Param.ProjectGid
+        required: true
+        comment: The item (project) to add to the portfolio.
+      - name: insert_before
+        <<: *Param.ProjectGid
+        comment: |
+          An id of an item (project) in this portfolio. The new item will be added before the one specified here.
+          `insert_before` and `insert_after` parameters cannot both be specified.
+      - name: insert_after
+        <<: *Param.ProjectGid
+        comment: |
+          An id of an item (project) in this portfolio. The new item will be added after the one specified here.
+          `insert_before` and `insert_after` parameters cannot both be specified.
+
+  - name: removeItem
+    class: items
+    method: POST
+    path: "/portfolios/%s/removeItem"
+    comment: |
+      Remove an item (project) to a portfolio.
+
+      Returns an empty data block.
+
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio from which to remove the item.
+      - name: item
+        <<: *Param.ProjectGid
+        required: true
+        comment: The item (project) to remove from the portfolio.
+
+  - name: customFieldSettings
+    class: custom-field-settings
+    method: GET
+    path: "/portfolios/%s/custom_field_settings"
+    comment: |
+      Get the custom field settings on a portfolio.
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio from which to get the custom field settings.
+
+  - name: addCustomFieldSetting
+    class: custom-field-settings
+    method: POST
+    path: "/portfolios/%s/addCustomFieldSetting"
+    comment: |
+      Create a new custom field setting on the portfolio. Returns the full
+      record for the new custom field setting.
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio onto which to add the custom field.
+      - name: custom_field
+        <<: *Param.CustomFieldGid
+        required: true
+        comment: The id of the custom field to add to the portfolio.
+      - name: is_important
+        <<: *Param.Bool
+        comment: |
+          Whether this field should be considered important to this portfolio (for instance, to display in the list view of items in the portfolio).
+      - name: insert_before
+        <<: *Param.CustomFieldSettingsGid
+        comment: |
+          An id of a custom field setting on this portfolio. The new custom field setting will be added before this one.
+          `insert_before` and `insert_after` parameters cannot both be specified.
+      - name: insert_after
+        <<: *Param.CustomFieldSettingsGid
+        comment: |
+          An id of a custom field setting on this portfolio. The new custom field setting will be added after this one.
+          `insert_before` and `insert_after` parameters cannot both be specified.
+
+  - name: removeCustomFieldSetting
+    class: custom-field-settings
+    method: POST
+    path: "/portfolios/%s/removeCustomFieldSetting"
+    comment: |
+      Remove a custom field setting on the portfolio. Returns an empty data
+      block.
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio from which to remove the custom field.
+      - name: custom_field
+        required: true
+        <<: *Param.CustomFieldGid
+        comment: The id of the custom field to remove from this portfolio.
