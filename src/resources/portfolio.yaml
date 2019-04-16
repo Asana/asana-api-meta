@@ -27,7 +27,7 @@ properties:
   - name: resource_type
     <<: *PropType.ResourceType
     comment: |
-      The resource type of this resource. The value for this resource is always `portfolio`. 
+      The resource type of this resource. The value for this resource is always `portfolio`.
     example_values:
       - '"portfolio"'
     values:
@@ -50,7 +50,13 @@ properties:
     access: Read-only
     comment: |
       The time at which this portfolio was created.
-     
+
+  - name: created_by
+    <<: *PropType.User
+    access: Read-only
+    comment: |
+      The user that created the portfolio.
+
   - name: custom_field_settings
     <<: *PropType.PortfolioCustomFieldSettingsCompactArray
     access: Read-only
@@ -70,6 +76,11 @@ properties:
     <<: *PropType.Workspace
     comment: |
       The workspace or organization that the portfolio belongs to.
+
+  - name: members
+    <<: *PropType.UserArray
+    comment: |
+      Members of the portfolio.
 
 
 action_classes:

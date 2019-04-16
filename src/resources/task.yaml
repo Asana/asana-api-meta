@@ -103,12 +103,12 @@ properties:
   - name: dependencies
     <<: *PropType.ResourceArray
     comment: |
-      Array of resources referencing tasks that this task depends on. The objects contain only the ID of the dependency.
+      [Opt In](/developers/documentation/getting-started/input-output-options). Array of resources referencing tasks that this task depends on. The objects contain only the ID of the dependency.
 
   - name: dependents
     <<: *PropType.ResourceArray
     comment: |
-      Array of resources referencing tasks that depend on this task. The objects contain only the ID of the dependent.
+      [Opt In](/developers/documentation/getting-started/input-output-options). Array of resources referencing tasks that depend on this task. The objects contain only the ID of the dependent.
 
   - name: due_on
     <<: *PropType.Date
@@ -127,6 +127,9 @@ properties:
   - name: external
     <<: *PropType.External
     comment: |
+      This field is returned if external values are set or it is included by using
+      [Opt In](/developers/documentation/getting-started/input-output-options).
+
       The external field allows you to store app-specific metadata on tasks,
       including an id that can be used to retrieve tasks and a data blob that
       can store app-specific character strings. Note that you will need to
@@ -150,6 +153,15 @@ properties:
     access: Read-only
     comment: |
       Array of users who have liked this task.
+
+  - name: memberships
+    <<: *PropType.Memberships
+    comment: |
+      Array of projects this task is associated with and the section it is in.
+      At task creation time, this array can be used to add the task to specific
+      sections. After task creation, these associations can be modified using
+      the `addProject` and `removeProject` endpoints. Note that over time, more
+      types of memberships may be added to this property.
 
   - name: modified_at
     <<: *PropType.DateTime
@@ -181,7 +193,7 @@ properties:
     example_values:
       - "'&lt;body&gt;Mittens &lt;em&gt;really&lt;/em&gt; likes the stuff from Humboldt.&lt;/body&gt;'"
     comment: |
-      The notes of the text with formatting as HTML.
+      [Opt In](/developers/documentation/getting-started/input-output-options). The notes of the text with formatting as HTML.
 
   - name: num_likes
     <<: *PropType.Count
@@ -195,6 +207,13 @@ properties:
     comment: |
       [Opt In](/developers/documentation/getting-started/input-output-options). The number of subtasks on this task.
 
+  - name: parent
+    <<: *PropType.Task
+    comment: |
+      The parent of this task, or `null` if this is not a subtask. This property
+      cannot be modified using a PUT request but you can change it with the
+      `setParent` endpoint. You can create subtasks by using the subtasks endpoint.
+
   - name: projects
     <<: *PropType.ProjectArray
     comment: |
@@ -202,13 +221,6 @@ properties:
       this array can be used to add the task to many projects at once. After
       task creation, these associations can be modified using the `addProject`
       and `removeProject` endpoints.
-
-  - name: parent
-    <<: *PropType.Task
-    comment: |
-      The parent of this task, or `null` if this is not a subtask. This property
-      cannot be modified using a PUT request but you can change it with the
-      `setParent` endpoint. You can create subtasks by using the subtasks endpoint.
 
   - name: start_on
     <<: *PropType.Date
@@ -225,15 +237,6 @@ properties:
       The workspace this task is associated with. Once created, task cannot be
       moved to a different workspace. This attribute can only be specified at
       creation time.
-
-  - name: memberships
-    <<: *PropType.Memberships
-    comment: |
-      Array of projects this task is associated with and the section it is in.
-      At task creation time, this array can be used to add the task to specific
-      sections. After task creation, these associations can be modified using
-      the `addProject` and `removeProject` endpoints. Note that over time, more
-      types of memberships may be added to this property.
 
   - name: tags
     <<: *PropType.ObjectArray

@@ -63,7 +63,7 @@ properties:
         comment: A story.
     access: Read-only
     comment: |
-      The type of the resource that generated the event.
+      **Deprecated: Refer to the resource_type of the resource.** The type of the resource that generated the event.
     notes:
       - |
         Currently, only tasks, projects and stories generate events.

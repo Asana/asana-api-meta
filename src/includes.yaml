@@ -100,7 +100,7 @@ templates:
         - "13597"
       comment: |
         Globally unique identifier for the project status update.
-  
+
   - template: &Param.ProjectStatusUpdateGid
       type: Gid
       example_values:
@@ -343,7 +343,7 @@ templates:
       example_values:
         - "1234"
       access: Read-only
-  
+
   - template: &PropType.Gid
     - type: Gid
       example_values:
@@ -503,11 +503,9 @@ templates:
         - '{id: 36985, gid: "36985", name: "Product launch", resource_type: "portfolio"}'
 
   - template: &PropType.CustomFieldPrecision
-    - type: Integer 
+    - type: Integer
       example_values:
         - "2"
-      comment: |
-        Only relevant for custom fields of type 'Number'. This field dictates the number of places after the decimal to round to, i.e. 0 is integer values, 1 rounds to the nearest tenth, and so on. Must be between 0 and 6, inclusive.
 
   - template: &PropType.CustomFieldName
     - type: String

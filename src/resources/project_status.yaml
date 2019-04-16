@@ -53,7 +53,7 @@ properties:
     <<: *PropType.HtmlText
     access: Read-only
     comment: |
-      The text content of the status update with formatting as HTML.
+      [Opt In](https://asana.com/developers/documentation/getting-started/input-output-options). The text content of the status update with formatting as HTML.
     example_values:
       - "'&lt;body&gt;The project &lt;strong&gt;is&lt;/strong&gt; moving forward according to plan...&lt;/body&gt;'"
 

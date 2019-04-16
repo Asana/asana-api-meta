@@ -144,7 +144,7 @@ properties:
   - name: html_notes
     <<: *PropType.HtmlText
     comment: |
-      The notes of the project with formatting as HTML.
+      [Opt In](https://asana.com/developers/documentation/getting-started/input-output-options). The notes of the project with formatting as HTML.
 
   - name: workspace
     <<: *PropType.Workspace

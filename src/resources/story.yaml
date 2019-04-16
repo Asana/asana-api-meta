@@ -96,7 +96,7 @@ properties:
   - name: html_text
     <<: *PropType.HtmlText
     comment: |
-      HTML formatted text for a comment.
+      [Opt In](https://asana.com/developers/documentation/getting-started/input-output-options). HTML formatted text for a comment.
 
   - name: target
     <<: *PropType.Task
