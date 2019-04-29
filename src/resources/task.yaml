@@ -620,6 +620,14 @@ actions:
         <<: *Param.WorkspaceGid
         required: true
         comment: The workspace or organization in which to search for tasks.
+      - name: resource_subtype
+        <<: *Param.ResourceSubtype
+        required: false
+        comment: |
+          Filters results by the task's resource_subtype.
+        example_values:
+          - '"default_task"'
+          - '"milestone"'
 
   # Dependencies
 
