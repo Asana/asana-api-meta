@@ -68,6 +68,12 @@ properties:
   - name: due_date
     <<: *PropType.Date
     comment: |
+      **Deprecated: new integrations should prefer the due_on field.**
+      The day on which this project is due. This takes a date with format YYYY-MM-DD.
+
+  - name: due_on
+    <<: *PropType.Date
+    comment: |
       The day on which this project is due. This takes a date with format YYYY-MM-DD.
 
   - name: start_on
