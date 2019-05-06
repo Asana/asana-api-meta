@@ -471,6 +471,11 @@ actions:
         <<: *Param.TaskGid
         required: true
         comment: The task to duplicate.
+      - name: include
+        <<: *Param.TaskIncludes
+        required: false
+        comment: |
+          The fields that will be duplicated to the new task.
     comment: |
       Creates and returns a job that will asynchronously handle the duplication.
 
