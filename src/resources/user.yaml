@@ -76,6 +76,8 @@ action_classes:
     url: get-single
   - name: Get all users
     url: get-all
+  - name: Get a user's favorites
+    url: get-favorites
 
 actions:
 
@@ -98,10 +100,14 @@ actions:
       Returns the full user record for the single user with the provided ID.
 
   - name: getUserFavorites
-    class: get-all
+    class: get-favorites
     method: GET
     path: "/users/%s/favorites"
     params:
+      - name: workspace
+        <<: *Param.WorkspaceId
+        required: true
+        comment: The workspace in which to get favorites.
       - name: resource_type
         type: Enum
         example_values:
@@ -119,10 +125,6 @@ actions:
             comment: A user.
         required: true
         comment: The resource type of favorites to be returned.
-      - name: workspace
-        <<: *Param.WorkspaceId
-        required: true
-        comment: The workspace in which to get favorites.
     comment: |
       Returns all of a user's favorites in the given workspace, of the given type.
       Results are given in order (The same order as Asana's sidebar).
