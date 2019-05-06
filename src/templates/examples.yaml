@@ -210,7 +210,7 @@
       method: "get"
     -
       response:
-        status: 200
+        status: 201
         data:
           gid: "1234"
           resource_type: "job"
@@ -893,7 +893,7 @@
       description: "Delete a project."
       method: "delete"
     - response:
-        status: 200
+        status: 201
         data:
           gid: "1234"
           resource_type: "job"
