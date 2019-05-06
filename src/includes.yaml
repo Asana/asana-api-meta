@@ -350,12 +350,12 @@ templates:
   - template: &Param.ProjectIncludes
       type: Array
       example_values:
-        - "[ members, task_notes, task_assignee, task_subtasks, task_attachments, task_dates, task_dependencies, task_followers, task_tags, task_projects ]"
+        - '[ "members", "task_notes", "task_assignee", "task_subtasks", "task_attachments", "task_dates", "task_dependencies", "task_followers", "task_tags", "task_projects" ]'
 
   - template: &Param.TaskIncludes
       type: Array
       example_values:
-        - "[ notes, assignee, subtasks, attachments, tags, followers, projects, dates, dependencies, parent ]"
+        - '[ "notes", "assignee", "subtasks", "attachments", "tags", "followers", "projects", "dates", "dependencies", "parent" ]'
 
   - template: &Param.DuplicateScheduleDates
       - type: String
