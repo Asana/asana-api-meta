@@ -325,13 +325,16 @@ actions:
           The elements that will be duplicated to the new project.
           Tasks and project notes are always included.
       - name: schedule_dates
-        <<: *Param.ScheduleDates
+        <<: *Param.DuplicateScheduleDates
         required: false
         comment: |
-          A dictionary of options to autoshift dates.
-          `task_due_date` must be included to use this option.
+          A dictionary of options to auto-shift dates.
+          `task_dates` must be included to use this option.
           Requires either `start_on` or `due_on`, but not both.
-
+          `start_on` will set the first start date of the duplicated
+          project to the given date, while `due_on` will set the last due date
+          to the given date. Both will offset the remaining dates by the same amount
+          of the original project.
     comment: |
       Creates and returns a job that will asynchronously handle the duplication.
 
