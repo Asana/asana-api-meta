@@ -1,0 +1,71 @@
+---
+!include ../includes.yaml
+name: job
+comment: |
+  A _job_ represents a process that handles asynchronous work.
+
+  Jobs are created when an endpoint requests an action that will be handled asynchronously.
+  Such as project or task duplication.
+
+notes:
+  - |
+    Only the creator of the duplication process can access the duplication status
+    of the new object.
+properties:
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the job.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `job`.
+    example_values:
+      - '"job"'
+    values:
+      - name: job
+        comment: A job resource type.
+
+  - name: resource_subtype
+    <<: *PropType.ResourceSubtype
+    access: Read-only
+    comment: |
+      The type of job.
+    example_values:
+      - '"duplicate_project"'
+      - '"duplicate_task"'
+    values:
+      - name: duplicate_project
+        comment: A job that duplicates a project.
+      - name: duplicate_task
+        comment: A job that duplicates a task.
+
+  - name: new_project
+    <<: *PropType.Project
+    access: Read-only
+    comment: |
+      Contains the new project if the job created a new project.
+
+  - name: new_task
+    <<: *PropType.Task
+    access: Read-only
+    comment: |
+      Contains the new task if the job created a new task.
+
+action_classes:
+  - name: Get a job
+    url: get
+
+actions:
+  - name: findById
+    class: get
+    method: GET
+    path: "/jobs/%s"
+    params:
+      - name: job
+        <<: *Param.JobGid
+        required: true
+        comment: The job to get.
+    comment: |
+      Returns the complete job record for a single job.

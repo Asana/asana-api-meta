@@ -108,7 +108,9 @@ properties:
   - name: dependents
     <<: *PropType.ResourceArray
     comment: |
-      [Opt In](/developers/documentation/getting-started/input-output-options). Array of resources referencing tasks that depend on this task. The objects contain only the ID of the dependent.
+      [Opt In](/developers/documentation/getting-started/input-output-options).
+      Array of resources referencing tasks that depend on this task. The objects
+      contain only the ID of the dependent.
 
   - name: due_on
     <<: *PropType.Date
@@ -129,7 +131,6 @@ properties:
     comment: |
       This field is returned if external values are set or it is included by using
       [Opt In](/developers/documentation/getting-started/input-output-options).
-
       The external field allows you to store app-specific metadata on tasks,
       including an id that can be used to retrieve tasks and a data blob that
       can store app-specific character strings. Note that you will need to
@@ -255,6 +256,8 @@ action_classes:
     url: update
   - name: Delete a task
     url: delete
+  - name: Duplicate a task
+    url: duplicate
   - name: Query for tasks
     url: query
   - name: Search for tasks in a workspace
@@ -458,6 +461,23 @@ actions:
       of 30 days; afterward they are completely removed from the system.
 
       Returns an empty data record.
+
+  - name: duplicateTask
+    class: duplicate
+    method: POST
+    path: "/tasks/%s/duplicate"
+    params:
+      - name: task
+        <<: *Param.TaskGid
+        required: true
+        comment: The task to duplicate.
+      - name: include
+        <<: *Param.TaskIncludes
+        required: false
+        comment: |
+          The fields that will be duplicated to the new task.
+    comment: |
+      Creates and returns a job that will asynchronously handle the duplication.
 
   # Query
 

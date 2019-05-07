@@ -210,6 +210,39 @@
       method: "get"
     -
       response:
+        status: 201
+        data:
+          gid: "1234"
+          resource_type: "job"
+          resource_subtype: "duplicate_task"
+          status: "in_progress"
+          new_task:
+            gid: "1516"
+            name: "New task name"
+            resource_type: "task"
+      request_data:
+        name: "New task name"
+        include[0]: "followers"
+        include[1]: "subtasks"
+      endpoint: "/tasks/1001/duplicate"
+      description: "Duplicate a task."
+      method: "post"
+    - response:
+        status: 200
+        data:
+          gid: "1234"
+          resource_type: "job"
+          resource_subtype: "duplicate_task"
+          status: "in_progress"
+          new_task:
+            gid: "1516"
+            name: "New task name"
+            resource_type: "task"
+      endpoint: "/jobs/1234"
+      description: "Get a job."
+      method: "get"
+    -
+      response:
         data: {}
       request_data:
         project: 14641
@@ -859,6 +892,27 @@
       endpoint: "/projects/1331"
       description: "Delete a project."
       method: "delete"
+    - response:
+        status: 201
+        data:
+          gid: "1234"
+          resource_type: "job"
+          resource_subtype: "duplicate_project"
+          status: "in_progress"
+          new_project:
+            gid: "1516"
+            name: "Things to Buy"
+            resource_type: "project"
+      request_data:
+        name: "Things to Buy"
+        team: 123
+        include[0]: "members"
+        include[1]: "task_notes"
+        schedule_dates.should_skip_weekends: true
+        schedule_dates.start_on: "2019-05-21"
+      endpoint: "/projects/1001/duplicate"
+      description: "Duplicate a project."
+      method: "post"
     -
       response:
         status: 200

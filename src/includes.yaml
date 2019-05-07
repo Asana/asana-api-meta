@@ -31,6 +31,13 @@ templates:
       example_values:
         - '"12345"'
 
+  - template: &Param.JobGid
+      type: Gid
+      example_values:
+        - '"124816"'
+      comment: |
+        Globally unique identifier for the job.
+
   - template: &Param.Number
     - type: Integer
       example_values:
@@ -340,6 +347,21 @@ templates:
       example_values:
         - "'Next Actions'"
 
+  - template: &Param.ProjectIncludes
+      type: Array
+      example_values:
+        - '[ "members", "task_notes", "task_assignee", "task_subtasks", "task_attachments", "task_dates", "task_dependencies", "task_followers", "task_tags", "task_projects" ]'
+
+  - template: &Param.TaskIncludes
+      type: Array
+      example_values:
+        - '[ "notes", "assignee", "subtasks", "attachments", "tags", "followers", "projects", "dates", "dependencies", "parent" ]'
+
+  - template: &Param.DuplicateScheduleDates
+      - type: String
+        example_values:
+          - "{ should_skip_weekends: true, due_on: '2019-05-21' }"
+
   # Types of properties
 
   - template: &PropType.Id
@@ -406,13 +428,13 @@ templates:
   - template: &PropType.Task
     - type: Task
       example_values:
-        - "{ id: 1234, name: 'Bug task' }"
+        - "{ id: 1234, gid: \"1234\", name: 'Bug task' }"
       access: Read-only
 
   - template: &PropType.Project
     - type: Project
       example_values:
-        - "{ id: 1234, name: 'Bugs' }"
+        - "{ id: 1234, gid: \"1234\", name: 'Bugs' }"
       access: Read-only
 
   # Leave it to the comment to specify all possible types

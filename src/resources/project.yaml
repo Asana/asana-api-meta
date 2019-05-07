@@ -179,6 +179,8 @@ action_classes:
     url: update
   - name: Delete a project
     url: delete
+  - name: Duplicate a project
+    url: duplicate
   - name: Query for projects
     url: query
   - name: Get project tasks
@@ -309,6 +311,39 @@ actions:
 
       Returns an empty data record.
 
+  - name: duplicateProject
+    class: duplicate
+    method: POST
+    path: "/projects/%s/duplicate"
+    params:
+      - name: project
+        <<: *Param.ProjectGid
+        required: true
+        comment: The project to duplicate.
+      - name: team
+        <<: *Param.TeamGid
+        required: false
+        comment: Required if the workspace is an organization.
+      - name: include
+        <<: *Param.ProjectIncludes
+        required: false
+        comment: |
+          The elements that will be duplicated to the new project.
+          Tasks and project notes are always included.
+      - name: schedule_dates
+        <<: *Param.DuplicateScheduleDates
+        required: false
+        comment: |
+          A dictionary of options to auto-shift dates.
+          `task_dates` must be included to use this option.
+          Requires either `start_on` or `due_on`, but not both.
+          `start_on` will set the first start date of the duplicated
+          project to the given date, while `due_on` will set the last due date
+          to the given date. Both will offset the remaining dates by the same amount
+          of the original project.
+    comment: |
+      Creates and returns a job that will asynchronously handle the duplication.
+
   - name: findAll
     class: query
     method: GET
@@ -324,6 +359,11 @@ actions:
       - name: team
         <<: *Param.TeamGid
         comment: The team to filter projects on.
+      - name: is_template
+        <<: *Param.Bool
+        comment: |
+          **Note: This parameter can only be included if a team is also defined, or the workspace is not an organization**
+          Filters results to include only template projects.
       - name: archived
         <<: *Param.Bool
         comment: |
@@ -339,6 +379,11 @@ actions:
         <<: *Param.WorkspaceGid
         required: true
         comment: The workspace or organization to find projects in.
+      - name: is_template
+        <<: *Param.Bool
+        comment: |
+          **Note: This parameter can only be included if a team is also defined, or the workspace is not an organization**
+          Filters results to include only template projects.
       - name: archived
         <<: *Param.Bool
         comment: |
@@ -357,6 +402,10 @@ actions:
         <<: *Param.TeamGid
         required: true
         comment: The team to find projects in.
+      - name: is_template
+        <<: *Param.Bool
+        comment: |
+          Filters results to include only template projects.
       - name: archived
         <<: *Param.Bool
         comment: |
