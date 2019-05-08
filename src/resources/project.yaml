@@ -323,7 +323,9 @@ actions:
       - name: team
         <<: *Param.TeamGid
         required: false
-        comment: Required if the workspace is an organization.
+        comment: |
+          Sets the team of the new project. If team is not defined, the new project
+          will be in the same team as the the original project.
       - name: include
         <<: *Param.ProjectIncludes
         required: false
@@ -337,7 +339,7 @@ actions:
           A dictionary of options to auto-shift dates.
           `task_dates` must be included to use this option.
           Requires either `start_on` or `due_on`, but not both.
-          `start_on` will set the first start date of the duplicated
+          `start_on` will set the first start date of the new
           project to the given date, while `due_on` will set the last due date
           to the given date. Both will offset the remaining dates by the same amount
           of the original project.
