@@ -104,6 +104,9 @@ actions:
     method: GET
     path: "/users/%s/favorites"
     params:
+      - name: user
+        <<: *Param.User
+        required: true
       - name: workspace
         <<: *Param.WorkspaceId
         required: true
