@@ -8,6 +8,9 @@ comment: |
   of multiple projects, including a progress report and the most recent
   [project status](/developers/api-reference/project_statuses) update.
 
+  Portfolios have some restrictions:
+  250 max projects and 20 max custom fields per portfolio.
+
 notes:
   - |
 
