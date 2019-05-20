@@ -41,6 +41,25 @@ properties:
       - name: duplicate_task
         comment: A job that duplicates a task.
 
+  - name: status
+    <<: *PropType.JobStatus
+    comment:
+      The status of the job.
+    example_values:
+      - '"not_started"'
+      - '"in_progress"'
+      - '"succeeded"'
+      - '"failed"'
+    values:
+      - name: not_started
+        comment: The job has not started.
+      - name: in_progress
+        comment: The job is in progress.
+      - name: succeeded
+        comment: The job has completed.
+      - name: failed
+        comment: The job has not started.
+
   - name: new_project
     <<: *PropType.Project
     access: Read-only

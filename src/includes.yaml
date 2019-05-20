@@ -669,6 +669,10 @@ templates:
     - type: Enum
       access: Read-only
 
+  - template: &PropType.JobStatus
+    - type: Enum
+      access: Read-only
+
   ## Events
   - template: &PropType.Action
     - type: Enum
