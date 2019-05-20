@@ -5,11 +5,11 @@ name: portfolio
 comment: |
   A _portfolio_ gives a high-level overview of the status of multiple
   initiatives in Asana.  Portfolios provide a dashboard overview of the state
-  of multiple projects, including a progress report and the most recent
+  of multiple items, including a progress report and the most recent
   [project status](/developers/api-reference/project_statuses) update.
 
-  Portfolios have some restrictions:
-  250 max projects and 20 max custom fields per portfolio.
+  Portfolios have some restrictions on size. Each portfolio has a max of 250
+  items and, like projects, a max of 20 custom fields.
 
 notes:
   - |
@@ -200,7 +200,7 @@ actions:
     method: GET
     path: "/portfolios/%s/items"
     comment: |
-      Get a list of the items (projects) in compact form in a portfolio.
+      Get a list of the items in compact form in a portfolio.
     params:
       - name: portfolio
         <<: *Param.PortfolioGid
@@ -212,7 +212,7 @@ actions:
     method: POST
     path: "/portfolios/%s/addItem"
     comment: |
-      Add an item (project) to a portfolio.
+      Add an item to a portfolio.
 
       Returns an empty data block.
 
@@ -224,16 +224,16 @@ actions:
       - name: item
         <<: *Param.ProjectGid
         required: true
-        comment: The item (project) to add to the portfolio.
+        comment: The item to add to the portfolio.
       - name: insert_before
         <<: *Param.ProjectGid
         comment: |
-          An id of an item (project) in this portfolio. The new item will be added before the one specified here.
+          An id of an item in this portfolio. The new item will be added before the one specified here.
           `insert_before` and `insert_after` parameters cannot both be specified.
       - name: insert_after
         <<: *Param.ProjectGid
         comment: |
-          An id of an item (project) in this portfolio. The new item will be added after the one specified here.
+          An id of an item in this portfolio. The new item will be added after the one specified here.
           `insert_before` and `insert_after` parameters cannot both be specified.
 
   - name: removeItem
@@ -241,7 +241,7 @@ actions:
     method: POST
     path: "/portfolios/%s/removeItem"
     comment: |
-      Remove an item (project) to a portfolio.
+      Remove an item to a portfolio.
 
       Returns an empty data block.
 
@@ -253,7 +253,7 @@ actions:
       - name: item
         <<: *Param.ProjectGid
         required: true
-        comment: The item (project) to remove from the portfolio.
+        comment: The item to remove from the portfolio.
 
   - name: customFieldSettings
     class: custom-field-settings

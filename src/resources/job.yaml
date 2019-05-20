@@ -46,7 +46,10 @@ properties:
     comment:
       The status of the job.
     example_values:
+      - '"not_started"'
       - '"in_progress"'
+      - '"succeeded"'
+      - '"failed"'
     values:
       - name: not_started
         comment: The job has not started.
