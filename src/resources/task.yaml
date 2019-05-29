@@ -144,6 +144,11 @@ properties:
     comment: |
       Array of users following this task.
 
+  - name: is_rendered_as_separator
+    <<: *PropType.Bool
+    comment: |
+      [Opt In](/developers/documentation/getting-started/input-output-options). In some contexts tasks can be rendered as a visual separator; for instance, subtasks can appear similar to [sections](/developers/api-reference/sections) without being true section objects. If a `task` object is rendered this way in any context it will have the property `is_rendered_as_separator` set to `true`.<br /><br />**Note:** Until the default behavior for our API changes integrations must [opt in to the `new_sections` change](https://forum.asana.com/t/sections-are-dead-long-live-sections/33951) to modify the `is_rendered_as_separator` property.
+
   - name: liked
     <<: *PropType.Bool
     comment: |
