@@ -331,7 +331,7 @@ actions:
         required: false
         comment: |
           The elements that will be duplicated to the new project.
-          Tasks and project notes are always included.
+          Tasks are always included.
       - name: schedule_dates
         <<: *Param.DuplicateScheduleDates
         required: false

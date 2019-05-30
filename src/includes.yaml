@@ -350,7 +350,7 @@ templates:
   - template: &Param.ProjectIncludes
       type: Array
       example_values:
-        - '[ "members", "task_notes", "task_assignee", "task_subtasks", "task_attachments", "task_dates", "task_dependencies", "task_followers", "task_tags", "task_projects" ]'
+        - '[ "members", "notes", "task_notes", "task_assignee", "task_subtasks", "task_attachments", "task_dates", "task_dependencies", "task_followers", "task_tags", "task_projects" ]'
 
   - template: &Param.TaskIncludes
       type: Array
