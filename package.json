@@ -33,7 +33,7 @@
     "gulp-tag-version": "^1.2.1",
     "gulp-template": "^2.0.0",
     "inflect": "^0.3.0",
-    "js-yaml": "^3.2.5",
+    "js-yaml": "^3.13.1",
     "jsonschema": "^1.0.0",
     "lodash": "^2.4.1",
     "sync-to-github": "^0.1.2"
