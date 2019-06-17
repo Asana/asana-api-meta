@@ -1015,16 +1015,8 @@
     - response:
         status: 200
         data:
-          - id: 6342
-            gid: "1012"
-            resource_type: "portfolio_membership"
-            user:
-              id: 1234
-              gid: "1234"
-              resource_type: "user"
-              name: "Tim Bizarro"
           - id: 7424
-            gid: "1019"
+            gid: "7424"
             resource_type: "portfolio_membership"
             user:
               id: 5678
@@ -1032,14 +1024,37 @@
               resource_type: "user"
               name: "Greg Sanchez"
           - "~..."
-      endpoint: "/portfolio/1843/portfolio_memberships"
+        endpoint: "/portfolio_memberships?portfolio=6242&user=5678"
+        description: "Query memberships for a specific portfolio user combination."
+        method: "get"
+    - response:
+        status: 200
+        data:
+          - id: 6342
+            gid: "6342"
+            resource_type: "portfolio_membership"
+            user:
+              id: 1234
+              gid: "1234"
+              resource_type: "user"
+              name: "Tim Bizarro"
+          - id: 7424
+            gid: "7424"
+            resource_type: "portfolio_membership"
+            user:
+              id: 5678
+              gid: "5678"
+              resource_type: "user"
+              name: "Greg Sanchez"
+          - "~..."
+      endpoint: "/portfolios/1843/portfolio_memberships"
       description: "Show memberships for a specific portfolio."
       method: "get"
     - response:
         status: 200
         data:
           id: 6274
-          gid: "1012"
+          gid: "6274"
           resource_type: "portfolio_membership"
           user:
             id: 1234
