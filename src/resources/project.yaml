@@ -322,6 +322,8 @@ actions:
         comment: The project to duplicate.
       - name: name
         type: String
+        example_values:
+          - "Things to Buy"
         required: true
         comment: The name of the new project.
       - name: team

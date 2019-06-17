@@ -99,6 +99,8 @@ action_classes:
     url: query
   - name: Items in a portfolio
     url: items
+  - name: Work with portfolio memberships
+    url: members
   - name: Custom fields on a portfolio
     url: custom-field-settings
 
@@ -276,7 +278,7 @@ actions:
     method: POST
     path: "/portfolios/%s/removeMembers"
     params:
-      - name: project
+      - name: portfolio
         <<: *Param.PortfolioGid
         required: true
         comment: The portfolio to remove members from.

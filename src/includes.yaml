@@ -86,6 +86,20 @@ templates:
       comment: |
         Globally unique identifier for the project.
 
+  - template: &Param.PortfolioId
+      type: Id
+      example_values:
+        - "26367"
+      comment: |
+        Globally unique identifier for the portfolio.
+
+  - template: &Param.PortfolioGid
+      type: Gid
+      example_values:
+        - '"26367"'
+      comment: |
+        Globally unique identifier for the portfolio.
+
 
   - template: &Param.ProjectMembershipId
       type: Id
@@ -100,6 +114,20 @@ templates:
         - '"34729"'
       comment: |
         Globally unique identifier for the project membership.
+
+  - template: &Param.PortfolioMembershipId
+      type: Id
+      example_values:
+        - "34729"
+      comment: |
+        Globally unique identifier for the portfolio membership.
+
+  - template: &Param.PortfolioMembershipGid
+      type: Gid
+      example_values:
+        - '"34729"'
+      comment: |
+        Globally unique identifier for the portfolio membership.
 
   - template: &Param.ProjectStatusUpdateId
       type: Id
@@ -430,6 +458,12 @@ templates:
       example_values:
         - "{ id: 1234, gid: \"1234\", name: 'Bug task' }"
       access: Read-only
+
+  - template: &PropType.Portfolio
+      - type: Project
+        example_values:
+          - "{ id: 1234, gid: \"1234\", name: 'Progress Tracking' }"
+        access: Read-only
 
   - template: &PropType.Project
     - type: Project
