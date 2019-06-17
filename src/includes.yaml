@@ -89,14 +89,14 @@ templates:
   - template: &Param.PortfolioId
       type: Id
       example_values:
-        - "26367"
+        - "36985"
       comment: |
         Globally unique identifier for the portfolio.
 
   - template: &Param.PortfolioGid
       type: Gid
       example_values:
-        - '"26367"'
+        - '"36985"'
       comment: |
         Globally unique identifier for the portfolio.
 
