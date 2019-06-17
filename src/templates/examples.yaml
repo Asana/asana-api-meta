@@ -1024,9 +1024,9 @@
               resource_type: "user"
               name: "Greg Sanchez"
           - "~..."
-        endpoint: "/portfolio_memberships?portfolio=6242&user=5678"
-        description: "Query memberships for a specific portfolio user combination."
-        method: "get"
+      endpoint: "/portfolio_memberships?portfolio=6242&user=5678"
+      description: "Query memberships for a specific portfolio user combination."
+      method: "get"
     - response:
         status: 200
         data:
