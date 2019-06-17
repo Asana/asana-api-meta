@@ -143,17 +143,7 @@ function curlExamplesForAction(action, resource_examples) {
     //TODO: this is a hack, simply to exclude selection-by-key vs selection-by-action/endpoint
     if (example.key) return false;
     var regex = "^" + action.path.replace(/%s/g, ".+").replace(/\//g, "\\/") + "(?!\\/)";
-    if (action.path.startsWith('/portfolio_')) {
-      console.log(regex);
-      if (example.method) {
-        console.log(example.endpoint);
-        console.log(example.endpoint.match(regex));
-      }
-    }
     match = (example.method === action.method.toLowerCase() && example.endpoint.match(regex));
-    if (action.path.startsWith('/portfolio_')) {
-      console.log(match ? "true" : "false");
-    }
     return match
 
   });
