@@ -476,6 +476,10 @@ actions:
         <<: *Param.TaskGid
         required: true
         comment: The task to duplicate.
+      - name: name
+        type: String
+        required: true
+        comment: The name of the new task.
       - name: include
         <<: *Param.TaskIncludes
         required: false

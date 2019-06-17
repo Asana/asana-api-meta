@@ -320,6 +320,10 @@ actions:
         <<: *Param.ProjectGid
         required: true
         comment: The project to duplicate.
+      - name: name
+        type: String
+        required: true
+        comment: The name of the new project.
       - name: team
         <<: *Param.TeamGid
         required: false

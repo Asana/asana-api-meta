@@ -1011,6 +1011,44 @@
       endpoint: "/project_memberships/1012"
       description: "Show a specific project membership."
       method: "get"
+  Portfolio Memberships:
+    - response:
+        status: 200
+        data:
+          - id: 6342
+            gid: "1012"
+            resource_type: "portfolio_membership"
+            user:
+              id: 1234
+              gid: "1234"
+              resource_type: "user"
+              name: "Tim Bizarro"
+          - id: 7424
+            gid: "1019"
+            resource_type: "portfolio_membership"
+            user:
+              id: 5678
+              gid: "5678"
+              resource_type: "user"
+              name: "Greg Sanchez"
+          - "~..."
+      endpoint: "/portfolio/1843/portfolio_memberships"
+      description: "Show memberships for a specific portfolio."
+      method: "get"
+    - response:
+        status: 200
+        data:
+          id: 6274
+          gid: "1012"
+          resource_type: "portfolio_membership"
+          user:
+            id: 1234
+            gid: "1234"
+            resource_type: "user"
+            name: "Tim Bizarro"
+      endpoint: "/portfolio_memberships/1012"
+      description: "Show a specific portfolio membership."
+      method: "get"
   Project Statuses:
     -
       response:
