@@ -968,6 +968,19 @@
       endpoint: "/projects/1331/removeCustomFieldSetting"
       description: "Remove a custom field setting from a project"
       method: "post"
+    - response:
+        status: 200
+        data: {
+          "num_tasks": integer,
+          "num_incomplete_tasks": integer,
+          "num_completed_tasks": integer,
+          "num_milestones": integer,
+          "num_incomplete_milestones": integer,
+          "num_completed_milestones": integer
+        }
+      endpoint: "/projects/1331/task_counts?opt_fields=num_tasks,num_incomplete_tasks,num_completed_tasks,num_milestone,num_incomplete_milestones,num_completed_milestones"
+      description: "Get the object that holds the task count fields."
+      method: "get"
   Project Memberships:
     -
       response:

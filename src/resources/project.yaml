@@ -203,6 +203,8 @@ action_classes:
     url: members
   - name: Modify custom field settings
     url: custom-field-settings
+  - name: Get project's task counts
+    url: get-task-counts
 
 actions:
 
@@ -548,3 +550,20 @@ actions:
       - name: custom_field
         <<: *Param.CustomFieldGid
         comment: The id of the custom field to remove from this project.
+
+  - name: getTaskCounts
+    class: get-task-counts
+    method: GET
+    path: "/projects/%s/task_counts"
+    comment: |
+      Get an object that holds task count fields. **All fields are excluded by default**. You must use [Opt In]
+      (https://asana.com/developers/documentation/getting-started/input-output-options) to get any information from
+      this endpoint.
+
+      This endpoint has a separate rate limit of 60 calls per minute.
+      **Note: Only opt in to the counts that you need. These expensive fields can cause you to hit a rate limit.**
+    params:
+      - name: project
+        <<: *Param.ProjectGid
+        required: true
+        comment: The project to associate the custom field with
