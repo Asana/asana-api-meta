@@ -144,11 +144,6 @@ function curlExamplesForAction(action, resource_examples) {
     if (example.key) return false;
     var regex = "^" + action.path.replace(/%s/g, "[^\/]+").replace(/\//g, "\\/") + "[^\\/]*$";
     match = (example.method === action.method.toLowerCase() && example.endpoint.match(regex));
-
-    if (example.endpoint === "/projects/1331/task_counts?opt_fields=num_tasks,num_incomplete_tasks,num_completed_tasks,num_milestone,num_incomplete_milestones,num_completed_milestones") {
-      console.log(regex);
-      console.log(match);
-    }
     return match
 
   });
