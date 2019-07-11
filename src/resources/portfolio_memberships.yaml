@@ -82,7 +82,7 @@ actions:
         comment: The portfolio for which to fetch memberships.
       - name: user
         <<: *Param.User
-        comment: If present, the user to filter the memberships to.
+        comment: If present, the user to filter the memberships on.
     collection: true
     comment: |
       Returns the compact portfolio membership records for the portfolio.
