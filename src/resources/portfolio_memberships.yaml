@@ -1,0 +1,100 @@
+---
+# See `user.yaml` for more docs on these yaml files.
+  !include ../includes.yaml
+name: portfolio_membership
+comment: |
+  This object determines if a user is a member of a portfolio.
+
+properties:
+
+  - name: id
+    <<: *PropType.Id
+    comment: |
+      Globally unique ID of the portfolio membership.
+      **Note: This field is under active migration to the [`gid` field](#field-gid)--please see our [blog post](/developers/documentation/getting-started/deprecations) for more information.**
+
+  - name: gid
+    <<: *PropType.Gid
+    comment: |
+      Globally unique ID of the portfolio membership.
+
+  - name: resource_type
+    <<: *PropType.ResourceType
+    comment: |
+      The resource type of this resource. The value for this resource is always `portfolio_membership`.
+    example_values:
+      - '"portfolio_membership"'
+    values:
+      - name: portfolio_membership
+        comment: A portfolio membership resource type.
+
+  - name: user
+    <<: *PropType.User
+    example_values:
+      - '{ id: 12345, gid: "12345", name: "Tim Bizarro" }'
+    access: Read-only
+    comment: |
+      The user in the membership.
+
+  - name: portfolio
+    <<: *PropType.Portfolio
+    access: Read-only
+    comment: |
+      [Opt In](https://asana.com/developers/documentation/getting-started/input-output-options). The portfolio the user is a member of.
+
+action_classes:
+  - name: Query for portfolio memberships
+    url: query
+  - name: Get all memberships for a portfolio
+    url: get-many
+  - name: Get a portfolio membership
+    url: get-single
+
+actions:
+
+  - name: findAll
+    class: query
+    method: GET
+    path: "/portfolio_memberships"
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        comment: The portfolio for which to fetch memberships.
+      - name: workspace
+        <<: *Param.WorkspaceGid
+        comment: The workspace for which to fetch memberships.
+      - name: user
+        <<: *Param.User
+        comment: The user to filter the memberships on.
+    collection: true
+    comment: |
+      Returns the compact portfolio membership records for the portfolio. You must
+      specify `portfolio`, `portfolio` and `user`, or `workspace` and `user`.
+
+  - name: findByPortfolio
+    class: get-many
+    method: GET
+    path: "/portfolios/%s/portfolio_memberships"
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio for which to fetch memberships.
+      - name: user
+        <<: *Param.User
+        comment: If present, the user to filter the memberships on.
+    collection: true
+    comment: |
+      Returns the compact portfolio membership records for the portfolio.
+
+
+  - name: findById
+    class: get-single
+    method: GET
+    path: "/portfolio_memberships/%s"
+    params:
+      - name: portfolio_membership
+        <<: *Param.PortfolioMembershipGid
+        required: true
+    comment: |
+      Returns the portfolio membership record.

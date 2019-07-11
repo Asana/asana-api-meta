@@ -142,7 +142,7 @@ function curlExamplesForAction(action, resource_examples) {
   var action_examples = _.filter(resource_examples, function(example) {
     //TODO: this is a hack, simply to exclude selection-by-key vs selection-by-action/endpoint
     if (example.key) return false;
-    var regex = "^" + action.path.replace(/%s/g, ".+").replace(/\//g, "\\/");
+    var regex = "^" + action.path.replace(/%s/g, ".+").replace(/\//g, "\\/") + "(?!\\/)";
     match = (example.method === action.method.toLowerCase() && example.endpoint.match(regex));
     return match
 
@@ -206,7 +206,7 @@ function classify(str) {
 }
 
 
-/** 
+/**
  * Construct a partial name based on a series of path parameters
  * The last argument (as in Ruby partials) will have a suffix appended.
  * (Unlike Ruby, the partial name need not start with an underscore)

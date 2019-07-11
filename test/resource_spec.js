@@ -11,9 +11,9 @@ describe('Resource', function() {
     it('should return known resources in order', function() {
       assert.deepEqual(resource.names(), [
         'attachment', 'custom_field_settings', 'custom_fields', 'event', 'job',
-        'organization_export', 'portfolio', 'project', 'project_membership',
-        'project_status', 'section', 'story', 'tag', 'task', 'team', 'user',
-        'user_task_list', 'webhook', 'workspace' ]);
+        'organization_export', 'portfolio', 'portfolio_memberships', 'project',
+        'project_membership', 'project_status', 'section', 'story', 'tag', 'task',
+        'team', 'user', 'user_task_list', 'webhook', 'workspace' ]);
     });
   });
 

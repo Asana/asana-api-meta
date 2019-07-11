@@ -99,6 +99,8 @@ action_classes:
     url: query
   - name: Items in a portfolio
     url: items
+  - name: Work with portfolio memberships
+    url: members
   - name: Custom fields on a portfolio
     url: custom-field-settings
 
@@ -254,6 +256,38 @@ actions:
         <<: *Param.ProjectGid
         required: true
         comment: The item to remove from the portfolio.
+
+  - name: addMembers
+    class: members
+    method: POST
+    path: "/portfolios/%s/addMembers"
+    params:
+      - name: portfolio
+        <<: *Param.ProjectGid
+        required: true
+        comment: The portfolio to add members to.
+      - name: members
+        <<: *Param.GidArray
+        required: true
+        comment: An array of user ids.
+    comment: |
+      Adds the specified list of users as members of the portfolio. Returns the updated portfolio record.
+
+  - name: removeMembers
+    class: members
+    method: POST
+    path: "/portfolios/%s/removeMembers"
+    params:
+      - name: portfolio
+        <<: *Param.PortfolioGid
+        required: true
+        comment: The portfolio to remove members from.
+      - name: members
+        <<: *Param.GidArray
+        required: true
+        comment: An array of user ids.
+    comment: |
+      Removes the specified list of members from the portfolio. Returns the updated portfolio record.
 
   - name: customFieldSettings
     class: custom-field-settings
