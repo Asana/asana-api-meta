@@ -140,7 +140,6 @@ actions:
         comment: The workspace to create a custom field in.
       - name: resource_subtype
         <<: *Param.CustomFieldType
-        required: true
       - name: type
         <<: *Param.CustomFieldType
         comment: "**Deprecated: New integrations should prefer the `resource_subtype` parameter.**"
