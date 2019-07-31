@@ -229,6 +229,13 @@ templates:
       comment: |
         Globally unique identifier for the workspace or organization.
 
+  - template: &Param.WorkspaceMembershipGid
+      type: Gid
+      example_values:
+        - '"1352"'
+      comment: |
+        Globally unique identifier for the workspace membership.
+
   - template: &Param.AttachmentId
       type: Id
       example_values:
@@ -425,6 +432,11 @@ templates:
     - type: Integer
       example_values:
         - "5"
+
+  - template: &PropType.UserTaskList
+    - type: UserTaskList
+      example_values:
+        - "{ gid: \"12345\", resource_type: \"user_task_list\", name: 'My Tasks' }"
 
   - template: &PropType.User
     - type: User

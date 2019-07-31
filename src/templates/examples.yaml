@@ -1545,3 +1545,72 @@
       endpoint: "/users/12345/user_task_list?workspace=1337"
       description: "Get a user task list by its owner"
       method: "get"
+
+  Workspace Memberships:
+    - response:
+        status: 200
+        data:
+          - gid: "7424"
+            resource_type: "workspace_membership"
+            user:
+              gid: "5678"
+              resource_type: "user"
+              name: "Greg Sanchez"
+            workspace:
+              gid: "6432"
+              resource_type: "workspace"
+              name: "Personal Projects"
+          - "~..."
+      endpoint: "/workspaces/6432/workspace_memberships?user=5678"
+      description: "Query memberships for a specific workspace user combination."
+      method: "get"
+    - response:
+        status: 200
+        data:
+          - gid: "6342"
+            resource_type: "workspace_membership"
+            user:
+              gid: "5678"
+              resource_type: "user"
+              name: "Greg Sanchez"
+            workspace:
+              gid: "6432"
+              resource_type: "workspace"
+              name: "Personal Projects"
+          - gid: "7424"
+            resource_type: "workspace_membership"
+            user:
+              gid: "5678"
+              resource_type: "user"
+              name: "Greg Sanchez"
+            workspace:
+              gid: "7384"
+              resource_type: "workspace"
+              name: "Work Projects"
+          - "~..."
+      endpoint: "/users/5678/workspace_memberships"
+      description: "Show workspace memberships for a specific user."
+      method: "get"
+    - response:
+        status: 200
+        data:
+          gid: "6274"
+          resource_type: "workspace_membership"
+          user:
+            gid: "1234"
+            resource_type: "user"
+            name: "Tim Bizarro"
+          workspace:
+            gid: "6432"
+            resource_type: "workspace"
+            name: "Personal Projects"
+          user_task_list:
+            gid: "5167"
+            resource_type: "user_task_list"
+            name: "My Tasks"
+          is_active: true
+          is_admin: true
+          is_guest: false
+      endpoint: "/workspace_memberships/6274"
+      description: "Show a specific portfolio membership."
+      method: "get"
