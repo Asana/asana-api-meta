@@ -13,7 +13,7 @@ describe('Resource', function() {
         'attachment', 'custom_field_settings', 'custom_fields', 'event', 'job',
         'organization_export', 'portfolio', 'portfolio_memberships', 'project',
         'project_membership', 'project_status', 'section', 'story', 'tag', 'task',
-        'team', 'user', 'user_task_list', 'webhook', 'workspace' ]);
+        'team', 'user', 'user_task_list', 'webhook', 'workspace', 'workspace_membership' ]);
     });
   });
 
