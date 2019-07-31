@@ -561,6 +561,8 @@ actions:
 
       This endpoint has an additional [rate limit](/developers/documentation/getting-started/rate-limits#standard)
       and each field counts especially high against our [cost limits](/developers/documentation/getting-started/rate-limits#cost).
+
+      Milestones are just tasks, so they are included in the `num_tasks`, `num_incomplete_tasks`, and `num_completed_tasks` counts.
     params:
       - name: project
         <<: *Param.ProjectGid
