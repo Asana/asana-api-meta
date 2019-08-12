@@ -28,7 +28,7 @@ function Action(action) {
 
     // Params and idParams
     var params = action.params || []
-    this.idParams = _.filter(params, function(p) { return p.required || p.type == "Id" })
+    this.idParams = _.filter(params, function(p) { return p.required || p.type == "Id" || p.type == "Gid" })
 
     // If it looks like an instance action but it's not, make it one
     if (!this.isInstanceAction) {
@@ -81,7 +81,7 @@ function Action(action) {
 
     // Endpoint path
     this.path = _.reduce(this.idParams, function(acc, id) {
-        var localName = that.mainIdParam == id ? "id" : id.name
+        var localName = that.mainIdParam == id ? "gid" : id.name
         return acc.replace("\%s", "#{" + localName + "}")
     }, action.path)
 
@@ -111,7 +111,7 @@ function Action(action) {
     // Method argument names
     var argumentNames = Array()
     if (!this.isInstanceAction) { argumentNames.push("client") }
-    if (this.mainIdParam !== undefined && !this.isInstanceAction) { argumentNames.push("id") }
+    if (this.mainIdParam !== undefined && !this.isInstanceAction) { argumentNames.push("gid") }
     _.forEach(this.params, function(param) {
         argumentNames.push(param.name + ":" + (param.required ? " required(\"" + param.name + "\")" : " nil"))
     })
@@ -170,7 +170,7 @@ Action.prototype.renderDocumentation = function () {
         return (name !== undefined ? name : p.name) + " - [" + p.type + "] " + p.comment
     }
     var lines = _.map(this.params, function(p) { return formatParam(p) })
-    if (this.mainIdParam !== undefined && !this.isInstanceAction) { lines.unshift(formatParam(this.mainIdParam, "id")) }
+    if (this.mainIdParam !== undefined && !this.isInstanceAction) { lines.unshift(formatParam(this.mainIdParam, "gid")) }
     if (this.collection) { lines.push("per_page - [Integer] the number of records to fetch per page.") }
     if (this.method != 'DELETE') { lines.push("options - [Hash] the request I/O options.") }
     if (this.requiresData) { lines.push("data - [Hash] the attributes to post.") }

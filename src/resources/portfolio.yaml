@@ -201,6 +201,7 @@ actions:
     class: items
     method: GET
     path: "/portfolios/%s/items"
+    collection: true
     comment: |
       Get a list of the items in compact form in a portfolio.
     params:
@@ -293,6 +294,7 @@ actions:
     class: custom-field-settings
     method: GET
     path: "/portfolios/%s/custom_field_settings"
+    collection: true
     comment: |
       Get the custom field settings on a portfolio.
     params:
