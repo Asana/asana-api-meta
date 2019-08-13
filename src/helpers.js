@@ -259,7 +259,7 @@ function partial() {
   // by specifying directories in the array - so ["directory", "subdirectory", "partialname"] elements becomes directory/subdirectory/partialname.ejs
   if (partialExists(partial_path_arry)) {
     var template_content = fs.readFileSync(partialFilename(partial_path_arry), 'utf8');
-    return stripWhitespace(_.template(template_content, _.merge(partial_context, langs.api_reference))); // Mixing in langs.api_reference includes the api_reference specific functions in this file.
+    return stripWhitespace(_.template(template_content)(_.merge(partial_context, langs.api_reference))); // Mixing in langs.api_reference includes the api_reference specific functions in this file.
   } else {
     return '';
   }

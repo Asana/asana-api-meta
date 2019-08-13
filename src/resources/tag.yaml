@@ -79,8 +79,6 @@ action_classes:
     url: update
   - name: Query for tags
     url: query
-  - name: Get tasks with tag
-    url: get-tasks
 
 actions:
 

@@ -59,15 +59,6 @@ properties:
       is set. Sizes provided are 21, 27, 36, 60, and 128. Images are in
       PNG format.
 
-  - name: workspaces
-    <<: *PropType.WorkspaceArray
-    comment: |
-      Workspaces and organizations this user may access.
-    notes:
-      - |
-        The API will only return workspaces and organizations that also
-        contain the authenticated user.
-
 # Action class refers to a general category the action falls under. These are
 # referenced in the actions themselves by their url because we may want to change
 # the exact wording of the class names in the future.

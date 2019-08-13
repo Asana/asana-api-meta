@@ -267,6 +267,8 @@ action_classes:
     url: query
   - name: Search for tasks in a workspace
     url: search
+  - name: Get tasks with tag
+    url: get-tag-tasks
   - name: Custom field values
     url: custom-field-values
     comment: |
@@ -624,7 +626,7 @@ actions:
 
 
   - name: getTasksWithTag
-    class: get-tasks
+    class: get-tag-tasks
     method: GET
     path: "/tags/%s/tasks"
     params:
