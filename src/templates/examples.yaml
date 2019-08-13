@@ -1225,13 +1225,6 @@
       response:
         status: 200
         data:
-          workspaces:
-            -
-              id: 1337
-              gid: "1337"
-              resource_type: "workspace"
-              name: "My Favorite Workspace"
-            - "~..."
           id: 5678
           gid: "5678"
           resource_type: "user"
