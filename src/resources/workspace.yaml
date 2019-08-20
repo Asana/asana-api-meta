@@ -61,6 +61,8 @@ action_classes:
     url: typeahead
   - name: User Management
     url: user-mgmt
+  - name: Get workspaces for user
+    url: get-all-user
 
 actions:
 
@@ -211,3 +213,17 @@ actions:
     comment: |
       The user making this call must be an admin in the workspace.
       Returns an empty data record.
+
+  - name: findByUser
+    class: get-all-user
+    method: GET
+    path: "/users/%s/workspaces"
+    collection: true
+    collection_cannot_paginate: true
+    params:
+      - name: user
+        <<: *Param.User
+        required: true
+        comment: The user for which to get workspaces.
+    comment: |
+      Returns the workspaces for the given user.
