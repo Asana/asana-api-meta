@@ -157,7 +157,7 @@ actions:
         Below is an example of what a well formed multipart/form-data encoded
         request might look like.
 
-            Authorization: Bearer <BEARER_TOKEN>\
+            Authorization: Bearer <personal_access_token>\
             Content-Type: multipart/form-data; boundary=<UNIQUE_BOUNDARY>\
             User-Agent: Java/1.7.0_76\
             Host: localhost\
