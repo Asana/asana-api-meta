@@ -567,4 +567,4 @@ actions:
       - name: project
         <<: *Param.ProjectGid
         required: true
-        comment: The project to associate the custom field with
+        comment: The project to get task counts for
