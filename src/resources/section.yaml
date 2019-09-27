@@ -160,6 +160,10 @@ actions:
     method: POST
     path: "/sections/%s/addTask"
     params:
+      - name: section
+        <<: *Param.SectionGid
+        required: true
+        comment: The section in which to add the task
       - name: task
         <<: *Param.TaskGid
         required: true
