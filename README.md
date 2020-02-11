@@ -27,19 +27,21 @@ It is also used to build the [Asana API Reference](https://asana.com/developers/
 
 ### Language Configuration
 
-Each language has its own configuration that determines how the output files are built. These configurations are specified in `gulpfile.js` as `var languages = ...`. Each record has the following schema:
+Each language has its own configuration that determines how the output files are built. These configurations are specified in `gulpfile.js` as `var languages = ...`. 
+
+Each record has the following schema:
 
   * `repo`: Name of the target repository where built files will be pushed to.
   * `branch`: Name of the branch in the repository to push to.
   * `outputPath`: Path, relative to the root of `repo`, where template output will go.
-  * `preserveRepoFiles`: Set to true if when the files are built and pushed to the target, any existing files are preserved. If false, it will clear out `outputPath` each time it pushes.
+  * `preserveRepoFiles`: Set to `true` if, when the files are built and pushed to the target, any existing files should be preserved. If `false`, it will clear out `outputPath` each time it pushes.
   * `skip`: An array of resource names to avoid generating output files for.
 
 ### Resource Definitions
 
 Resources are defined in individual YAML files under `src/resources`. The one-resource-per-file convention keeps the files manageable.
 
-A schema is provided for resources, and the resources are validated against it during testing. It can be found in `test/resource_schema.json`, and uses the [JSON Schema](http://json-schema.org/) syntax, with the [`jsonschema`](http://json-schema.org/) Node package for validation.
+A schema is provided for resources, and the resources are validated against it during testing. It can be found in `test/resource_schema.json`, and uses the [JSON Schema](http://json-schema.org) syntax, with the [`jsonschema`](http://json-schema.org) Node package for validation.
 
 The schemas make heavy use of the "anchor" and "alias" features of YAML, so the files can be more normalized and avoid excessive repetition. These are mostly used to define commonly-used components like types, properties, and parameters that appear in multiple (sometimes many, many) places.
 
@@ -64,7 +66,9 @@ Authors modifying the templates should ensure that they *generate pretty code*, 
 
 ### Helpers
 
-Rather than pour a bunch of logic into the template, it's better style to put them into helpers. Currently there is only a single `helpers` file, but we should break this into a set of language-specific files (that might each call some useful common helpers where appropriate).
+Rather than pour a bunch of logic into the template, it's better style to put them into helpers. 
+
+Currently, there is only a single `helpers` file, but we should break this into a set of language-specific files (that might each call some useful common helpers where appropriate).
 
 Examples of places where extracting helpers is useful are `paramsForAction` or `wrapComment`.
 
@@ -74,8 +78,8 @@ Examples of places where extracting helpers is useful are `paramsForAction` or `
 
   1. Get a personal access token for GitHub and assign it to the environment variable `ASANA_GITHUB_TOKEN`:
      `export ASANA_GITHUB_TOKEN=...`
-  2. Run a test deployment for a single language, e.g. `gulp deploy-js`. This will create a new branch in the target repo and deploy the generated files to that branch. The branch will be named for your GitHub username and a date-timestamp, for example `asanabot-20150531-012345`.
-  3. Inspect the diffs on GitHub. If you need to make changes you can re-run the deploy and it will create a new branch.
+  2. Run a test deployment for a single language (e.g., `gulp deploy-js`). This will create a new branch in the target repo and deploy the generated files to that branch. The branch name is generated from your **GitHub username** and a **date-timestamp**. (For example: `asanabot-20150531-012345`.)
+  3. Inspect the diffs on GitHub. If you need to make changes, you can re-run the deploy and it will create a new branch.
   4. You can do a test deploy to all languages at once by running just `gulp deploy`.
 
 ### Committing
@@ -86,16 +90,16 @@ Examples of places where extracting helpers is useful are `paramsForAction` or `
   
 ### Deploying
 
-  1. Clone the repo, work on master.
-  2. Bump the package version to indicate the [semantic version](http://semver.org/) change, using one of: `gulp bump-patch`, `gulp bump-feature`, or `gulp bump-release`
-  3. Push changes to origin, including tags:
+  1. Clone the repo; work on `master`.
+  2. Bump the package version to indicate the [semantic version](http://semver.org) change, using one of: `gulp bump-patch`, `gulp bump-feature`, or `gulp bump-release`.
+  3. Push changes to `origin`, including tags:
      `git push origin master --tags` 
 
 ### Propagating Changes to Client Libraries
 
   1. Travis will automatically build and deploy new code to the `api-meta-incoming` branch of all the repos, creating pull requests for each.
   2. Review and merge the pull requests as appropriate.
-  3. Update package versions according to [semantic versioning](http://semver.org/), and push.
+  3. Update package versions according to [semantic versioning](http://semver.org), and push.
 
 
 [travis-url]: http://travis-ci.org/Asana/asana-api-meta
